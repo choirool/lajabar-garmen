@@ -15,6 +15,19 @@
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-jet-nav-link>
+                    <x-nav-link-dropdown href="#">
+                        <x-slot name="textLink">
+                            {{ __('Master data') }}
+                        </x-slot>
+                        <x-slot name="menuItems">
+                            <x-nav-link-dropdown-item href="{{ route('master-data.users') }}">
+                                {{ __('Users') }}
+                            </x-nav-link-dropdown-item>
+                            <x-nav-link-dropdown-item href="{{ route('profile.show') }}">
+                                {{ __('Items') }}
+                            </x-nav-link-dropdown-item>
+                        </x-slot>
+                    </x-nav-link-dropdown>
                 </div>
             </div>
 
