@@ -20,15 +20,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function (){
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
     Route::prefix('/master-data')->name('master-data.')->group(function () {
-        Route::get('/users', Users::class)->name('users');
-        Route::get('/create-user', CreateUsers::class)->name('create-user');
-        Route::get('/update-user/{id}', UpdateUsers::class)->name('update-user');
+        Route::prefix('/users')->group(function () {
+            Route::get('/', Users::class)->name('users');
+            Route::get('/create-user', CreateUsers::class)->name('create-user');
+            Route::get('/update-user/{id}', UpdateUsers::class)->name('update-user');
+        });
     });
 });
-
