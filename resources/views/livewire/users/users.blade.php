@@ -11,7 +11,7 @@
                 <div class="w-full flex">
                     <div class="w-1/2 my-2">
                         <x-jet-input type="text" class="mt-1 block w-2/4" placeholder="{{ __('Search by name, username or email...') }}"
-                        wire:model="search" />
+                        wire:model.debounce.500ms="search" />
                     </div>
                     <div class="w-1/2 my-2">
                         <x-link class="ml-2 float-right" href="{{ route('master-data.create-user') }}">
@@ -42,7 +42,20 @@
                                 <td class="border px-4 py-2">{{ $user->username }}</td>
                                 <td class="border px-4 py-2">{{ $user->email }}</td>
                                 <td class="border px-4 py-2">
-                                    <a href="{{ route('master-data.update-user', ['id' => $user->id]) }}">Edit</a>
+                                    <x-link href="{{ route('master-data.update-user', ['id' => $user->id]) }}">{{ __('Edit') }}</x-link>
+                                    @if($confirming == $user->id)
+                                        <x-button action="deleteUser({{ $user->id }})" type="danger">
+                                            Yes?
+                                        </x-button>
+                                        <x-button action="resetConfirm" type="success">
+                                            No
+                                        </x-button>
+                                    @else
+                                        <x-button action="confirmDelete({{ $user->id }})">
+                                            Delete
+                                        </x-button>
+                                        
+                                    @endif
                                 </td>
                             </tr>
                         @empty

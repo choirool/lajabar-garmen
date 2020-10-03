@@ -11,6 +11,7 @@ class Users extends Component
     use WithPagination;
 
     public $search;
+    public $confirming;
 
     protected $updatesQueryString = ['search'];
 
@@ -21,6 +22,22 @@ class Users extends Component
 
     public function updatingSearch()
     {
+        $this->resetPage();
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->confirming = $id;
+    }
+
+    public function resetConfirm()
+    {
+        $this->confirming = '';
+    }
+
+    public function deleteUser($id)
+    {
+        User::where('id', $id)->delete();
         $this->resetPage();
     }
 
