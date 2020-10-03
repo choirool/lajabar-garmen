@@ -3,6 +3,9 @@
 use App\Http\Livewire\Color\Colors;
 use App\Http\Livewire\Color\CreateColor;
 use App\Http\Livewire\Color\UpdateColor;
+use App\Http\Livewire\Size\CreateSize;
+use App\Http\Livewire\Size\Sizes;
+use App\Http\Livewire\Size\UpdateSize;
 use App\Http\Livewire\Users\CreateUsers;
 use App\Http\Livewire\Users\UpdateUsers;
 use App\Http\Livewire\Users\Users;
@@ -28,6 +31,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/', Colors::class)->name('colors');
             Route::get('/create-color', CreateColor::class)->name('create-color');
             Route::get('/update-color/{id}', UpdateColor::class)->name('update-color');
+        });
+
+        Route::prefix('sizes')->group(function () {
+            Route::get('/', Sizes::class)->name('sizes');
+            Route::get('/create-size', CreateSize::class)->name('create-size');
+            Route::get('/update-size/{id}', UpdateSize::class)->name('update-size');
         });
     });
 });

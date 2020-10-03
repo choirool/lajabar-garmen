@@ -26,6 +26,9 @@
                             <x-nav-link-dropdown-item href="{{ route('master-data.colors') }}">
                                 {{ __('Color master') }}
                             </x-nav-link-dropdown-item>
+                            <x-nav-link-dropdown-item href="{{ route('master-data.sizes') }}">
+                                {{ __('Size master') }}
+                            </x-nav-link-dropdown-item>
                         </x-slot>
                     </x-nav-link-dropdown>
                 </div>

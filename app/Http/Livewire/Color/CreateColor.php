@@ -12,7 +12,7 @@ class CreateColor extends Component
     public function saveColor()
     {
         $this->validate([
-            'name' => 'required|min:2|unique:users',
+            'name' => 'required|min:2|unique:colors',
         ]);
 
         Color::create([

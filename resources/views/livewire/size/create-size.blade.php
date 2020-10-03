@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Update Color Item') }}
+        {{ __('Create a New Size Item') }}
     </h2>
 </x-slot>
 
@@ -8,7 +8,7 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-1 py-8 sm:px-8 bg-white border-b border-gray-200">
-                <x-form-section submit="saveColor">                
+                <x-form-section submit="saveSize">                
                     <x-slot name="form">
                         <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="name" value="{{ __('Name') }}" />
