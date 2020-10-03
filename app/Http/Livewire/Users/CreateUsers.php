@@ -32,8 +32,7 @@ class CreateUsers extends Component
         
         session()->flash('message', 'User successfully created.');
 
-        return redirect()
-            ->route('master-data.users');
+        return redirect()->route('master-data.users');
     }
 
     public function render()

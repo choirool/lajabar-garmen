@@ -32,6 +32,7 @@
                             <th class="border px-4 py-2">Name</th>
                             <th class="border px-4 py-2">Username</th>
                             <th class="border px-4 py-2">Email</th>
+                            <th class="border px-4 py-2"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,9 +41,14 @@
                                 <td class="border px-4 py-2">{{ $user->name }}</td>
                                 <td class="border px-4 py-2">{{ $user->username }}</td>
                                 <td class="border px-4 py-2">{{ $user->email }}</td>
+                                <td class="border px-4 py-2">
+                                    <a href="{{ route('master-data.update-user', ['id' => $user->id]) }}">Edit</a>
+                                </td>
                             </tr>
                         @empty
-                            
+                        <tr>
+                            <td class="border px-4 py-2" colspan="2">No data</td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
