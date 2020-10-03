@@ -3,6 +3,9 @@
 use App\Http\Livewire\Color\Colors;
 use App\Http\Livewire\Color\CreateColor;
 use App\Http\Livewire\Color\UpdateColor;
+use App\Http\Livewire\Material\CreateMaterial;
+use App\Http\Livewire\Material\Materials;
+use App\Http\Livewire\Material\UpdateMaterial;
 use App\Http\Livewire\Size\CreateSize;
 use App\Http\Livewire\Size\Sizes;
 use App\Http\Livewire\Size\UpdateSize;
@@ -37,6 +40,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/', Sizes::class)->name('sizes');
             Route::get('/create-size', CreateSize::class)->name('create-size');
             Route::get('/update-size/{id}', UpdateSize::class)->name('update-size');
+        });
+
+        Route::prefix('materials')->group(function () {
+            Route::get('/', Materials::class)->name('materials');
+            Route::get('/create-material', CreateMaterial::class)->name('create-material');
+            Route::get('/update-material/{id}', UpdateMaterial::class)->name('update-material');
         });
     });
 });
