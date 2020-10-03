@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Livewire\Category\Categories;
+use App\Http\Livewire\Category\CreateCategory;
+use App\Http\Livewire\Category\UpdateCategory;
 use App\Http\Livewire\Color\Colors;
 use App\Http\Livewire\Color\CreateColor;
 use App\Http\Livewire\Color\UpdateColor;
@@ -46,6 +49,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/', Materials::class)->name('materials');
             Route::get('/create-material', CreateMaterial::class)->name('create-material');
             Route::get('/update-material/{id}', UpdateMaterial::class)->name('update-material');
+        });
+
+        Route::prefix('categories')->group(function () {
+            Route::get('/', Categories::class)->name('categories');
+            Route::get('/create-category', CreateCategory::class)->name('create-category');
+            Route::get('/update-category/{id}', UpdateCategory::class)->name('update-category');
         });
     });
 });
