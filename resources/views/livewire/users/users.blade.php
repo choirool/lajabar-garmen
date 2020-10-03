@@ -20,13 +20,11 @@
                     </div>
                 </div>
 
-                <div>
-                    @if (session()->has('message'))
-                        <div class="alert alert-success">
-                            {{ session('message') }}
-                        </div>
-                    @endif
-                </div>
+                @if (session()->has('message'))
+                    <x-alert>
+                        {{ session('message') }}
+                    </x-alert>
+                @endif
                 
                 <table class="table-auto w-full">
                     <thead>

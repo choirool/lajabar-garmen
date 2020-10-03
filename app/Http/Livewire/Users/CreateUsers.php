@@ -14,13 +14,6 @@ class CreateUsers extends Component
     public $email = '';
     public $password = '';
 
-    protected $rules = [
-        'name' => 'required|min:6',
-        'username' => 'required|min:6',
-        'email' => 'required|email',
-        'password' => ['required', 'string', 'min:6'],
-    ];
-
     public function saveUser()
     {
         $this->validate([
