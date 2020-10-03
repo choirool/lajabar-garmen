@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Livewire\Users;
+use App\Http\Livewire\Users\CreateUsers;
+use App\Http\Livewire\Users\Users;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
     Route::prefix('/master-data')->name('master-data.')->group(function () {
         Route::get('/users', Users::class)->name('users');
+        Route::get('/create-user', CreateUsers::class)->name('create-user');
     });
 });
 

@@ -8,6 +8,26 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-1 py-8 sm:px-8 bg-white border-b border-gray-200">
+                <div class="w-full flex">
+                    <div class="w-1/2 my-2">
+                        <x-jet-input type="text" class="mt-1 block w-2/4" placeholder="{{ __('Search by name, username or email...') }}"
+                        wire:model="search" />
+                    </div>
+                    <div class="w-1/2 my-2">
+                        <x-link class="ml-2 float-right" href="{{ route('master-data.create-user') }}">
+                            Create new
+                        </x-link>
+                    </div>
+                </div>
+
+                <div>
+                    @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            {{ session('message') }}
+                        </div>
+                    @endif
+                </div>
+                
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
