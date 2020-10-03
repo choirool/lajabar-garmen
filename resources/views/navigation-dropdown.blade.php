@@ -23,8 +23,8 @@
                             <x-nav-link-dropdown-item href="{{ route('master-data.users') }}">
                                 {{ __('Users') }}
                             </x-nav-link-dropdown-item>
-                            <x-nav-link-dropdown-item href="{{ route('profile.show') }}">
-                                {{ __('Items') }}
+                            <x-nav-link-dropdown-item href="{{ route('master-data.colors') }}">
+                                {{ __('Color master') }}
                             </x-nav-link-dropdown-item>
                         </x-slot>
                     </x-nav-link-dropdown>

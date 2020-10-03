@@ -1,20 +1,12 @@
 <?php
 
+use App\Http\Livewire\Color\Colors;
+use App\Http\Livewire\Color\CreateColor;
+use App\Http\Livewire\Color\UpdateColor;
 use App\Http\Livewire\Users\CreateUsers;
 use App\Http\Livewire\Users\UpdateUsers;
 use App\Http\Livewire\Users\Users;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,6 +22,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/', Users::class)->name('users');
             Route::get('/create-user', CreateUsers::class)->name('create-user');
             Route::get('/update-user/{id}', UpdateUsers::class)->name('update-user');
+        });
+
+        Route::prefix('colors')->group(function () {
+            Route::get('/', Colors::class)->name('colors');
+            Route::get('/create-color', CreateColor::class)->name('create-color');
+            Route::get('/update-color/{id}', UpdateColor::class)->name('update-color');
         });
     });
 });
