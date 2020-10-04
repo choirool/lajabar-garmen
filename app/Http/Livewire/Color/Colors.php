@@ -30,7 +30,6 @@ class Colors extends Component
     public function delete($id)
     {
         Color::where('id', $id)->delete();
-        $this->resetPage();
     }
 
     public function confirmDelete($id)

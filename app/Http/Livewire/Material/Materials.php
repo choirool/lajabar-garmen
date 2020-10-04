@@ -23,7 +23,6 @@ class Materials extends Component
     public function delete($id)
     {
         Material::where('id', $id)->delete();
-        $this->resetPage();
     }
 
     public function confirmDelete($id)

@@ -23,7 +23,6 @@ class Sizes extends Component
     public function delete($id)
     {
         Size::where('id', $id)->delete();
-        $this->resetPage();
     }
 
     public function confirmDelete($id)

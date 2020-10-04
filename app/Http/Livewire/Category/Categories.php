@@ -23,7 +23,6 @@ class Categories extends Component
     public function delete($id)
     {
         Category::where('id', $id)->delete();
-        $this->resetPage();
     }
 
     public function confirmDelete($id)

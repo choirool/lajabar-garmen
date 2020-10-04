@@ -38,7 +38,6 @@ class Users extends Component
     public function deleteUser($id)
     {
         User::where('id', $id)->delete();
-        $this->resetPage();
     }
 
     public function render()
