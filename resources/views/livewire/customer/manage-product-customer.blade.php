@@ -8,9 +8,25 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-1 py-8 sm:px-8 bg-white border-b border-gray-200">
-                <div class="w-full flex">
+                <div class="w-full flex bg-blue-200 px-5 py-5 mb-5">
                     <div class="w-1/2 my-2">
-                        Customer name: {{ $customer->name }}
+                        <table>
+                            <tr>
+                                <td>Customer name </td>
+                                <td>:</td>
+                                <td>{{ $customer->name }}</td>
+                            </tr>
+                            <tr>
+                                <td>Phone</td>
+                                <td>:</td>
+                                <td>{{ $customer->phone }}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>:</td>
+                                <td>{{ $customer->email }}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
 
@@ -128,14 +144,18 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td>
-                                        <a href="javascript:;" wire:click="addCustomerItem">Add new aitem</a>
+                                    <td class="pt-2">
+                                        <a href="javascript:;" 
+                                            wire:click="addCustomerItem" 
+                                            class="bg-blue-400 p-1">
+                                            Add new item
+                                        </a>
                                     </td>
                                     <td></td>
                                 </tr>
                             </tfoot>
                         </table>
-                        <div class="mt-2">
+                        <div class="mt-2 flex">
                             <x-button>
                                 {{ __('Save') }}
                             </x-button>

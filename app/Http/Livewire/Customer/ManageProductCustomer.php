@@ -34,11 +34,11 @@ class ManageProductCustomer extends Component
 
     public function mount($id)
     {
-        $this->items = Item::select('name', 'id', 'unit')->get();
+        $this->items = Item::select('name', 'id', 'unit')->orderBy('name')->get();
         $this->customer = Customer::findOrFail($id);
-        $this->materials = Material::all();
-        $this->categories = Category::all();
-        $this->colors = Color::all();
+        $this->materials = Material::orderBy('name')->get();
+        $this->categories = Category::orderBy('name')->get();
+        $this->colors = Color::orderBy('name')->get();
         $this->customerItems[] = $this->itemsData;
         $this->getCustomerItems();
     }
