@@ -16,6 +16,9 @@ use App\Http\Livewire\Item\UpdateItem;
 use App\Http\Livewire\Material\CreateMaterial;
 use App\Http\Livewire\Material\Materials;
 use App\Http\Livewire\Material\UpdateMaterial;
+use App\Http\Livewire\Salesman\CreateSalesman;
+use App\Http\Livewire\Salesman\Salesmen;
+use App\Http\Livewire\Salesman\UpdateSalesman;
 use App\Http\Livewire\Size\CreateSize;
 use App\Http\Livewire\Size\Sizes;
 use App\Http\Livewire\Size\UpdateSize;
@@ -75,6 +78,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/', Items::class)->name('items');
             Route::get('/create-item', CreateItem::class)->name('create-item');
             Route::get('/update-item/{id}', UpdateItem::class)->name('update-item');
+        });
+
+        Route::prefix('salesmen')->group(function () {
+            Route::get('/', Salesmen::class)->name('salesmen');
+            Route::get('/create-salesman', CreateSalesman::class)->name('create-salesman');
+            Route::get('/update-salesman/{id}', UpdateSalesman::class)->name('update-salesman');
         });
     });
 });

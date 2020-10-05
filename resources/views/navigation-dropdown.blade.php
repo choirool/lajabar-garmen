@@ -38,6 +38,9 @@
                             <x-nav-link-dropdown-item href="{{ route('master-data.items') }}">
                                 {{ __('Item master') }}
                             </x-nav-link-dropdown-item>
+                            <x-nav-link-dropdown-item href="{{ route('master-data.salesmen') }}">
+                                {{ __('Salesmen master') }}
+                            </x-nav-link-dropdown-item>
                             <x-nav-link-dropdown-item href="{{ route('master-data.customers') }}">
                                 {{ __('Customers master') }}
                             </x-nav-link-dropdown-item>
