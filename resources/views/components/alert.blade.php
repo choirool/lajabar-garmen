@@ -7,7 +7,7 @@
     }
 
     if ($type == 'success') {
-        $classType = 'text-indigo-600 bg-indigo-200 border border-indigo-400';
+        $classType = 'text-green-600 bg-green-200 border border-green-400';
     }
 
     if ($type == 'info') {
@@ -24,6 +24,6 @@
     
 @endphp
 
-<div class="block text-sm text-left {{ $classType }} h-12 flex items-center p-4 my-4 rounded-sm" role="alert">
+<div class="block text-sm text-left {{ $classType }} h-auto flex items-center p-4 my-4 rounded-sm" role="alert">
     {{ $slot }}
 </div>

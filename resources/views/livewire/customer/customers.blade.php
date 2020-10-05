@@ -59,7 +59,7 @@
                                             Delete
                                         </x-button>
                                     @endif
-                                    <x-link href="{{ route('master-data.update-customer', ['id' => $customer->id]) }}">{{ __('Product') }}</x-link>
+                                    <x-link href="{{ route('master-data.manage-products-customer', ['id' => $customer->id]) }}">{{ __('Product') }}</x-link>
                                 </td>
                             </tr>
                         @empty
