@@ -29,37 +29,39 @@
                 <table class="table-auto w-full text-xs">
                     <thead>
                         <tr>
-                            <th class="border px-4 py-2">Name</th>
-                            <th class="border px-4 py-2">Address</th>
-                            <th class="border px-4 py-2">Phone</th>
-                            <th class="border px-4 py-2">Email</th>
-                            <th class="border px-4 py-2">Country</th>
-                            <th class="border px-4 py-2"></th>
+                            <th class="border">Name</th>
+                            <th class="border">Address</th>
+                            <th class="border">Phone</th>
+                            <th class="border">Email</th>
+                            <th class="border">Country</th>
+                            <th class="border"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($customers as $customer)
                             <tr>
-                                <td class="border px-1 py-1 w-1 truncate">{{ $customer->name }}</td>
-                                <td class="border px-1 py-1 w-2 truncate">{{ $customer->address }}</td>
-                                <td class="border px-1 py-1 w-1 truncate">{{ $customer->phone }}</td>
-                                <td class="border px-1 py-1 w-1 truncate">{{ $customer->email }}</td>
-                                <td class="border px-1 py-1 w-1 truncate">{{ $customer->country }}</td>
-                                <td class="border px-1 py-1">
-                                    <x-link href="{{ route('master-data.update-customer', ['id' => $customer->id]) }}">{{ __('Edit') }}</x-link>
+                                <td class="border align-top truncate">
+                                    <span>{{ $customer->name }}</span>
+                                </td>
+                                <td class="border align-top truncate">{{ $customer->address }}</td>
+                                <td class="border align-top truncate">{{ $customer->phone }}</td>
+                                <td class="border align-top truncate">{{ $customer->email }}</td>
+                                <td class="border align-top truncate">{{ $customer->country }}</td>
+                                <td class="border align-top">
+                                    <x-link href="{{ route('master-data.update-customer', ['id' => $customer->id]) }}" size="small">{{ __('Edit') }}</x-link>
                                     @if($confirming == $customer->id)
-                                        <x-button action="delete({{ $customer->id }})" type="danger">
+                                        <x-button action="delete({{ $customer->id }})" type="danger" size="small">
                                             Yes?
                                         </x-button>
-                                        <x-button action="resetConfirm" type="success">
+                                        <x-button action="resetConfirm" type="success" size="small">
                                             No
                                         </x-button>
                                     @else
-                                        <x-button action="confirmDelete({{ $customer->id }})">
+                                        <x-button action="confirmDelete({{ $customer->id }})" size="small">
                                             Delete
                                         </x-button>
                                     @endif
-                                    <x-link href="{{ route('master-data.manage-products-customer', ['id' => $customer->id]) }}">{{ __('Product') }}</x-link>
+                                    <x-link href="{{ route('master-data.manage-products-customer', ['id' => $customer->id]) }}" size="small">{{ __('Product') }}</x-link>
                                 </td>
                             </tr>
                         @empty
