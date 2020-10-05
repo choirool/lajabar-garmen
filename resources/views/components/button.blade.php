@@ -1,4 +1,4 @@
-@props(['type' => '', 'action', 'size'])
+@props(['type' => '', 'action' => '', 'size' => ''])
 
 @php
     $typeClass = 'bg-white bg-gray-200 hover:bg-gray-400 text-black';

@@ -28,6 +28,7 @@ class ManageProductCustomer extends Component
         'material' => '',
         'color' => '',
         'printing' => '',
+        'sablon' => false,
         'note' => '',
     ];
 
@@ -60,7 +61,7 @@ class ManageProductCustomer extends Component
                 'type' => $customerItem->item->category_id,
                 'material' => $customerItem->material_id,
                 'color' => $customerItem->color_id,
-                'printing' => $customerItem->screen_printing,
+                'sablon' => $customerItem->screen_printing,
                 'note' => $customerItem->note,
             ];
         }
@@ -93,6 +94,7 @@ class ManageProductCustomer extends Component
             'customerItems.*.type' => 'required|exists:categories,id',
             'customerItems.*.material' => 'required|exists:materials,id',
             'customerItems.*.color' => 'required|exists:colors,id',
+            'customerItems.*.sablon' => 'required|boolean',
             'customerItems.*.note' => '',
         ]);
 
@@ -110,7 +112,7 @@ class ManageProductCustomer extends Component
                 'price' => $item['price'],
                 'image' => '',
                 'note' => $item['note'],
-                'screen_printing' => false,
+                'screen_printing' => $item['sablon'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
