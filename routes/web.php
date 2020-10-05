@@ -9,6 +9,9 @@ use App\Http\Livewire\Color\UpdateColor;
 use App\Http\Livewire\Customer\CreateCustomer;
 use App\Http\Livewire\Customer\Customers;
 use App\Http\Livewire\Customer\UpdateCustomer;
+use App\Http\Livewire\Item\CreateItem;
+use App\Http\Livewire\Item\Items;
+use App\Http\Livewire\Item\UpdateItem;
 use App\Http\Livewire\Material\CreateMaterial;
 use App\Http\Livewire\Material\Materials;
 use App\Http\Livewire\Material\UpdateMaterial;
@@ -64,6 +67,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/', Customers::class)->name('customers');
             Route::get('/create-customer', CreateCustomer::class)->name('create-customer');
             Route::get('/update-customer/{id}', UpdateCustomer::class)->name('update-customer');
+        });
+
+        Route::prefix('items')->group(function () {
+            Route::get('/', Items::class)->name('items');
+            Route::get('/create-item', CreateItem::class)->name('create-item');
+            Route::get('/update-item/{id}', UpdateItem::class)->name('update-item');
         });
     });
 });
