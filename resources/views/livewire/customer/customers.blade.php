@@ -34,6 +34,7 @@
                             <th class="border">Phone</th>
                             <th class="border">Email</th>
                             <th class="border">Country</th>
+                            <th class="border">Status</th>
                             <th class="border"></th>
                         </tr>
                     </thead>
@@ -47,20 +48,28 @@
                                 <td class="border align-top truncate">{{ $customer->phone }}</td>
                                 <td class="border align-top truncate">{{ $customer->email }}</td>
                                 <td class="border align-top truncate">{{ $customer->country }}</td>
-                                <td class="border align-top">
-                                    <x-link href="{{ route('master-data.update-customer', ['id' => $customer->id]) }}" size="small">{{ __('Edit') }}</x-link>
+                                <td class="border align-top truncate">
                                     @if($confirming == $customer->id)
-                                        <x-button action="delete({{ $customer->id }})" type="danger" size="small">
+                                        <x-button action="toggleActive({{ $customer->id }}, {{ $customer->deleted_at ? true : false}})" type="danger" size="small">
                                             Yes?
                                         </x-button>
                                         <x-button action="resetConfirm" type="success" size="small">
                                             No
                                         </x-button>
                                     @else
-                                        <x-button action="confirmDelete({{ $customer->id }})" size="small">
-                                            Delete
-                                        </x-button>
+                                        @if ($customer->deleted_at)
+                                            <x-button action="confirmDelete({{ $customer->id }})" size="small">
+                                                Inactive
+                                            </x-button>
+                                        @else
+                                            <x-button action="confirmDelete({{ $customer->id }})" size="small">
+                                                Acitive
+                                            </x-button>    
+                                        @endif
                                     @endif
+                                </td>
+                                <td class="border align-top">
+                                    <x-link href="{{ route('master-data.update-customer', ['id' => $customer->id]) }}" size="small">{{ __('Edit') }}</x-link>
                                     <x-link href="{{ route('master-data.manage-products-customer', ['id' => $customer->id]) }}" size="small">{{ __('Product') }}</x-link>
                                 </td>
                             </tr>

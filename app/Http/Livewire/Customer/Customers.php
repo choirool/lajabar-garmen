@@ -20,9 +20,16 @@ class Customers extends Component
         $this->search = request()->query('search', $this->search);
     }
 
-    public function delete($id)
+    public function toggleActive($id, $deleted = false)
     {
-        Customer::where('id', $id)->delete();
+        $customer = Customer::where('id', $id);
+        if ($deleted) {
+            $customer->restore();
+        } else {
+            $customer->delete();
+        }
+
+        $this->resetConfirm();
     }
 
     public function confirmDelete($id)
@@ -44,6 +51,7 @@ class Customers extends Component
                     ->orWhere('address', 'like', '%' . $this->search . '%')
                     ->orWhere('phone', 'like', '%' . $this->search . '%');
             })
+            ->withTrashed()
             ->paginate();
     }
 
