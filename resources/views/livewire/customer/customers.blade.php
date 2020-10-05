@@ -26,23 +26,25 @@
                     </x-alert>
                 @endif
                 
-                <table class="table-auto w-full">
+                <table class="table-auto w-full text-xs">
                     <thead>
                         <tr>
                             <th class="border px-4 py-2">Name</th>
                             <th class="border px-4 py-2">Address</th>
                             <th class="border px-4 py-2">Phone</th>
                             <th class="border px-4 py-2">Email</th>
+                            <th class="border px-4 py-2">Country</th>
                             <th class="border px-4 py-2"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($customers as $customer)
                             <tr>
-                                <td class="border px-1 py-1 truncate">{{ $customer->name }}</td>
-                                <td class="border px-1 py-1 truncate">{{ $customer->address }}</td>
-                                <td class="border px-1 py-1 truncate">{{ $customer->phone }}</td>
-                                <td class="border px-1 py-1 truncate">{{ $customer->email }}</td>
+                                <td class="border px-1 py-1 w-1 truncate">{{ $customer->name }}</td>
+                                <td class="border px-1 py-1 w-2 truncate">{{ $customer->address }}</td>
+                                <td class="border px-1 py-1 w-1 truncate">{{ $customer->phone }}</td>
+                                <td class="border px-1 py-1 w-1 truncate">{{ $customer->email }}</td>
+                                <td class="border px-1 py-1 w-1 truncate">{{ $customer->country }}</td>
                                 <td class="border px-1 py-1">
                                     <x-link href="{{ route('master-data.update-customer', ['id' => $customer->id]) }}">{{ __('Edit') }}</x-link>
                                     @if($confirming == $customer->id)
@@ -56,8 +58,8 @@
                                         <x-button action="confirmDelete({{ $customer->id }})">
                                             Delete
                                         </x-button>
-                                        
                                     @endif
+                                    <x-link href="{{ route('master-data.update-customer', ['id' => $customer->id]) }}">{{ __('Product') }}</x-link>
                                 </td>
                             </tr>
                         @empty
