@@ -19,7 +19,6 @@ class CreateCustomerItemsTable extends Migration
             $table->integer('item_id');
             $table->integer('material_id');
             $table->integer('color_id');
-            $table->decimal('price');
             $table->string('image');
             $table->text('note');
             $table->boolean('screen_printing')->default(false);

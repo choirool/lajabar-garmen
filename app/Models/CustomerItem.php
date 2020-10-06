@@ -43,4 +43,9 @@ class CustomerItem extends Model
     {
         return $this->belongsTo(Material::class);
     }
+
+    public function prices()
+    {
+        return $this->hasMany(CustomerItemPrice::class);
+    }
 }

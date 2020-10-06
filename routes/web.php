@@ -22,6 +22,7 @@ use App\Http\Livewire\Salesman\UpdateSalesman;
 use App\Http\Livewire\Size\CreateSize;
 use App\Http\Livewire\Size\Sizes;
 use App\Http\Livewire\Size\UpdateSize;
+use App\Http\Livewire\Transaction\Orders;
 use App\Http\Livewire\Users\CreateUsers;
 use App\Http\Livewire\Users\UpdateUsers;
 use App\Http\Livewire\Users\Users;
@@ -85,5 +86,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/create-salesman', CreateSalesman::class)->name('create-salesman');
             Route::get('/update-salesman/{id}', UpdateSalesman::class)->name('update-salesman');
         });
+    });
+
+    Route::prefix('transactions')->name('transactions.')->group(function () {
+        Route::get('/orders', Orders::class)->name('prders');
     });
 });

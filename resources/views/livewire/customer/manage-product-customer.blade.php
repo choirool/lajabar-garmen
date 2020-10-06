@@ -5,9 +5,9 @@
 </x-slot>
 
 <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="w-full mx-auto sm:px-6 lg:px-1">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-            <div class="p-1 py-8 sm:px-8 bg-white border-b border-gray-200">
+            <div class="p-1 py-1 sm:px-1 bg-white border-b border-gray-200">
                 <div class="w-full flex bg-blue-200 px-5 py-5 mb-5">
                     <div class="w-1/2 my-2">
                         <table>
@@ -51,18 +51,23 @@
                 
                 <div class="w-full flex">
                     <form wire:submit.prevent="saveData">
-                        <table class="table-auto w-full text-base">
+                        <table class="table-auto w-full text-xs">
                             <thead>
                                 <tr>
-                                    <th class="border" width="20%">Item name</th>
-                                    <th class="border" width="3%">Unit</th>
-                                    <th class="border" width="10%">Price</th>
-                                    <th class="border" width="15%">Type</th>
-                                    <th class="border" width="15%">Material</th>
-                                    <th class="border" width="10%">Color</th>
-                                    <th class="border" width="3%">Sablon</th>
-                                    <th class="border" width="25%">Note</th>
-                                    <th class="border" width="2%"></th>
+                                    <th class="border" width="20%" rowspan="2">Item name</th>
+                                    <th class="border" width="3%" rowspan="2">Unit</th>
+                                    <th class="border" width="10%" colspan="{{ $sizes->count() }}">Price</th>
+                                    <th class="border" width="10%" rowspan="2">Type</th>
+                                    <th class="border" width="10%" rowspan="2">Material</th>
+                                    <th class="border" width="7%" rowspan="2">Color</th>
+                                    <th class="border" width="3%" rowspan="2">Sablon</th>
+                                    <th class="border" width="25%" rowspan="2">Note</th>
+                                    <th class="border" width="2%" rowspan="2"></th>
+                                </tr>
+                                <tr>
+                                    @foreach ($sizes as $size)
+                                        <th class="border" width="7%">{{ $size->name }}</th>
+                                    @endforeach
                                 </tr>
                             </thead>
                             <tbody>
@@ -74,7 +79,7 @@
                                                 id="customerItems.{{ $index }}.item_id"
                                                 wire:change="itemSelected({{ $index }})" 
                                                 wire:model="customerItems.{{ $index }}.item_id">
-                                                <option>Select item</option>
+                                                <option value="null">Select item</option>
                                                 @foreach ($items as $item)
                                                     <option value="{{ $item->id }}">
                                                         {{ $item->name }}
@@ -84,11 +89,21 @@
                                             {{-- <x-jet-input-error for="customerItems.{{ $index }}.item_id" class="mt-2 text-xs" /> --}}
                                         </td>
                                         <td class="border align-top">
-                                            <input id="customerItems.{{ $index }}.unit" type="text" wire:model.defer="customerItems.{{ $index }}.unit" class="w-full bg-white">
+                                            <input id="customerItems.{{ $index }}.unit" type="text" wire:model.defer="customerItems.{{ $index }}.unit" class="w-full bg-white text-center">
                                         </td>
-                                        <td class="border align-top @if($errors->has('customerItems.'.$index.'.price')) border-red-700 @endif">
+                                        @foreach ($sizes as $i => $size)
+                                            <td class="border align-top @if($errors->has('customerItems.'.$index.'.price.'.$i.'.value')) border-red-700 @endif">
+                                                <input 
+                                                    id="customerItems.{{ $index }}.price.{{ $i }}.value" 
+                                                    type="number" 
+                                                    class="w-full bg-white text-right"
+                                                    min="0"
+                                                    wire:model.debounce.500ms="customerItems.{{ $index }}.price.{{ $i }}.value">
+                                            </td>
+                                        @endforeach
+                                        {{-- <td class="border align-top @if($errors->has('customerItems.'.$index.'.price')) border-red-700 @endif">
                                             <input id="customerItems.{{ $index }}.price" type="text" wire:model.debounce.500ms="customerItems.{{ $index }}.price" class="w-full bg-white">
-                                        </td>
+                                        </td> --}}
                                         <td class="border align-top @if($errors->has('customerItems.'.$index.'.type')) border-red-700 @endif">
                                             <select
                                                 class="w-full bg-white"
@@ -160,7 +175,6 @@
                                 {{ __('Save') }}
                             </x-button>
                         </div>
-                        {{-- <button type="submit">Save</button> --}}
                     </form>
                 </div>
             </div>        
