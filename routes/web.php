@@ -1,32 +1,32 @@
 <?php
 
+use App\Http\Livewire\Item\Items;
+use App\Http\Livewire\Size\Sizes;
+use App\Http\Livewire\Users\Users;
+use App\Http\Livewire\Color\Colors;
+use Illuminate\Support\Facades\Route;
+use App\Http\Livewire\Item\CreateItem;
+use App\Http\Livewire\Item\UpdateItem;
+use App\Http\Livewire\Size\CreateSize;
+use App\Http\Livewire\Size\UpdateSize;
+use App\Http\Livewire\Color\CreateColor;
+use App\Http\Livewire\Color\UpdateColor;
+use App\Http\Livewire\Salesman\Salesmen;
+use App\Http\Livewire\Users\CreateUsers;
+use App\Http\Livewire\Users\UpdateUsers;
+use App\Http\Livewire\Customer\Customers;
+use App\Http\Livewire\Material\Materials;
 use App\Http\Livewire\Category\Categories;
 use App\Http\Livewire\Category\CreateCategory;
 use App\Http\Livewire\Category\UpdateCategory;
-use App\Http\Livewire\Color\Colors;
-use App\Http\Livewire\Color\CreateColor;
-use App\Http\Livewire\Color\UpdateColor;
 use App\Http\Livewire\Customer\CreateCustomer;
-use App\Http\Livewire\Customer\Customers;
-use App\Http\Livewire\Customer\ManageProductCustomer;
 use App\Http\Livewire\Customer\UpdateCustomer;
-use App\Http\Livewire\Item\CreateItem;
-use App\Http\Livewire\Item\Items;
-use App\Http\Livewire\Item\UpdateItem;
 use App\Http\Livewire\Material\CreateMaterial;
-use App\Http\Livewire\Material\Materials;
 use App\Http\Livewire\Material\UpdateMaterial;
 use App\Http\Livewire\Salesman\CreateSalesman;
-use App\Http\Livewire\Salesman\Salesmen;
 use App\Http\Livewire\Salesman\UpdateSalesman;
-use App\Http\Livewire\Size\CreateSize;
-use App\Http\Livewire\Size\Sizes;
-use App\Http\Livewire\Size\UpdateSize;
-use App\Http\Livewire\Transaction\Orders;
-use App\Http\Livewire\Users\CreateUsers;
-use App\Http\Livewire\Users\UpdateUsers;
-use App\Http\Livewire\Users\Users;
-use Illuminate\Support\Facades\Route;
+use App\Http\Livewire\Transaction\CreateOrder;
+use App\Http\Livewire\Customer\ManageProductCustomer;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/', function () {
@@ -89,6 +89,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
 
     Route::prefix('transactions')->name('transactions.')->group(function () {
-        Route::get('/orders', Orders::class)->name('prders');
+        Route::get('/create-order', CreateOrder::class)->name('create-order');
     });
 });

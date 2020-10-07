@@ -16,7 +16,7 @@ use App\Models\CustomerItem;
 use App\Models\OrderItemPrice;
 use Illuminate\Support\Facades\DB;
 
-class Orders extends Component
+class CreateOrder extends Component
 {
     public $customers;
     public $salesmen;
@@ -230,6 +230,6 @@ class Orders extends Component
 
     public function render()
     {
-        return view('livewire.transaction.orders');
+        return view('livewire.transaction.create-order');
     }
 }
