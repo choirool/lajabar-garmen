@@ -22,6 +22,7 @@
                                                 <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                                             @endforeach
                                         </select>
+                                        <x-jet-input-error for="form.customer_id" class="mt-2" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -29,18 +30,20 @@
                                     <td>:</td>
                                     <td>
                                         <input type="date" wire:model="form.date">
+                                        <x-jet-input-error for="form.date" class="mt-2" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Sales</td>
                                     <td>:</td>
                                     <td>
-                                        <select id="" wire:model="form.salesman_id" wire:change="customerSelected">
+                                        <select wire:model="form.salesman_id">
                                             <option value="">Select salesman</option>
                                             @foreach ($salesmen as $salesman)
                                                 <option value="{{ $salesman->id }}">{{ $salesman->name }}</option>
                                             @endforeach
                                         </select>
+                                        <x-jet-input-error for="form.salesman_id" class="mt-2" />
                                     </td>
                                 </tr>
                             </table>
@@ -83,7 +86,7 @@
                                     @endphp
                                     @foreach ($form['order_lines'] as $i => $orderLines)
                                         <tr>
-                                            <td class="border @if($errors->has('customerItems.'.$i.'.item')) border-red-700 @endif">
+                                            <td class="border @if($errors->has('form.order_lines.'.$i.'.item')) border-red-700 @endif">
                                                 <select 
                                                     wire:model="form.order_lines.{{ $i }}.item"
                                                     wire:change="itemSelected({{ $i }})" 
@@ -94,8 +97,10 @@
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td class="border text-center">{{ $orderLines['unit'] }}</td>
-                                            <td class="border @if($errors->has('customerItems.'.$i.'.type')) border-red-700 @endif">
+                                            <td class="border @if($errors->has('form.order_lines.'.$i.'.unit')) border-red-700 @endif">
+                                                <input type="text" wire:model="form.order_lines.{{ $i }}.unit" class="w-10 text-center">
+                                            </td>
+                                            <td class="border @if($errors->has('form.order_lines.'.$i.'.type')) border-red-700 @endif">
                                                 <select wire:model="form.order_lines.{{ $i }}.type" class="w-28 bg-white">
                                                     <option value="0">Select category</option>
                                                     @foreach ($categories as $category)
@@ -103,7 +108,7 @@
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td class="border @if($errors->has('customerItems.'.$i.'.material')) border-red-700 @endif">
+                                            <td class="border @if($errors->has('form.order_lines.'.$i.'.material')) border-red-700 @endif">
                                                 <select wire:model="form.order_lines.{{ $i }}.material" class="w-28 bg-white">
                                                     <option value="0">Select material</option>
                                                     @foreach ($materials as $material)
@@ -111,7 +116,7 @@
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td class="border @if($errors->has('customerItems.'.$i.'.color')) border-red-700 @endif">
+                                            <td class="border @if($errors->has('form.order_lines.'.$i.'.color')) border-red-700 @endif">
                                                 <select wire:model="form.order_lines.{{ $i }}.color" class="bg-white">
                                                     <option value="0">Select color</option>
                                                     @foreach ($colors as $color)
@@ -119,14 +124,14 @@
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td class="border text-center @if($errors->has('customerItems.'.$i.'.printing')) border-red-700 @endif">
+                                            <td class="border text-center @if($errors->has('form.order_lines.'.$i.'.printing')) border-red-700 @endif">
                                                 <input type="checkbox" wire:model="form.order_lines.{{ $i }}.printing">
                                             </td>
                                             @foreach ($sizes as $y => $size)
-                                                <td class="border @if($errors->has('customerItems.'.$i.'.price.'.$y.'.qty')) border-red-700 @endif">
+                                                <td class="border @if($errors->has('form.order_lines.'.$i.'.price.'.$y.'.qty')) border-red-700 @endif">
                                                     <input type="number" wire:model.debounce.500ms="form.order_lines.{{ $i }}.price.{{ $y }}.qty" class="w-16">
                                                 </td>
-                                                <td class="border @if($errors->has('customerItems.'.$i.'.price.'.$y.'.price')) border-red-700 @endif">
+                                                <td class="border @if($errors->has('form.order_lines.'.$i.'.price.'.$y.'.price')) border-red-700 @endif">
                                                     <input type="number" wire:model.debounce.500ms="form.order_lines.{{ $i }}.price.{{ $y }}.price" class="w-20 text-right">
                                                 </td>
                                             @endforeach
@@ -141,10 +146,10 @@
                                                         @endphp
                                                     @endforeach
                                                     
-                                                    {{ $subTotal[$i] }}
+                                                    {{ number_format($subTotal[$i], 0,",",".") }}
                                                 </div>
                                             </td>
-                                            <td class="border @if($errors->has('customerItems.'.$i.'.price.'.$y.'.note')) border-red-700 @endif">
+                                            <td class="border @if($errors->has('form.order_lines.'.$i.'.price.'.$y.'.note')) border-red-700 @endif">
                                                 <input type="text" wire:model="form.order_lines.{{ $i }}.note">
                                             </td>
                                             <td class="border">
@@ -171,15 +176,17 @@
                                                     $total += $st;
                                                 @endphp
                                             @endforeach
-                                            {{ $total }}
+                                            {{ number_format($total, 0,",",".") }}
                                         </td>
                                         <td class=""></td>
                                     </tr>
                                 </tbody>
-                                <tfoot>
-                                    
-                                </tfoot>
                             </table>
+                        </div>
+                        <div class="mt-2 flex">
+                            <x-button>
+                                {{ __('Save') }}
+                            </x-button>
                         </div>
                     @endif
                 </div>        
