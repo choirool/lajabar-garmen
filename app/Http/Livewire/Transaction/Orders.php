@@ -23,7 +23,11 @@ class Orders extends Component
     public $customerItems;
     public $showTable = false;
     public $items;
-    public $form = [];
+    public $form = [
+        'customer_id' => null,
+        'salesman_id' => null,
+        'order_lines' => []
+    ];
 
     public function mount()
     {
@@ -39,13 +43,7 @@ class Orders extends Component
 
     protected function initiateForm()
     {
-        $this->form = [
-            'customer_id' => null,
-            'date' => now()->format('Y-m-d'),
-            'salesman_id' => null,
-            'order_lines' => []
-        ];
-
+        $this->form['date'] = now()->format('Y-m-d');
         $this->form['order_lines'][0] = [
             'item' => '',
             'unit' => '',
@@ -63,6 +61,13 @@ class Orders extends Component
                 'price' => 0,
             ];
         }
+    }
+
+    public function itemSelected($i)
+    {
+        $item = $this->items->first(fn($item) => $item->id == $this->form['order_lines'][$i]['item']);
+        $this->form['order_lines'][$i]['unit'] = $item->unit;
+        $this->form['order_lines'][$i]['type'] = $item->category_id;
     }
 
     public function customerSelected()
@@ -113,6 +118,33 @@ class Orders extends Component
             ->get();
     }
 
+    public function addItem()
+    {
+        $i = count($this->form['order_lines']);
+        $this->form['order_lines'][$i] = [
+            'item' => '',
+            'unit' => '',
+            'type' => '',
+            'material' => '',
+            'color' => '',
+            'printing' => '',
+            'note' => '',
+        ];
+
+        foreach ($this->sizes as $size) {
+            $this->form['order_lines'][$i]['price'][] = [
+                'size_id' => $size->id,
+                'qty' => 0,
+                'price' => 0,
+            ];
+        }
+    }
+
+    public function deleteItem($i)
+    {
+        unset($this->form['order_lines'][$i]);
+        $this->form['order_lines'] = array_values($this->form['order_lines']);
+    }
 
     public function render()
     {
