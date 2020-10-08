@@ -183,6 +183,9 @@ class CreateOrder extends Component
                     });
                 });
             });
+
+            session()->flash('message', 'Data successfully created.');
+            return redirect()->route('transactions.orders');
         }
     }
 

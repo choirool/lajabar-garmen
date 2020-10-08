@@ -33,7 +33,7 @@
                         </a>
                     </div>
                     <div class="w-full md:w-1/2 xl:w-1/4 pt-3 px-3 md:pr-2 xl:pr-3 xl:pl-1">
-                        <a href="#">
+                        <a href="{{ route('transactions.orders') }}">
                             <div class="bg-orange-600 border rounded shadow p-2 h-48">
                                 <div class="flex flex-row items-center">
                                     <div class="flex-1 text-center pt-14">

@@ -46,6 +46,26 @@
                             </x-nav-link-dropdown-item>
                         </x-slot>
                     </x-nav-link-dropdown>
+                    <x-nav-link-dropdown href="#">
+                        <x-slot name="textLink">
+                            {{ __('Transaction') }}
+                        </x-slot>
+                        <x-slot name="menuItems">
+                            <x-nav-link-dropdown-item href="{{ route('transactions.orders') }}">
+                                {{ __('Orders') }}
+                            </x-nav-link-dropdown-item>
+                        </x-slot>
+                    </x-nav-link-dropdown>
+                    <x-nav-link-dropdown href="#">
+                        <x-slot name="textLink">
+                            {{ __('Reports') }}
+                        </x-slot>
+                        <x-slot name="menuItems">
+                            <x-nav-link-dropdown-item href="#">
+                                {{ __('Orders') }}
+                            </x-nav-link-dropdown-item>
+                        </x-slot>
+                    </x-nav-link-dropdown>
                 </div>
             </div>
 
