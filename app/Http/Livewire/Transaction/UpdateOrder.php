@@ -12,7 +12,6 @@ use App\Models\Customer;
 use App\Models\Material;
 use App\Models\Salesman;
 use App\Models\OrderItem;
-use App\Models\CustomerItem;
 use App\Models\OrderItemPrice;
 use Illuminate\Support\Facades\DB;
 
