@@ -28,10 +28,8 @@ class UpdateOrder extends Component
     public $showTable = true;
     public $items;
     public $order;
-    public $form = [
-
-        'order_lines' => []
-    ];
+    public $form = [];
+    public $deletedOrderItems = [];
 
     public function mount($id)
     {
@@ -56,6 +54,7 @@ class UpdateOrder extends Component
     protected function initiateForm()
     {
         $this->form = [
+            'id' => $this->order->id,
             'customer_id' => $this->order->customer_id,
             'salesman_id' => $this->order->salesman_id,
             'date' => $this->order->invoice_date,
@@ -63,6 +62,7 @@ class UpdateOrder extends Component
 
         foreach ($this->order->orderItems as $i => $orderItem) {
             $this->form['order_lines'][$i] = [
+                'id' => $orderItem->id,
                 'item' => $orderItem->item_id,
                 'unit' => $orderItem->item->unit,
                 'type' => $orderItem->item->category_id,
@@ -76,6 +76,7 @@ class UpdateOrder extends Component
                 $priceData = $orderItem->prices->first(fn ($price) => $price->size_id == $size->id);
 
                 $this->form['order_lines'][$i]['price'][] = [
+                    'id' => $priceData ? $priceData->id : null,
                     'size_id' => $size->id,
                     'qty' => $priceData ? $priceData->qty : 0,
                     'price' => $priceData? $priceData->price : 0,
@@ -99,6 +100,7 @@ class UpdateOrder extends Component
     {
         $i = count($this->form['order_lines']);
         $this->form['order_lines'][$i] = [
+            'id' => null,
             'item' => '',
             'unit' => '',
             'type' => '',
@@ -110,6 +112,7 @@ class UpdateOrder extends Component
 
         foreach ($this->sizes as $size) {
             $this->form['order_lines'][$i]['price'][] = [
+                'id' => null,
                 'size_id' => $size->id,
                 'qty' => 0,
                 'price' => 0,
@@ -119,6 +122,10 @@ class UpdateOrder extends Component
 
     public function deleteItem($i)
     {
+        if (isset($this->form['order_lines'][$i]['id'])) {
+            $this->deletedOrderItems[] = $this->form['order_lines'][$i]['id'];
+        }
+
         unset($this->form['order_lines'][$i]);
         $this->form['order_lines'] = array_values($this->form['order_lines']);
     }
@@ -144,10 +151,10 @@ class UpdateOrder extends Component
 
         if ($formData = $this->filterData()) {
             DB::transaction(function () use ($formData) {
-                $order = $this->storeOrder();
+                $this->storeOrder();
 
-                $formData->each(function ($data) use ($order) {
-                    $orderItem = $this->storeOrderItem($data, $order);
+                $formData->each(function ($data) {
+                    $orderItem = $this->storeOrderItem($data);
 
                     collect($data['price'])->each(function ($price) use ($orderItem) {
                         if ((int) $price['qty'] > 0 && (int) $price['price'] > 0) {
@@ -155,27 +162,39 @@ class UpdateOrder extends Component
                         }
                     });
                 });
+
+                $this->deleteOrderItems();
             });
 
-            session()->flash('message', 'Data successfully created.');
+            session()->flash('message', 'Data successfully updated.');
             return redirect()->route('transactions.orders');
         }
     }
 
     protected function storeOrder()
     {
-        return Order::create([
-            'invoice_code' => generate_invoice_code(),
+        Order::where('id', $this->form['id'])->update([
             'customer_id' => $this->form['customer_id'],
             'invoice_date' => $this->form['date'],
             'salesman_id' => $this->form['salesman_id'],
         ]);
     }
 
-    protected function storeOrderItem($data, $order)
+    protected function storeOrderItem($data)
     {
-        return OrderItem::create([
-            'order_id' => $order->id,
+        if ($data['id'] == null) {
+            return OrderItem::create([
+                'order_id' => $this->order->id,
+                'item_id' => $data['item'],
+                'material_id' => $data['material'],
+                'color_id' => $data['color'],
+                'image' => '',
+                'note' => $data['note'],
+                'screen_printing' => $data['printing'],
+            ]);
+        }
+
+        OrderItem::where('id', $data['id'])->update([
             'item_id' => $data['item'],
             'material_id' => $data['material'],
             'color_id' => $data['color'],
@@ -187,12 +206,28 @@ class UpdateOrder extends Component
 
     protected function storeOrderItemPrice($price, $orderItem)
     {
-        OrderItemPrice::create([
-            'order_item_id' => $orderItem->id,
+        if ($price['id'] == null) {
+            OrderItemPrice::create([
+                'order_item_id' => $orderItem->id,
+                'size_id' => $price['size_id'],
+                'qty' => $price['qty'],
+                'price' => $price['price'],
+            ]);
+        }
+
+        OrderItemPrice::where('id', $price['id'])->update([
             'size_id' => $price['size_id'],
             'qty' => $price['qty'],
             'price' => $price['price'],
         ]);
+    }
+
+    public function deleteOrderItems()
+    {
+        if (count($this->deletedOrderItems)) {
+            OrderItem::whereIn('id', $this->deletedOrderItems)->delete();
+            OrderItemPrice::whereIn('order_item_id', $this->deletedOrderItems)->delete();
+        }
     }
 
     protected function filterData()

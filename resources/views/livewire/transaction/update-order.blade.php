@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Productions') }}
+        {{ __('Edit Production #:invoice_code', ['invoice_code' => $order->invoice_code]) }}
     </h2>
 </x-slot>
 
