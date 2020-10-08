@@ -31,6 +31,7 @@
                                 class="mt-7 p-3 bg-green-200 hover:bg-gray-400 text-black text-xs ite uppercase tracking-widest rounded transition ease-in-out duration-150">
                                 Search
                             </button>
+                        </div>
                     </div>
                     <div class="w-1/5 my-2">
                         <x-link class="ml-2 float-right" href="{{ route('transactions.create-order') }}">
