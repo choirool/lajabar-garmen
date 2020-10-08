@@ -69,7 +69,10 @@
                                 <td class="border align-top truncate">{{ $order->customer->phone }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->email }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->country }}</td>
-                                <td class="border"></td>
+                                <td class="border">
+                                    <x-link href="{{ route('transactions.update-order', ['id' => $order->id]) }}" size="small">{{ __('Edit') }}</x-link>
+                                    <x-link href="{{ route('master-data.update-customer', ['id' => $order->id]) }}" size="small">{{ __('Check') }}</x-link>
+                                </td>
                             </tr>
                         @empty
                         <tr>

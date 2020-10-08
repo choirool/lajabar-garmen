@@ -27,6 +27,7 @@ use App\Http\Livewire\Material\UpdateMaterial;
 use App\Http\Livewire\Salesman\CreateSalesman;
 use App\Http\Livewire\Salesman\UpdateSalesman;
 use App\Http\Livewire\Transaction\CreateOrder;
+use App\Http\Livewire\Transaction\UpdateOrder;
 use App\Http\Livewire\Customer\ManageProductCustomer;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
@@ -92,5 +93,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::prefix('transactions')->name('transactions.')->group(function () {
         Route::get('/orders', Orders::class)->name('orders');
         Route::get('/create-order', CreateOrder::class)->name('create-order');
+        Route::get('/update-order/{id}', UpdateOrder::class)->name('update-order');
     });
 });

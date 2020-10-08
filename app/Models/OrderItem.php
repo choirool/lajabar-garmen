@@ -28,7 +28,12 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function price()
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
+    public function prices()
     {
         return $this->hasMany(OrderItemPrice::class);
     }
