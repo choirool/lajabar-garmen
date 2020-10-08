@@ -76,6 +76,8 @@ class CreateOrder extends Component
 
     public function customerSelected()
     {
+        $this->form['order_lines'] = [];
+        $this->initiateForm();
         $this->customerItems = $this->loadCustomerItems();
         $this->initiateFormFromCustomerItems();
         $this->showTable = true;
