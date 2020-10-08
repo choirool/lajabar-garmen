@@ -40,7 +40,7 @@ class CreateOrder extends Component
         $this->materials = Material::orderBy('name')->get();
         $this->categories = Category::orderBy('name')->get();
         $this->colors = Color::orderBy('name')->get();
-        $this->sizes = Size::orderBy('name')->get();
+        $this->sizes = Size::all();
         $this->items = Item::select('name', 'id', 'unit')->orderBy('name')->get();
         $this->initiateForm();
     }

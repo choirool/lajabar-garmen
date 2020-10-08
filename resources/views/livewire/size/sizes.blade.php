@@ -30,6 +30,7 @@
                     <thead>
                         <tr>
                             <th class="border px-4 py-2">Name</th>
+                            <th class="border px-4 py-2">Level</th>
                             <th class="border px-4 py-2"></th>
                         </tr>
                     </thead>
@@ -37,6 +38,7 @@
                         @forelse ($sizes as $size)
                             <tr>
                                 <td class="border px-4 py-2">{{ $size->name }}</td>
+                                <td class="border px-4 py-2">{{ $size->sort }}</td>
                                 <td class="border px-4 py-2">
                                     <x-link href="{{ route('master-data.update-size', ['id' => $size->id]) }}">{{ __('Edit') }}</x-link>
                                     @if($confirming == $size->id)

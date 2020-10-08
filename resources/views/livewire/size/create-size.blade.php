@@ -14,7 +14,12 @@
                             <x-jet-label for="name" value="{{ __('Name') }}" />
                             <x-jet-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="name" />
                             <x-jet-input-error for="name" class="mt-2" />
-                        </div>                
+                        </div>
+                        <div class="col-span-6 sm:col-span-4">
+                            <x-jet-label for="level" value="{{ __('Level') }}" />
+                            <x-jet-input id="level" type="text" class="mt-1 block w-full" wire:model.defer="level" />
+                            <x-jet-input-error for="level" class="mt-2" />
+                        </div>               
                     </x-slot>
                 
                     <x-slot name="actions">
