@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="w-1/5 my-2">
-                        <x-link class="ml-2 float-right" href="{{ route('transactions.create-order') }}">
+                        <x-link class="ml-2 float-right" href="{{ route('transactions.v2.create-order') }}">
                             {{ __('Create new') }}
                         </x-link>
                     </div>

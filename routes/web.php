@@ -75,6 +75,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/create-customer', CreateCustomer::class)->name('create-customer');
             Route::get('/update-customer/{id}', UpdateCustomer::class)->name('update-customer');
             Route::get('/update-customer/{id}/manage-product', ManageProductCustomer::class)->name('manage-products-customer');
+            Route::get('/customer-items', \App\Http\Controllers\CustomerItemsController::class)->name('customer.customer-items');
         });
 
         Route::prefix('items')->group(function () {
@@ -94,5 +95,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/orders', Orders::class)->name('orders');
         Route::get('/create-order', CreateOrder::class)->name('create-order');
         Route::get('/update-order/{id}', UpdateOrder::class)->name('update-order');
+
+        Route::get('/v2/create-order', [\App\Http\Controllers\OrderController::class, 'create'])->name('v2.create-order');
+        Route::post('/v2/create-order', [\App\Http\Controllers\OrderController::class, 'store'])->name('v2.store-order');
     });
 });
