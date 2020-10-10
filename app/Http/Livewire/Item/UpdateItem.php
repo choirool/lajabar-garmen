@@ -22,7 +22,7 @@ class UpdateItem extends Component
         $this->category = $item->category_id;
     }
 
-    public function saveitem()
+    public function saveItem()
     {
         $this->validate([
             'name' => 'required|min:2|unique:items,name,' . $this->item->id . ',id',
