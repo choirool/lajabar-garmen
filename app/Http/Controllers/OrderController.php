@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Responses\Order\OrderEditResponse;
 use App\Http\Responses\Order\OrderStoreResponse;
 use App\Http\Responses\Order\OrderCreateResponse;
+use App\Http\Responses\Order\OrderUpdateResponse;
 
 class OrderController extends Controller
 {
@@ -70,9 +72,9 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateOrderRequest $request)
     {
-        //
+        return new OrderUpdateResponse;
     }
 
     /**

@@ -99,5 +99,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/v2/create-order', [\App\Http\Controllers\OrderController::class, 'create'])->name('v2.create-order');
         Route::post('/v2/create-order', [\App\Http\Controllers\OrderController::class, 'store'])->name('v2.store-order');
         Route::get('/v2/update-order/{id}', [\App\Http\Controllers\OrderController::class, 'edit'])->name('v2.edit-order');
+        Route::patch('/v2/update-order', [\App\Http\Controllers\OrderController::class, 'update'])->name('v2.update-order');
     });
 });

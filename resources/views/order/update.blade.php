@@ -202,7 +202,8 @@
                     customer_id: {{ $order->customer_id }},
                     date: '{{ $order->invoice_date }}',
                     salesman_id: {{ $order->salesman_id }},
-                    order_lines: []
+                    order_lines: [],
+                    deleted_items: []
                 },
                 addNewLine(data = null) {
                     var orderLine = {
@@ -229,6 +230,11 @@
                     this.form.order_lines.push(orderLine)
                 },
                 removeLine(i) {
+                    var deletedItem = this.form.order_lines[i]
+                    if (deletedItem.id) {
+                        this.form.deleted_items.push(deletedItem.id)
+                    }
+
                     this.form.order_lines.splice(i, 1)
                 },
                 itemSelected(i, data) {
@@ -253,8 +259,8 @@
                     let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     this.errors = []
                     this.loading = true
-                    fetch('{{ route('transactions.v2.store-order') }}', {
-                        method: 'POST',
+                    fetch('{{ route('transactions.v2.update-order') }}', {
+                        method: 'PATCH',
                         headers: {
                             'Content-Type': 'application/json',
                             'Accept': 'application/json, text-plain, */*',
