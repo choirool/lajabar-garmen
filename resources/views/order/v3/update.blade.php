@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Productions') }}
+            {{ __('Update production') }}
         </h2>
     </x-slot>
 
@@ -64,28 +64,24 @@
                             <table class="table-auto text-xs">
                                 <thead>
                                     <tr>
-                                        <th class="border" rowspan="3">Item name</th>
-                                        <th class="border" rowspan="3">
+                                        <th class="border" rowspan="2">Item name</th>
+                                        <th class="border" rowspan="2">
                                             <div class="w-10">Unit</div>
                                         </th>
-                                        <th class="border" rowspan="3">Type</th>
-                                        <th class="border" rowspan="3">Material</th>
-                                        <th class="border" rowspan="3">Color</th>
-                                        <th class="border" rowspan="3">Sablon</th>
-                                        <th class="border" colspan="{{ $sizes->count() * 2 }}">Price</th>
-                                        <th class="border" rowspan="3">Sub Total</th>
-                                        <th class="border" rowspan="3">Note</th>
-                                        <th class="border" rowspan="3"></th>
+                                        <th class="border" rowspan="2">Type</th>
+                                        <th class="border" rowspan="2">Material</th>
+                                        <th class="border" rowspan="2">Color</th>
+                                        <th class="border" rowspan="2">Sablon</th>
+                                        <th class="border" colspan="{{ $sizes->count() }}">Price</th>
+                                        <th class="border" rowspan="2">Qty</th>
+                                        <th class="border" rowspan="2">Price</th>
+                                        <th class="border" rowspan="2">Sub Total</th>
+                                        <th class="border" rowspan="2">Note</th>
+                                        <th class="border" rowspan="2"></th>
                                     </tr>
                                     <tr>
                                         @foreach ($sizes as $size)
-                                            <th class="border" colspan="2">{{ $size->name }}</th>
-                                        @endforeach
-                                    </tr>
-                                    <tr>
-                                        @foreach ($sizes as $size)
-                                            <th class="border">qty</th>
-                                            <th class="border">price</th>
+                                            <th class="border">{{ $size->name }}</th>
                                         @endforeach
                                     </tr>
                                 </thead>
@@ -137,10 +133,13 @@
                                                 <td class="border" :class="{ 'border-red-700': errors[`order_lines.${index}.price{{ $y }}.qty`] }">
                                                     <input type="number" min="0" class="w-16" x-model="order_line.price[{{ $y }}].qty">
                                                 </td>
-                                                <td class="border" :class="{ 'border-red-700': errors[`order_lines.${index}.price{{ $y }}.price`] }">
-                                                    <input type="number" min="0" class="w-20 text-right" x-model="order_line.price[{{ $y }}].price">
-                                                </td>
                                             @endforeach
+                                            <td class="border text-right">
+                                                <div class="w-24" x-text="subQty(order_line)"></div>
+                                            </td>
+                                            <td class="border text-center">
+                                                <input type="number" min="0" class="w-20" x-model="order_line.priceData" @change="priceDataChanged(order_line)">
+                                            </td>
                                             <td class="border text-right">
                                                 <div class="w-24" x-text="subTotal(order_line)"></div>
                                             </td>
@@ -162,7 +161,7 @@
                                                 Add new item
                                             </a>
                                         </td>
-                                        <td colspan="{{ ($sizes->count() * 2 + 6) }}" class="text-right">
+                                        <td colspan="{{ ($sizes->count() + 8) }}" class="text-right">
                                             <span x-text="grandTotal()"></span>
                                         </td>
                                         <td class=""></td>
@@ -193,49 +192,49 @@
         function order() {
             return {
                 errors: [],
-                showTable: false,
+                showTable: true,
                 loading: false,
                 sizes: @json($sizes),
                 items: @json($items),
                 form: {
-                    customer_id: '',
-                    date: '',
-                    salesman_id: '',
-                    order_lines: []
+                    id: {{ $order->id }},
+                    customer_id: {{ $order->customer_id }},
+                    date: '{{ $order->invoice_date }}',
+                    salesman_id: {{ $order->salesman_id }},
+                    order_lines: [],
+                    deleted_items: []
                 },
                 addNewLine(data = null) {
                     var orderLine = {
+                        id: null,
                         item: data ? data.item.id : '',
                         unit: data ? data.item.unit : '',
                         type: data ? data.item.category_id : '',
                         material: data ? data.material_id : '',
                         color: data ? data.color_id : '',
                         printing: data ? data.screen_printing == 1 : false,
+                        priceData: 0,
                         note: '',
                         price: [],
                     }
 
                     this.sizes.forEach(size => {
-                        if (data) {
-                            var currentPrice = data.prices.find(price => price.size_id == size.id)
-
-                            orderLine.price.push({
-                                size_id: size.id,
-                                qty: 0,
-                                price: currentPrice ? currentPrice.price : 0
-                            })
-                        } else {
-                            orderLine.price.push({
-                                size_id: size.id,
-                                qty: 0,
-                                price: 0
-                            })
-                        }
+                        orderLine.price.push({
+                            id: null,
+                            size_id: size.id,
+                            qty: 0,
+                            price: 0
+                        })
                     });
        
                     this.form.order_lines.push(orderLine)
                 },
                 removeLine(i) {
+                    var deletedItem = this.form.order_lines[i]
+                    if (deletedItem.id) {
+                        this.form.deleted_items.push(deletedItem.id)
+                    }
+
                     this.form.order_lines.splice(i, 1)
                 },
                 itemSelected(i, data) {
@@ -243,32 +242,77 @@
                     this.form.order_lines[i].unit = selectedItem.unit
                     this.form.order_lines[i].type = selectedItem.category_id
                 },
+                subQty(data) {
+                    var subQty = 0
+                    data.price.forEach(qty => subQty += parseInt(qty.qty))
+                    return subQty
+                },
                 subTotal(data) {
                     var subTotal = 0
-                    data.price.forEach(price => subTotal += price.qty * price.price)
+                    data.price.forEach(price => subTotal += parseFloat(price.qty) * parseFloat(price.price))
                     return subTotal
                 },
                 grandTotal() {
                     var grandTotal = 0
                     this.form.order_lines.forEach(orderLine => {
-                        orderLine.price.forEach(price => grandTotal += price.qty * price.price)
+                        orderLine.price.forEach(price => grandTotal += parseFloat(price.qty) * parseFloat(price.price))
                     });
 
                     return grandTotal
+                },
+                priceDataChanged(data) {
+                    data.price.forEach(price => {
+                        price.price = data.priceData
+                    })
+                },
+                generateFormData() {
+                    var formData = new FormData()
+
+                    for (const key in this.form) {
+                        if (this.form.hasOwnProperty(key)) {
+                            const element = this.form[key]
+                            if (typeof element == 'object') {
+                                for (const k in element) {
+                                    if (element.hasOwnProperty(k)) {
+                                        const orderLines = element[k];
+                                        formData.append(`order_lines[${k}][id]`, orderLines['id'])
+                                        formData.append(`order_lines[${k}][item]`, orderLines['item'])
+                                        formData.append(`order_lines[${k}][unit]`, orderLines['unit'])
+                                        formData.append(`order_lines[${k}][type]`, orderLines['type'])
+                                        formData.append(`order_lines[${k}][material]`, orderLines['material'])
+                                        formData.append(`order_lines[${k}][color]`, orderLines['color'])
+                                        formData.append(`order_lines[${k}][printing]`, orderLines['printing'] == true ? '1' : '0')
+                                        formData.append(`order_lines[${k}][note]`, orderLines['note'])
+
+                                        orderLines['price'].forEach((price, i) => {
+                                            formData.append(`order_lines[${k}][price][${i}][id]`, price.id)
+                                            formData.append(`order_lines[${k}][price][${i}][size_id]`, price.size_id)
+                                            formData.append(`order_lines[${k}][price][${i}][qty]`, price.qty)
+                                            formData.append(`order_lines[${k}][price][${i}][price]`, price.price)
+                                        })
+                                    }
+                                }
+                            } else {
+                                formData.append(key, element)
+                            }
+                        }
+                    }
+
+                    return formData
                 },
                 saveOrder() {
                     let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     this.errors = []
                     this.loading = true
-                    fetch('{{ route('transactions.v2.store-order') }}', {
-                        method: 'POST',
+                    fetch('{{ route('transactions.v2.update-order') }}', {
+                        method: 'PATCH',
                         headers: {
-                            'Content-Type': 'application/json',
+                            // 'Content-Type': 'multipart/form-data',
+                            // 'X-Requested-With': 'XMLHttpRequest',
                             'Accept': 'application/json, text-plain, */*',
-                            'X-Requested-With': 'XMLHttpRequest',
                             'X-CSRF-TOKEN': token
                         },
-                        body: JSON.stringify(this.form)
+                        body: this.generateFormData()
                     })
                     .then(response => response.json())
                     .then((response) => {
@@ -285,22 +329,56 @@
                         this.loading = false
                     });
                 },
-                initOrder($watch) {
-                    $watch('form.customer_id', (value) => {
-                        this.form.order_lines = []
-                        
-                        fetch(`{{ route('master-data.customer.customer-items') }}?id=${value}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.length > 0) {
-                                    data.forEach(d => this.addNewLine(d))
-                                } else {
-                                    this.addNewLine()
-                                }
-                            })
-                        
-                        this.showTable = true
+                mapProductPrice(data) {
+                    var result = []
+                    data.order_lines.forEach(element => {
+                        element.price.forEach(price => {
+                            if (price.price > 0) {
+                                result.push(price.price)
+                            }
+                        })
                     })
+
+                    return result
+                },
+                initOrder($watch) {
+                    @foreach($order->orderItems as $i => $orderItem)
+                        this.form.order_lines.push({
+                            id: {{ $orderItem->id }},
+                            item: {{ $orderItem->item_id }},
+                            unit: '{{ $orderItem->item->unit }}',
+                            type: {{ $orderItem->item->category_id }},
+                            material: {{ $orderItem->material_id }},
+                            color: {{ $orderItem->color_id }},
+                            printing: {{ $orderItem->screen_printing }},
+                            priceData: 0,
+                            note: '{{ $orderItem->note }}',
+                            price: []
+                        })
+
+                        
+                        @foreach($sizes as $size)
+                            @php
+                                $currentPirceData = $orderItem->prices->first(fn ($price) => $price->size_id == $size->id);
+                            @endphp
+                            @if($currentPirceData && $currentPirceData->price > 0)
+                                this.form.order_lines[{{ $i }}].priceData = {{ $currentPirceData->price }}
+                            @endif
+
+                            this.form.order_lines[{{ $i }}].price.push({
+                                id: {{ $currentPirceData ? $currentPirceData->id : 'null' }},
+                                size_id: {{ $size->id }},
+                                qty: {{ $currentPirceData ? $currentPirceData->qty: 0 }},
+                                price: {{ $currentPirceData ? $currentPirceData->price : 0 }}
+                            })
+                        @endforeach
+                    @endforeach
+
+                    var mapProductPrice = this.mapProductPrice(this.form)
+                    unique = mapProductPrice.filter((item, i, ar) => ar.indexOf(item) === i)
+                    if (unique.length > 1) {
+                        window.location.href = '{{ route('transactions.v2.update-order') }}/{{ $order->id }}'
+                    }
                 }
             }
         }

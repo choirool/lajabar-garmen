@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Responses\Order;
+namespace App\Http\Responses\Order\V3;
 
 use App\Models\Item;
 use App\Models\Size;
@@ -23,7 +23,7 @@ class OrderEditResponse implements Responsable
 
     public function toResponse($request)
     {
-        return view('order.update', [
+        return view('order.v3.update', [
             'customers' => Customer::select('name', 'id')->orderBy('name')->get(),
             'salesmen' => Salesman::select('name', 'id')->orderBy('name')->get(),
             'materials' => Material::orderBy('name')->get(),

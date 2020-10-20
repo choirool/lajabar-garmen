@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Order;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
-use App\Http\Responses\Order\OrderEditResponse;
-use App\Http\Responses\Order\OrderStoreResponse;
-use App\Http\Responses\Order\OrderCreateResponse;
-use App\Http\Responses\Order\OrderUpdateResponse;
+use App\Http\Responses\Order\V2\OrderEditResponse;
+use App\Http\Responses\Order\V2\OrderStoreResponse;
+use App\Http\Responses\Order\V2\OrderCreateResponse;
+use App\Http\Responses\Order\V2\OrderUpdateResponse;
 
-class OrderController extends Controller
+class OrderV2Controller extends Controller
 {
     /**
      * Display a listing of the resource.

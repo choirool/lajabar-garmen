@@ -96,9 +96,18 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/create-order', CreateOrder::class)->name('create-order');
         Route::get('/update-order/{id}', UpdateOrder::class)->name('update-order');
 
-        Route::get('/v2/create-order', [\App\Http\Controllers\OrderController::class, 'create'])->name('v2.create-order');
-        Route::post('/v2/create-order', [\App\Http\Controllers\OrderController::class, 'store'])->name('v2.store-order');
-        Route::get('/v2/update-order/{id}', [\App\Http\Controllers\OrderController::class, 'edit'])->name('v2.edit-order');
-        Route::patch('/v2/update-order', [\App\Http\Controllers\OrderController::class, 'update'])->name('v2.update-order');
+        Route::prefix('/v2')->name('v2.')->group(function () { 
+            Route::get('/create-order', [\App\Http\Controllers\Order\OrderV2Controller::class, 'create'])->name('create-order');
+            Route::post('/create-order', [\App\Http\Controllers\Order\OrderV2Controller::class, 'store'])->name('store-order');
+            Route::get('/update-order/{id}', [\App\Http\Controllers\Order\OrderV2Controller::class, 'edit'])->name('edit-order');
+            Route::patch('/update-order', [\App\Http\Controllers\Order\OrderV2Controller::class, 'update'])->name('update-order');
+        });
+
+        Route::prefix('/v3')->name('v3.')->group(function () { 
+            Route::get('/create-order', [\App\Http\Controllers\Order\OrderV3Controller::class, 'create'])->name('create-order');
+            Route::get('/update-order/{id}', [\App\Http\Controllers\Order\OrderV3Controller::class, 'edit'])->name('edit-order');
+            // Route::post('/create-order', [\App\Http\Controllers\OrderV3Controller::class, 'store'])->name('store-order');
+            // Route::patch('/update-order', [\App\Http\Controllers\OrderV3Controller::class, 'update'])->name('update-order');
+        });
     });
 });

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Responses\Order;
+namespace App\Http\Responses\Order\V2;
 
 use App\Models\Item;
 use App\Models\Size;
@@ -15,7 +15,7 @@ class OrderCreateResponse implements Responsable
 {
     public function toResponse($request)
     {
-        return view('order.create', [
+        return view('order.v2.create', [
             'customers' => Customer::select('name', 'id')->orderBy('name')->get(),
             'salesmen' => Salesman::select('name', 'id')->orderBy('name')->get(),
             'materials' => Material::orderBy('name')->get(),
