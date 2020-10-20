@@ -340,6 +340,14 @@
 
                     return result
                 },
+                mapProduct(data) {
+                    var result = []
+                    data.forEach(element => {
+                        result.push(element.item.id)
+                    })
+
+                    return result
+                },
                 initOrder($watch) {
                     $watch('form.customer_id', (value) => {
                         this.form.order_lines = []
@@ -348,10 +356,11 @@
                             .then(response => response.json())
                             .then(data => {
                                 if (data.length > 0) {
+                                    var mapProduct = this.mapProduct(data)
                                     var mapProductPrice = this.mapProductPrice(data)
                                     unique = mapProductPrice.filter((item, i, ar) => ar.indexOf(item) === i)
 
-                                    if (unique.length > 1) {
+                                    if (unique.length > mapProduct.length) {
                                         window.location.href = `{{ route('transactions.v2.create-order') }}?customer_id=${value}`
                                     } else {
                                         data.forEach(d => this.addNewLine(d))

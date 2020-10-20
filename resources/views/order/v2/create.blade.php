@@ -288,7 +288,10 @@
                 initOrder($watch) {
                     setTimeout(() => {
                         const urlParams = new URLSearchParams(window.location.search)
-                        this.form.customer_id = urlParams.get('customer_id')
+                        const customerId = urlParams.get('customer_id')
+                        if (customerId) {
+                            this.form.customer_id = customerId
+                        }
                     }, 500)
 
                     $watch('form.customer_id', (value) => {
