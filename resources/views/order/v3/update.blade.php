@@ -276,21 +276,25 @@
                                 for (const k in element) {
                                     if (element.hasOwnProperty(k)) {
                                         const orderLines = element[k];
-                                        formData.append(`order_lines[${k}][id]`, orderLines['id'])
-                                        formData.append(`order_lines[${k}][item]`, orderLines['item'])
-                                        formData.append(`order_lines[${k}][unit]`, orderLines['unit'])
-                                        formData.append(`order_lines[${k}][type]`, orderLines['type'])
-                                        formData.append(`order_lines[${k}][material]`, orderLines['material'])
-                                        formData.append(`order_lines[${k}][color]`, orderLines['color'])
-                                        formData.append(`order_lines[${k}][printing]`, orderLines['printing'] == true ? '1' : '0')
-                                        formData.append(`order_lines[${k}][note]`, orderLines['note'])
+                                        if (orderLines['id'] == undefined) {
+                                            formData.append('deleted_items[]', orderLines)
+                                        } else {
+                                            formData.append(`order_lines[${k}][id]`, orderLines['id'])
+                                            formData.append(`order_lines[${k}][item]`, orderLines['item'])
+                                            formData.append(`order_lines[${k}][unit]`, orderLines['unit'])
+                                            formData.append(`order_lines[${k}][type]`, orderLines['type'])
+                                            formData.append(`order_lines[${k}][material]`, orderLines['material'])
+                                            formData.append(`order_lines[${k}][color]`, orderLines['color'])
+                                            formData.append(`order_lines[${k}][printing]`, orderLines['printing'] == true ? '1' : '0')
+                                            formData.append(`order_lines[${k}][note]`, orderLines['note'])
 
-                                        orderLines['price'].forEach((price, i) => {
-                                            formData.append(`order_lines[${k}][price][${i}][id]`, price.id)
-                                            formData.append(`order_lines[${k}][price][${i}][size_id]`, price.size_id)
-                                            formData.append(`order_lines[${k}][price][${i}][qty]`, price.qty)
-                                            formData.append(`order_lines[${k}][price][${i}][price]`, price.price)
-                                        })
+                                            orderLines['price'].forEach((price, i) => {
+                                                formData.append(`order_lines[${k}][price][${i}][id]`, price.id)
+                                                formData.append(`order_lines[${k}][price][${i}][size_id]`, price.size_id)
+                                                formData.append(`order_lines[${k}][price][${i}][qty]`, price.qty)
+                                                formData.append(`order_lines[${k}][price][${i}][price]`, price.price)
+                                            })
+                                        }
                                     }
                                 }
                             } else {
@@ -328,7 +332,7 @@
                     }).catch((error) => {
                         console.log(error);
                         this.loading = false
-                    });
+                    })
                 },
                 initOrder($watch) {
                     @foreach($order->orderItems as $i => $orderItem)

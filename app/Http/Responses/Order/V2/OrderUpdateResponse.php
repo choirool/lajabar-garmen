@@ -44,6 +44,8 @@ class OrderUpdateResponse implements Responsable
                         }
                     });
                 });
+
+                $this->deleteOrderItems($request);
             });
         }
     }
@@ -101,7 +103,7 @@ class OrderUpdateResponse implements Responsable
 
     public function deleteOrderItems($request)
     {
-        if (count($request->deleted_items)) {
+        if ($request->has('deleted_items') && count($request->deleted_items)) {
             OrderItem::whereIn('id', $request->deleted_items)->delete();
             OrderItemPrice::whereIn('order_item_id', $request->deleted_items)->delete();
         }
