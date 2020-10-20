@@ -15,15 +15,19 @@ use Illuminate\Contracts\Support\Responsable;
 class OrderEditResponse implements Responsable
 {
     protected $id;
+    protected $order;
 
     public function __construct($id)
     {
         $this->id = $id;
+        $this->order = $this->getOrder();
     }
 
     public function toResponse($request)
     {
-        return view('order.v3.update', [
+        $version = $this->useVersion2() ? 'v2' : 'v3';
+
+        return view('order.'.$version.'.update', [
             'customers' => Customer::select('name', 'id')->orderBy('name')->get(),
             'salesmen' => Salesman::select('name', 'id')->orderBy('name')->get(),
             'materials' => Material::orderBy('name')->get(),
@@ -31,7 +35,7 @@ class OrderEditResponse implements Responsable
             'colors' => Color::orderBy('name')->get(),
             'sizes' => Size::select('name', 'id')->get(),
             'items' => Item::select('name', 'id', 'unit', 'category_id')->orderBy('name')->get(),
-            'order' => $this->getOrder(),
+            'order' => $this->order,
         ]);
     }
 
@@ -42,5 +46,21 @@ class OrderEditResponse implements Responsable
                 $query->with('item', 'prices');
             }])
             ->findOrFail($this->id);
+    }
+
+    protected function useVersion2()
+    {
+        $result = [];
+        $this->order->orderItems->each(function ($orderItems) use(&$result) {
+            $pricesList = [];
+            $orderItems->prices->each(function ($prices) use(&$pricesList, &$result) {
+                $pricesList[] = $prices->price;
+            });
+
+            // $result[] = $pricesList;
+            $result[] = collect($pricesList)->unique()->count() > 1;
+        });
+        
+        return in_array(true, $result);
     }
 }

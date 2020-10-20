@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="w-1/5 my-2">
-                        <x-link class="ml-2 float-right" href="{{ route('transactions.v2.create-order') }}">
+                        <x-link class="ml-2 float-right" href="{{ route('transactions.v3.create-order') }}">
                             {{ __('Create new') }}
                         </x-link>
                     </div>
@@ -70,7 +70,7 @@
                                 <td class="border align-top truncate">{{ $order->customer->email }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->country }}</td>
                                 <td class="border">
-                                    <x-link href="{{ route('transactions.v2.edit-order', ['id' => $order->id]) }}" size="small">{{ __('Edit') }}</x-link>
+                                    <x-link href="{{ route('transactions.v3.edit-order', ['id' => $order->id]) }}" size="small">{{ __('Edit') }}</x-link>
                                     <x-link href="{{ route('master-data.update-customer', ['id' => $order->id]) }}" size="small">{{ __('Check') }}</x-link>
                                 </td>
                             </tr>

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Update production') }}
+            {{ __('Update production (v3)') }}
         </h2>
     </x-slot>
 
@@ -206,7 +206,7 @@
                 },
                 addNewLine(data = null) {
                     var orderLine = {
-                        id: null,
+                        id: '',
                         item: data ? data.item.id : '',
                         unit: data ? data.item.unit : '',
                         type: data ? data.item.category_id : '',
@@ -220,7 +220,7 @@
 
                     this.sizes.forEach(size => {
                         orderLine.price.push({
-                            id: null,
+                            id: '',
                             size_id: size.id,
                             qty: 0,
                             price: 0
@@ -267,6 +267,7 @@
                 },
                 generateFormData() {
                     var formData = new FormData()
+                    formData.append('method', '_patch')
 
                     for (const key in this.form) {
                         if (this.form.hasOwnProperty(key)) {
@@ -305,7 +306,7 @@
                     this.errors = []
                     this.loading = true
                     fetch('{{ route('transactions.v2.update-order') }}', {
-                        method: 'PATCH',
+                        method: 'POST',
                         headers: {
                             // 'Content-Type': 'multipart/form-data',
                             // 'X-Requested-With': 'XMLHttpRequest',
@@ -329,18 +330,6 @@
                         this.loading = false
                     });
                 },
-                mapProductPrice(data) {
-                    var result = []
-                    data.order_lines.forEach(element => {
-                        element.price.forEach(price => {
-                            if (price.price > 0) {
-                                result.push(price.price)
-                            }
-                        })
-                    })
-
-                    return result
-                },
                 initOrder($watch) {
                     @foreach($order->orderItems as $i => $orderItem)
                         this.form.order_lines.push({
@@ -360,25 +349,19 @@
                         @foreach($sizes as $size)
                             @php
                                 $currentPirceData = $orderItem->prices->first(fn ($price) => $price->size_id == $size->id);
+                                $nonZeroPriceData = $orderItem->prices->first(fn ($price) => $price->price > 0);
                             @endphp
-                            @if($currentPirceData && $currentPirceData->price > 0)
-                                this.form.order_lines[{{ $i }}].priceData = {{ $currentPirceData->price }}
-                            @endif
+
+                            this.form.order_lines[{{ $i }}].priceData = {{ $nonZeroPriceData ? $nonZeroPriceData->price : 0 }}
 
                             this.form.order_lines[{{ $i }}].price.push({
                                 id: {{ $currentPirceData ? $currentPirceData->id : 'null' }},
                                 size_id: {{ $size->id }},
                                 qty: {{ $currentPirceData ? $currentPirceData->qty: 0 }},
-                                price: {{ $currentPirceData ? $currentPirceData->price : 0 }}
+                                price: {{ $nonZeroPriceData ? $nonZeroPriceData->price : 0 }}
                             })
                         @endforeach
                     @endforeach
-
-                    var mapProductPrice = this.mapProductPrice(this.form)
-                    unique = mapProductPrice.filter((item, i, ar) => ar.indexOf(item) === i)
-                    if (unique.length > 1) {
-                        window.location.href = '{{ route('transactions.v2.update-order') }}/{{ $order->id }}'
-                    }
                 }
             }
         }

@@ -100,7 +100,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/create-order', [\App\Http\Controllers\Order\OrderV2Controller::class, 'create'])->name('create-order');
             Route::post('/create-order', [\App\Http\Controllers\Order\OrderV2Controller::class, 'store'])->name('store-order');
             Route::get('/update-order/{id}', [\App\Http\Controllers\Order\OrderV2Controller::class, 'edit'])->name('edit-order');
-            Route::patch('/update-order', [\App\Http\Controllers\Order\OrderV2Controller::class, 'update'])->name('update-order');
+            Route::match(['post', 'patch'], '/update-order', [\App\Http\Controllers\Order\OrderV2Controller::class, 'update'])->name('update-order');
         });
 
         Route::prefix('/v3')->name('v3.')->group(function () { 
