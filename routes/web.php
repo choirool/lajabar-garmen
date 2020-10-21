@@ -118,4 +118,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Artisan::call($request->c);
         }
     });
+
+    Route::get('/create-symlink', function () {
+        $target  = ' /home/u1045124/public_html/staging/storage/app/public';
+        $link    = '/home/u1045124/public_html/staging/storage';
+
+        symlink($target, $link);
+    });
 });
