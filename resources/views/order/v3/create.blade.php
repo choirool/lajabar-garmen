@@ -289,7 +289,9 @@
                                         formData.append(`order_lines[${k}][color]`, orderLines['color'])
                                         formData.append(`order_lines[${k}][printing]`, orderLines['printing'] == true ? '1' : '0')
                                         formData.append(`order_lines[${k}][note]`, orderLines['note'])
-                                        formData.append(`order_lines[${k}][image]`, this.$refs[`file_${k}`].files[0])
+                                        if (this.$refs[`file_${k}`].files[0]) {
+                                            formData.append(`order_lines[${k}][image]`, this.$refs[`file_${k}`].files[0])
+                                        }
 
                                         orderLines['price'].forEach((price, i) => {
                                             formData.append(`order_lines[${k}][price][${i}][size_id]`, price.size_id)
@@ -336,23 +338,16 @@
                         this.loading = false
                     });
                 },
-                mapProductPrice(data) {
+                useVesion2(data) {
                     var result = []
-                    data.forEach(element => {
-                        element.prices.forEach(price => {
-                            result.push(price.price)
-                        })
+                    data.forEach(item => {
+                        var pricesList = []
+                        item.prices.forEach(price => pricesList.push(price.price))
+                        var unique = pricesList.filter((pricesListItem, i, ar) => ar.indexOf(pricesListItem) === i)
+                        result.push(unique.length > 1)
                     })
 
-                    return result
-                },
-                mapProduct(data) {
-                    var result = []
-                    data.forEach(element => {
-                        result.push(element.item.id)
-                    })
-
-                    return result
+                    return result.includes(true)
                 },
                 initOrder($watch) {
                     $watch('form.customer_id', (value) => {
@@ -362,11 +357,7 @@
                             .then(response => response.json())
                             .then(data => {
                                 if (data.length > 0) {
-                                    var mapProduct = this.mapProduct(data)
-                                    var mapProductPrice = this.mapProductPrice(data)
-                                    unique = mapProductPrice.filter((item, i, ar) => ar.indexOf(item) === i)
-
-                                    if (unique.length > mapProduct.length) {
+                                     if (this.useVesion2(data)) {
                                         window.location.href = `{{ route('transactions.v2.create-order') }}?customer_id=${value}`
                                     } else {
                                         data.forEach(d => this.addNewLine(d))
