@@ -60,6 +60,7 @@ class UpdateOrderRequest extends FormRequest
             'order_lines.*.color' => 'required|in:' . $this->colors->implode('id', ','),
             'order_lines.*.printing' => 'required|boolean',
             'order_lines.*.note' => '',
+            'order_lines.*.image' => 'sometimes|image',
             'order_lines.*.price' => 'required|array',
             'order_lines.*.price.*.size_id' => 'required|in:' . $this->sizes->implode('id', ','),
             'order_lines.*.price.*.qty' => 'required|numeric|min:0',

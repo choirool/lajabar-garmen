@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemPrice;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Support\Responsable;
 
 class OrderUpdateResponse implements Responsable
@@ -61,26 +62,46 @@ class OrderUpdateResponse implements Responsable
 
     protected function storeOrderItem($data)
     {
-        if ($data['id'] == null) {
-            return OrderItem::create([
-                'order_id' => $this->order->id,
-                'item_id' => $data['item'],
-                'material_id' => $data['material'],
-                'color_id' => $data['color'],
-                'image' => '',
-                'note' => isset($data['note']) ? $data['note'] : '',
-                'screen_printing' => $data['printing'],
-            ]);
+        $imageName = '';
+        if (isset($data['image'])) {
+            $upload = $this->storeImage($data['image'], $this->order->id);
+            $imageName = $upload['name'];
         }
 
-        OrderItem::where('id', $data['id'])->update([
+        $orderItemData = [
             'item_id' => $data['item'],
             'material_id' => $data['material'],
             'color_id' => $data['color'],
-            'image' => '',
             'note' => isset($data['note']) ? $data['note'] : '',
             'screen_printing' => $data['printing'],
-        ]);
+        ];
+
+        if ($data['id'] == null) {
+            $orderItemData['order_id'] = $this->order->id;
+            $orderItemData['image'] = $imageName;
+            return OrderItem::create($orderItemData);
+        }
+
+        if ($imageName !== '') {
+            $orderItemData['image'] = $imageName;
+        }
+        
+        OrderItem::where('id', $data['id'])->update($orderItemData);
+    }
+
+    protected function storeImage($image, $orderId)
+    {
+        $fileName = $orderId . '-' . time() . '.' . $image->extension();
+        $path = Storage::putFileAs(
+            'orders',
+            $image,
+            $fileName
+        );
+
+        return [
+            'name' => $fileName,
+            'path' => $path,
+        ];
     }
 
     protected function storeOrderItemPrice($price, $orderItem)
@@ -108,7 +129,7 @@ class OrderUpdateResponse implements Responsable
             OrderItemPrice::whereIn('order_item_id', $request->deleted_items)->delete();
         }
     }
-    
+
     protected function filterData($request)
     {
         return collect($request['order_lines'])->filter(function ($orderLine) {

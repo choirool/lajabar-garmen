@@ -58,6 +58,7 @@ class OrderStoreResponse implements Responsable
             $upload = $this->storeImage($data['image'], $order->id);
             $imageName = $upload['name'];
         }
+        
         return OrderItem::create([
             'order_id' => $order->id,
             'item_id' => $data['item'],
