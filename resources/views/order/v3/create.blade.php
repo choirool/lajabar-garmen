@@ -76,6 +76,7 @@
                                         <th class="border" rowspan="2">Qty</th>
                                         <th class="border" rowspan="2">Price</th>
                                         <th class="border" rowspan="2">Sub Total</th>
+                                        <th class="border" rowspan="2">Image</th>
                                         <th class="border" rowspan="2">Note</th>
                                         <th class="border" rowspan="2"></th>
                                     </tr>
@@ -142,6 +143,9 @@
                                             </td>
                                             <td class="border text-right">
                                                 <div class="w-24" x-text="subTotal(order_line)"></div>
+                                            </td>
+                                            <td class="border">
+                                                <input type="file" :x-ref="`file_${index}`" :class="{ 'border-red-700': errors[`order_lines.${index}.image`] }">
                                             </td>
                                             <td class="border">
                                                 <input type="text" x-model="order_line.note" :class="{ 'border-red-700': errors[`order_lines.${index}.note`] }">
@@ -211,6 +215,7 @@
                         color: data ? data.color_id : '',
                         printing: data ? data.screen_printing == 1 : false,
                         note: '',
+                        image: '',
                         priceData: 0,
                         price: [],
                     }
@@ -284,6 +289,7 @@
                                         formData.append(`order_lines[${k}][color]`, orderLines['color'])
                                         formData.append(`order_lines[${k}][printing]`, orderLines['printing'] == true ? '1' : '0')
                                         formData.append(`order_lines[${k}][note]`, orderLines['note'])
+                                        formData.append(`order_lines[${k}][image]`, this.$refs[`file_${k}`].files[0])
 
                                         orderLines['price'].forEach((price, i) => {
                                             formData.append(`order_lines[${k}][price][${i}][size_id]`, price.size_id)

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Order;
 use App\Models\OrderItemPrice;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -23,6 +24,10 @@ class OrderItem extends Model
         'screen_printing',
     ];
 
+    protected $appends = [
+        'image_url',
+    ];
+
     public function order()
     {
         return $this->belongsTo(Order::class);
@@ -36,5 +41,14 @@ class OrderItem extends Model
     public function prices()
     {
         return $this->hasMany(OrderItemPrice::class);
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->image) {
+            return Storage::url('orders/' . $this->image);
+        }
+
+        return null;
     }
 }

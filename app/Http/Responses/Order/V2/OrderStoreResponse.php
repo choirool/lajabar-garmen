@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemPrice;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Support\Responsable;
 
 class OrderStoreResponse implements Responsable
@@ -52,15 +53,35 @@ class OrderStoreResponse implements Responsable
 
     protected function storeOrderItem($data, $order)
     {
+        $imageName = '';
+        if ($data['image']) {
+            $upload = $this->storeImage($data['image'], $order->id);
+            $imageName = $upload['name'];
+        }
         return OrderItem::create([
             'order_id' => $order->id,
             'item_id' => $data['item'],
             'material_id' => $data['material'],
             'color_id' => $data['color'],
-            'image' => '',
+            'image' => $imageName,
             'note' => isset($data['note']) ? $data['note'] : '',
             'screen_printing' => $data['printing'],
         ]);
+    }
+
+    protected function storeImage($image, $orderId)
+    {
+        $fileName = $orderId . '-' . time() . '.' . $image->extension();
+        $path = Storage::putFileAs(
+            'orders',
+            $image,
+            $fileName
+        );
+
+        return [
+            'name' => $fileName,
+            'path' => $path,
+        ];
     }
 
     protected function storeOrderItemPrice($price, $orderItem)
@@ -72,7 +93,7 @@ class OrderStoreResponse implements Responsable
             'price' => $price['price'],
         ]);
     }
-    
+
     protected function filterData($request)
     {
         return collect($request['order_lines'])->filter(function ($orderLine) {
