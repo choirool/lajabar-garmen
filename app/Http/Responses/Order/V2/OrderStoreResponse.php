@@ -54,7 +54,7 @@ class OrderStoreResponse implements Responsable
     protected function storeOrderItem($data, $order)
     {
         $imageName = '';
-        if ($data['image']) {
+        if (isset($data['image'])) {
             $upload = $this->storeImage($data['image'], $order->id);
             $imageName = $upload['name'];
         }
