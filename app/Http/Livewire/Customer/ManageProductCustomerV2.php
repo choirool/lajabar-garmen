@@ -48,6 +48,7 @@ class ManageProductCustomerV2 extends Component
         $this->materials = Material::orderBy('name')->get();
         $this->categories = Category::orderBy('name')->get();
         $this->colors = Color::orderBy('name')->get();
+        $this->sizes = Size::orderBy('name')->get();
         $this->customerItems[] = $this->itemsData;
         $this->getCustomerItems();
     }
@@ -135,7 +136,6 @@ class ManageProductCustomerV2 extends Component
 
     protected function saveCustomerProduct()
     {
-        $this->sizes = Size::orderBy('name')->get();
         DB::transaction(function () {
             CustomerItemPrice::whereHas('customerItem', function ($query) {
                 $query->where('customer_id', $this->customer->id);
