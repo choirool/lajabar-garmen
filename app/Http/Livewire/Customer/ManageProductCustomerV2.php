@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\DB;
 class ManageProductCustomerV2 extends Component
 {
     protected $currentCustomerItems;
-    protected $version = 'v2';
     public $customer;
     public $categories;
     public $materials;
@@ -39,12 +38,13 @@ class ManageProductCustomerV2 extends Component
 
     public function mount($id)
     {
+        $this->customer = Customer::findOrFail($id);
+
         if ($this->useVersion1($id)) {
-            $this->version = 'v1';
+            return redirect()->route('master-data.manage-products-customer', ['id' => $this->customer->id]);
         }
 
         $this->items = Item::select('name', 'id', 'unit')->orderBy('name')->get();
-        $this->customer = Customer::findOrFail($id);
         $this->materials = Material::orderBy('name')->get();
         $this->categories = Category::orderBy('name')->get();
         $this->colors = Color::orderBy('name')->get();
@@ -184,10 +184,6 @@ class ManageProductCustomerV2 extends Component
 
     public function render()
     {
-        if ($this->version == 'v1') {
-            return view('livewire.customer.manage-product-customer');
-        }
-
         return view('livewire.customer.manage-product-customer-v2');
     }
 }
