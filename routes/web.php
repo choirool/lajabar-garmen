@@ -31,6 +31,7 @@ use App\Http\Livewire\Salesman\UpdateSalesman;
 use App\Http\Livewire\Transaction\CreateOrder;
 use App\Http\Livewire\Transaction\UpdateOrder;
 use App\Http\Livewire\Customer\ManageProductCustomer;
+use App\Http\Livewire\Customer\ManageProductCustomerV2;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/', function () {
@@ -77,6 +78,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/create-customer', CreateCustomer::class)->name('create-customer');
             Route::get('/update-customer/{id}', UpdateCustomer::class)->name('update-customer');
             Route::get('/update-customer/{id}/manage-product', ManageProductCustomer::class)->name('manage-products-customer');
+            Route::get('/update-customer/{id}/manage-product-v2', ManageProductCustomerV2::class)->name('manage-products-customer-v2');
             Route::get('/customer-items', \App\Http\Controllers\CustomerItemsController::class)->name('customer.customer-items');
         });
 
