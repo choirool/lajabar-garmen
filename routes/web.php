@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductionController;
 use Illuminate\Http\Request;
 use App\Http\Livewire\Item\Items;
 use App\Http\Livewire\Size\Sizes;
@@ -99,6 +100,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/orders', Orders::class)->name('orders');
         Route::get('/create-order', CreateOrder::class)->name('create-order');
         Route::get('/update-order/{id}', UpdateOrder::class)->name('update-order');
+
+        Route::prefix('productions')->name('production.')->group(function () {
+            Route::get('/{orderId}', [ProductionController::class, 'index'])->name('index');
+        });
 
         Route::prefix('/v2')->name('v2.')->group(function () {
             Route::get('/create-order', [\App\Http\Controllers\Order\OrderV2Controller::class, 'create'])->name('create-order');
