@@ -70,7 +70,7 @@
                                 </td>
                                 <td class="border align-top">
                                     <x-link href="{{ $customer->deleted_at ? '#' : route('master-data.update-customer', ['id' => $customer->id]) }}" size="small">{{ __('Edit') }}</x-link>
-                                    <x-link href="{{ $customer->deleted_at ? '#' : route('master-data.manage-products-customer', ['id' => $customer->id]) }}" size="small">{{ __('Product') }}</x-link>
+                                    <x-link href="{{ $customer->deleted_at ? '#' : route('master-data.manage-products-customer-v2', ['id' => $customer->id]) }}" size="small">{{ __('Product') }}</x-link>
                                 </td>
                             </tr>
                         @empty

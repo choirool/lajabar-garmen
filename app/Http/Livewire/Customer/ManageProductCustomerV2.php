@@ -77,11 +77,12 @@ class ManageProductCustomerV2 extends Component
             $this->customerItems = [];
 
             foreach ($this->currentCustomerItems as $i => $customerItem) {
+                $price = $customerItem->prices->first();
                 $this->customerItems[$i] = [
                     'item_id' => $customerItem->item_id,
                     'item_name' => $customerItem->item->name,
                     'unit' => $customerItem->item->unit,
-                    'price' => $customerItem->prices->first()->price,
+                    'price' => $price ? $price->price : 0,
                     'type' => $customerItem->item->category_id,
                     'material' => $customerItem->material_id,
                     'color' => $customerItem->color_id,
@@ -134,8 +135,8 @@ class ManageProductCustomerV2 extends Component
 
     protected function saveCustomerProduct()
     {
+        $this->sizes = Size::orderBy('name')->get();
         DB::transaction(function () {
-            $this->sizes = Size::orderBy('name')->get();
             CustomerItemPrice::whereHas('customerItem', function ($query) {
                 $query->where('customer_id', $this->customer->id);
             })->forceDelete();
@@ -169,7 +170,7 @@ class ManageProductCustomerV2 extends Component
     {
         $priceData = [];
         foreach ($this->sizes as $size) {
-            $this->itemsData['prices'][] = [
+            $priceData[] = [
                 'customer_item_id' => $customerItem->id,
                 'size_id' => $size->id,
                 'price' => $price,
