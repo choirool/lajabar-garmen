@@ -9,6 +9,6 @@ class ProductionController extends Controller
 {
     public function index(Request $request, $orderId)
     {
-        return new ProductionIndexResponse;
+        return new ProductionIndexResponse($orderId);
     }
 }

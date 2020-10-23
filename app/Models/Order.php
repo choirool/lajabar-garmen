@@ -28,4 +28,9 @@ class Order extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+
+    public function salesman()
+    {
+        return $this->belongsTo(Salesman::class);
+    }
 }

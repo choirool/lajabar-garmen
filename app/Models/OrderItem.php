@@ -38,6 +38,16 @@ class OrderItem extends Model
         return $this->belongsTo(Item::class);
     }
 
+    public function material()
+    {
+        return $this->belongsTo(Material::class);
+    }
+
+    public function color()
+    {
+        return $this->belongsTo(Color::class);
+    }
+
     public function prices()
     {
         return $this->hasMany(OrderItemPrice::class);
