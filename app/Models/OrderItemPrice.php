@@ -23,4 +23,9 @@ class OrderItemPrice extends Model
     {
         return $this->belongsTo(OrderItem::class);
     }
+
+    public function productions()
+    {
+        return $this->hasMany(Production::class);
+    }
 }

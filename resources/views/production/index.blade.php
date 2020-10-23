@@ -171,6 +171,15 @@
                         this.form[index].values[i].old_value = this.form[index].values[i].value
                     }
                 },
+                currentProgress(data) {
+                    if(data !== undefined && data.productions) {
+                        return data.productions.reduce((carry, production) => {
+                            return carry + parseFloat(production.value)
+                        }, 0)
+                    }
+
+                    return 0
+                },
                 saveData() {
                     let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     this.errors = []
@@ -212,12 +221,13 @@
 
                         this.sizes.forEach(size => {
                             var currentSize = orderItem.prices.find(p => p.size_id == size.id)
+                            var currentValue = this.currentProgress(currentSize)
 
                             this.form[index].values.push({
                                 id: currentSize ? currentSize.id : null,
                                 size_id: size.id,
-                                value: 0,
-                                old_value: 0,
+                                value: currentValue,
+                                old_value: currentValue,
                                 disabled: currentSize == undefined
                             })
                         })

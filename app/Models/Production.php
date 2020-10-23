@@ -14,5 +14,11 @@ class Production extends Model
     protected $fillable = [
         'order_item_price_id',
         'value',
+        'size_id',
     ];
+
+    public function orderItemPrice()
+    {
+        return $this->belongsTo(OrderItemPrice::class);
+    }
 }

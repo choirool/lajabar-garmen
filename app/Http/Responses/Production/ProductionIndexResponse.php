@@ -19,7 +19,7 @@ class ProductionIndexResponse implements Responsable
     {
         return Order::query()
             ->with(['orderItems' => function ($query) {
-                $query->with('prices', 'item.category', 'material', 'color');
+                $query->with('prices.productions', 'item.category', 'material', 'color');
             }])
             ->with('customer', 'salesman')
             ->findOrFail($orderId);
