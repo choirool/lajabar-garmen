@@ -103,6 +103,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
         Route::prefix('productions')->name('production.')->group(function () {
             Route::get('/{orderId}', [ProductionController::class, 'index'])->name('index');
+            Route::post('/{orderId}', [ProductionController::class, 'store'])->name('store');
         });
 
         Route::prefix('/v2')->name('v2.')->group(function () {

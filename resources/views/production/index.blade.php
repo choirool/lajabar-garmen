@@ -172,7 +172,36 @@
                     }
                 },
                 saveData() {
-                    console.log(this.form);
+                    let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    this.errors = []
+                    this.loading = true
+
+                    fetch('{{ route('transactions.production.store', ['orderId' => $order->id]) }}', {
+                        method: 'POST',
+                        headers: {
+                            // 'X-Requested-With': 'XMLHttpRequest',
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json, text-plain, */*',
+                            'X-CSRF-TOKEN': token
+                        },
+                        body: JSON.stringify(this.form)
+                    })
+                    .then(response => response.json())
+                    .then((response) => {
+                        this.loading = false
+                        console.log(response);
+                        // if (response.errors) {
+                        //     this.errors = response.errors
+                        //     this.loading = false
+                        // }
+
+                        // if (response.status) {
+                        //     window.location = response.redirect
+                        // }
+                    }).catch((error) => {
+                        console.log(error);
+                        this.loading = false
+                    })
                 },
                 initOrder($watch) {
                     this.order.order_items.forEach((orderItem, index) => {
