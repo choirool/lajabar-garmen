@@ -41,7 +41,13 @@
                             </table>
                         </div>
                     </div>
-
+                    <div class="w-full">
+                        <template x-if="message != ''">
+                            <x-alert type="success">
+                                Data saved
+                            </x-alert>
+                        </template>
+                    </div>
                     <div class="w-full flex overflow-x-scroll overflow-y-hidden">
                         <table class="table-auto text-xs">
                             <thead>
@@ -128,7 +134,9 @@
         function production() {
             return {
                 errors: [],
+                timeout: null,
                 howTable: false,
+                message: '',
                 loading: false,
                 order: @json($order),
                 sizes: @json($sizes),
@@ -198,15 +206,17 @@
                     .then(response => response.json())
                     .then((response) => {
                         this.loading = false
-                        console.log(response);
-                        // if (response.errors) {
-                        //     this.errors = response.errors
-                        //     this.loading = false
-                        // }
+                        if (response.errors) {
+                            this.errors = response.errors
+                        }
 
-                        // if (response.status) {
-                        //     window.location = response.redirect
-                        // }
+                        if (response.status) {
+                            clearTimeout(this.timeout)
+                            this.message = response.message
+                            this.timeout = setTimeout(() => { this.message = '' }, 3000)
+                        }
+                        
+                        this.loading = false
                     }).catch((error) => {
                         console.log(error);
                         this.loading = false

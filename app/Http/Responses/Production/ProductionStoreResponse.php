@@ -18,7 +18,12 @@ class ProductionStoreResponse implements Responsable
     public function toResponse($request)
     {
         $this->saveData($request);
-        return $request->all();
+        session()->flash('message', 'Data successfully created.');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data successfully saved.'
+        ]);
     }
 
     protected function saveData($request)
