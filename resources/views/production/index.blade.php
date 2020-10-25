@@ -86,13 +86,21 @@
                                         <template x-for="(size, i) in sizes">
                                             <td class="border">
                                                 <template x-if="!form[index].values[i].disabled">
-                                                    <input 
-                                                        type="number" 
-                                                        min="0" 
-                                                        max="5" 
-                                                        class="w-16" 
-                                                        x-model="form[index].values[i].value"
-                                                        @change="valueChanged(orderItem, index, i)">
+                                                    <div 
+                                                        x-on:mouseover="form[index].values[i].tooltips = true"
+                                                        x-on:mouseleave="form[index].values[i].tooltips = false">
+                                                        <input 
+                                                            type="number" 
+                                                            min="0" 
+                                                            :max="inputTitle(orderItem, index, i)" 
+                                                            class="w-16" 
+                                                            x-model="form[index].values[i].value"
+                                                            @change="valueChanged(orderItem, index, i)">
+                                                        <div class="relative" x-cloak x-show.transition.origin.top="form[index].values[i].tooltips">
+                                                            <div class="absolute top-0 z-10 w-auto p-1 -mt-5 text-sm leading-tight text-black transform -translate-x-1/2 -translate-y-full bg-blue-200 rounded-lg shadow-lg"
+                                                                x-text="inputTitle(orderItem, index, i)">
+                                                            </div>
+                                                        </div>
                                                 </template>
                                                 <template x-if="form[index].values[i].disabled">
                                                     <input type="number" min="0" class="w-16 bg-gray-300" disabled>
@@ -169,15 +177,26 @@
                     percentage = Math.floor(this.progress(formIndex) / totalQty * 100)
                     return `${percentage}%`;
                 },
+                inputTitle(orderItem, index, i) {
+                    return orderItem.prices.find(price => price.size_id == this.form[index].values[i].size_id).qty
+                },
                 valueChanged(orderItem, index, i) {
-                    var totalQty = this.subTotalQty(orderItem)
-                    var progress = this.progress(index)
-                    if (progress > totalQty) {
+                    var orderSize = orderItem.prices.find(price => price.size_id == this.form[index].values[i].size_id)
+                    if (this.form[index].values[i].value > orderSize.qty) {
                         alert('Value too large')
                         this.form[index].values[i].value = this.form[index].values[i].old_value
                     } else {
                         this.form[index].values[i].old_value = this.form[index].values[i].value
                     }
+
+                    // var totalQty = this.subTotalQty(orderItem)
+                    // var progress = this.progress(index)
+                    // if (progress > totalQty) {
+                    //     alert('Value too large')
+                    //     this.form[index].values[i].value = this.form[index].values[i].old_value
+                    // } else {
+                    //     this.form[index].values[i].old_value = this.form[index].values[i].value
+                    // }
                 },
                 currentProgress(data) {
                     if(data !== undefined && data.productions) {
@@ -237,6 +256,7 @@
                                 id: currentSize ? currentSize.id : null,
                                 size_id: size.id,
                                 value: currentValue,
+                                tooltips: false,
                                 old_value: currentValue,
                                 disabled: currentSize == undefined
                             })
