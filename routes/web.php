@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\ProductionController;
 use Illuminate\Http\Request;
 use App\Http\Livewire\Item\Items;
@@ -76,10 +77,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
         Route::prefix('customers')->group(function () {
             Route::get('/', Customers::class)->name('customers');
+            Route::post('/update-customer/store-data-v3', [CustomerController::class, 'storeManageProduct'])->name('manage-products-customer-store-data-v3');
             Route::get('/create-customer', CreateCustomer::class)->name('create-customer');
             Route::get('/update-customer/{id}', UpdateCustomer::class)->name('update-customer');
             Route::get('/update-customer/{id}/manage-product', ManageProductCustomer::class)->name('manage-products-customer');
             Route::get('/update-customer/{id}/manage-product-v2', ManageProductCustomerV2::class)->name('manage-products-customer-v2');
+            Route::get('/update-customer/{id}/manage-product-v3', [CustomerController::class, 'manageProduct'])->name('manage-products-customer-v3');
             Route::get('/customer-items', \App\Http\Controllers\CustomerItemsController::class)->name('customer.customer-items');
         });
 
