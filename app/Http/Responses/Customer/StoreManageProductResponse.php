@@ -41,7 +41,7 @@ class StoreManageProductResponse implements Responsable
                 'material_id' => $item['material_id'],
                 'color_id' => $item['color_id'],
                 'image' => '',
-                'note' => $item['note'],
+                'note' => $item['note'] ? : '',
                 'screen_printing' => $item['screen_printing'],
             ]);
 
