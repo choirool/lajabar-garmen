@@ -27,8 +27,8 @@ class OrderEditResponse implements Responsable
     {
         $version = $this->useVersion2() ? 'v2' : 'v3';
 
-        return view('order.'.$version.'.update', [
-            'customers' => Customer::select('name', 'id')->orderBy('name')->get(),
+        return view('order.' . $version . '.update', [
+            'customers' => $this->getCustomer(),
             'salesmen' => Salesman::select('name', 'id')->orderBy('name')->get(),
             'materials' => Material::orderBy('name')->get(),
             'categories' => Category::orderBy('name')->get(),
@@ -37,6 +37,16 @@ class OrderEditResponse implements Responsable
             'items' => Item::select('name', 'id', 'unit', 'category_id')->orderBy('name')->get(),
             'order' => $this->order,
         ]);
+    }
+
+    protected function getCustomer()
+    {
+        return Customer::select('name', 'id')
+            ->where('id', $this->order->customer_id)
+            ->with(['products' => function ($query) {
+                $query->with('item', 'prices');
+            }])
+            ->get();
     }
 
     protected function getOrder()
@@ -51,16 +61,16 @@ class OrderEditResponse implements Responsable
     protected function useVersion2()
     {
         $result = [];
-        $this->order->orderItems->each(function ($orderItems) use(&$result) {
+        $this->order->orderItems->each(function ($orderItems) use (&$result) {
             $pricesList = [];
-            $orderItems->prices->each(function ($prices) use(&$pricesList, &$result) {
+            $orderItems->prices->each(function ($prices) use (&$pricesList, &$result) {
                 $pricesList[] = $prices->price;
             });
 
             // $result[] = $pricesList;
             $result[] = collect($pricesList)->unique()->count() > 1;
         });
-        
+
         return in_array(true, $result);
     }
 }

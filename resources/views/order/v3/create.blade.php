@@ -89,15 +89,23 @@
                                 <tbody>
                                     <template x-for="(order_line, index) in form.order_lines" :key="index">
                                         <tr>
-                                            <td class="border" :class="{ 'border-red-700': errors[`order_lines.${index}.item`] }">
+                                            <td class="border" 
+                                                :class="{ 'border-red-700': errors[`order_lines.${index}.item`] || errors[`order_lines.${index}.item_combination`] }">
                                                 <select 
                                                     x-model="order_line.item"
-                                                    x-on:change="itemSelected(index, order_line.item)"
+                                                    x-on:change="
+                                                        itemSelected(index, order_line.item), 
+                                                        createItemCombination(index),
+                                                        setPrice(index)
+                                                    "
                                                     class="w-28 bg-white">
                                                     <option value="0">Select item</option>
-                                                    @foreach ($items as $item)
+                                                    <template x-for="item in availableItems">
+                                                        <option :value="item.id" x-text="item.name"></option>
+                                                    </template>
+                                                    {{-- @foreach ($items as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </select>
                                             </td>
                                             <td class="border" :class="{ 'border-red-700': errors[`order_lines.${index}.unit`] }">
@@ -111,16 +119,24 @@
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td class="border" :class="{ 'border-red-700': errors[`order_lines.${index}.material`] }">
-                                                <select x-model="order_line.material" class="w-28 bg-white">
+                                            <td class="border" 
+                                                :class="{ 'border-red-700': errors[`order_lines.${index}.material`] || errors[`order_lines.${index}.item_combination`] }">
+                                                <select 
+                                                    x-model="order_line.material" 
+                                                    class="w-28 bg-white"
+                                                    @change="createItemCombination(index), setPrice(index)">
                                                     <option value="0">Select material</option>
                                                     @foreach ($materials as $material)
                                                         <option value="{{ $material->id }}">{{ $material->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td class="border" :class="{ 'border-red-700': errors[`order_lines.${index}.color`] }">
-                                                <select x-model="order_line.color" class="bg-white">
+                                            <td class="border" 
+                                                :class="{ 'border-red-700': errors[`order_lines.${index}.color`] || errors[`order_lines.${index}.item_combination`] }">
+                                                <select 
+                                                    x-model="order_line.color" 
+                                                    class="bg-white"
+                                                    @change="createItemCombination(index), setPrice(index)">
                                                     <option value="0">Select color</option>
                                                     @foreach ($colors as $color)
                                                         <option value="{{ $color->id }}">{{ $color->name }}</option>
@@ -200,6 +216,8 @@
                 loading: false,
                 sizes: @json($sizes),
                 items: @json($items),
+                availableItems: [],
+                customerItems: [],
                 form: {
                     customer_id: '',
                     date: '',
@@ -210,6 +228,7 @@
                     var orderLine = {
                         item: data ? data.item.id : '',
                         unit: data ? data.item.unit : '',
+                        item_combination: '',
                         type: data ? data.item.category_id : '',
                         material: data ? data.material_id : '',
                         color: data ? data.color_id : '',
@@ -249,6 +268,32 @@
                     this.form.order_lines[i].unit = selectedItem.unit
                     this.form.order_lines[i].type = selectedItem.category_id
                 },
+                createItemCombination(i) {
+                    var formItem = this.form.order_lines[i]
+                    this.form.order_lines[i].item_combination = `${formItem.item}_${formItem.material}_${formItem.color}`
+                },
+                setPrice(i) {
+                    var formItem = this.form.order_lines[i]
+                    if (formItem.item && formItem.material && formItem.color) {
+                        var customerItem = this.customerItems.find(item => {
+                            return item.item_id == formItem.item
+                                && item.material_id == formItem.material
+                                && item.color_id == formItem.color
+                        })
+
+                        if (customerItem) {
+                            this.form.order_lines[i].priceData = customerItem.prices[0].price
+                            this.form.order_lines[i].price.forEach(price => {
+                                price.price = customerItem.prices[0].price
+                            })
+                        } else {
+                            this.form.order_lines[i].priceData = 0
+                            this.form.order_lines[i].price.forEach(price => {
+                                price.price =0
+                            })
+                        }
+                    }
+                },
                 subQty(data) {
                     var subQty = 0
                     data.price.forEach(qty => subQty += parseInt(qty.qty))
@@ -284,6 +329,7 @@
                                         const orderLines = element[k];
                                         formData.append(`order_lines[${k}][item]`, orderLines['item'])
                                         formData.append(`order_lines[${k}][unit]`, orderLines['unit'])
+                                        formData.append(`order_lines[${k}][item_combination]`, orderLines['item_combination'])
                                         formData.append(`order_lines[${k}][type]`, orderLines['type'])
                                         formData.append(`order_lines[${k}][material]`, orderLines['material'])
                                         formData.append(`order_lines[${k}][color]`, orderLines['color'])
@@ -356,16 +402,14 @@
                         fetch(`{{ route('master-data.customer.customer-items') }}?id=${value}`)
                             .then(response => response.json())
                             .then(data => {
+                                this.availableItems = []
                                 if (data.length > 0) {
-                                     if (this.useVesion2(data)) {
-                                        window.location.href = `{{ route('transactions.v2.create-order') }}?customer_id=${value}`
-                                    } else {
-                                        data.forEach(d => this.addNewLine(d))
-                                    }
-
-                                } else {
-                                    this.addNewLine()
+                                    this.customerItems = data
+                                    var itemIds = data.map(item => item.item_id)
+                                    this.availableItems = this.items.filter(item => itemIds.includes(item.id))
                                 }
+
+                                this.addNewLine()
                             })
                         
                         this.showTable = true
