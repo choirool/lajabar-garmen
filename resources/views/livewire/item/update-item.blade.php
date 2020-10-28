@@ -31,14 +31,14 @@
                             <x-jet-input-error for="category" class="mt-2" />
                         </div>
                         <div class="col-span-6 sm:col-span-4">
-                            <x-jet-label for="category" value="{{ __('Matrial') }}" />
-                            <select id="category" wire:model="material" class="mt-1 block w-full form-input rounded-md shadow-sm">
+                            <x-jet-label for="material" value="{{ __('Matrial') }}" />
+                            <select id="material" wire:model="material" class="mt-1 block w-full form-input rounded-md shadow-sm">
                                 <option>Select matrial</option>
                                 @foreach ($materials as $material)
                                     <option value="{{ $material->id }}">{{ $material->name }}</option>
                                 @endforeach
                             </select>
-                            <x-jet-input-error for="category" class="mt-2" />
+                            <x-jet-input-error for="material" class="mt-2" />
                         </div>       
                     </x-slot>
                 
