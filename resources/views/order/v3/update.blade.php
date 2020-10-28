@@ -108,7 +108,7 @@
                                                 <input type="text" x-model="order_line.unit" class="w-10 text-center">
                                             </td>
                                             <td class="border" :class="{ 'border-red-700': errors[`order_lines.${index}.type`] }">
-                                                <select x-model="order_line.type" class="w-28 bg-white">
+                                                <select x-model="order_line.type" class="w-28 bg-white" disabled>
                                                     <option value="0">Select category</option>
                                                     @foreach ($categories as $category)
                                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
