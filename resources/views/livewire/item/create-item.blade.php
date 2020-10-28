@@ -21,9 +21,9 @@
                             <x-jet-input-error for="unit" class="mt-2" />
                         </div>
                         <div class="col-span-6 sm:col-span-4">
-                            <x-jet-label for="category" value="{{ __('Category') }}" />
+                            <x-jet-label for="category" value="{{ __('Type') }}" />
                             <select id="category" wire:model="category" class="mt-1 block w-full form-input rounded-md shadow-sm">
-                                <option>Select category</option>
+                                <option>Select type</option>
                                 @foreach ($categories as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach

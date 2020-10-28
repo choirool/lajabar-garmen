@@ -30,7 +30,7 @@
                     <thead>
                         <tr>
                             <th class="border px-4 py-2">Name</th>
-                            <th class="border px-4 py-2">Category</th>
+                            <th class="border px-4 py-2">Type</th>
                             <th class="border px-4 py-2">Material</th>
                             <th class="border px-4 py-2">Unit</th>
                             <th class="border px-4 py-2"></th>
