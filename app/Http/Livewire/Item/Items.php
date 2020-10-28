@@ -39,7 +39,7 @@ class Items extends Component
     {
         return Item::query()
             ->where('name', 'like', '%' . $this->search . '%')
-            ->with('category')
+            ->with('category', 'material')
             ->paginate();
     }
 

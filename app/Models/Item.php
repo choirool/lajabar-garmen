@@ -15,6 +15,7 @@ class Item extends Model
         'name',
         'unit',
         'category_id',
+        'material_id',
     ];
 
     public function category()
@@ -25,5 +26,10 @@ class Item extends Model
     public function customerItems()
     {
         return $this->hasMany(CustomerItem::class);
+    }
+
+    public function material()
+    {
+        return $this->belongsTo(Material::class);
     }
 }

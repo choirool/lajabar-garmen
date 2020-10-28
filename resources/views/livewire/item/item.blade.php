@@ -31,6 +31,7 @@
                         <tr>
                             <th class="border px-4 py-2">Name</th>
                             <th class="border px-4 py-2">Category</th>
+                            <th class="border px-4 py-2">Material</th>
                             <th class="border px-4 py-2">Unit</th>
                             <th class="border px-4 py-2"></th>
                         </tr>
@@ -40,6 +41,7 @@
                             <tr>
                                 <td class="border px-4 py-2">{{ $item->name }}</td>
                                 <td class="border px-4 py-2">{{ optional($item->category)->name }}</td>
+                                <td class="border px-4 py-2">{{ optional($item->material)->name }}</td>
                                 <td class="border px-4 py-2">{{ $item->unit }}</td>
                                 <td class="border px-4 py-2">
                                     <x-link href="{{ route('master-data.update-item', ['id' => $item->id]) }}">{{ __('Edit') }}</x-link>
