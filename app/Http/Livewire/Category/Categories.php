@@ -17,6 +17,10 @@ class Categories extends Component
 
     public function mount()
     {
+        if (!auth()->user()->isAbleTo('type-list')) {
+            abort(403);
+        }
+
         $this->search = request()->query('search', $this->search);
     }
 

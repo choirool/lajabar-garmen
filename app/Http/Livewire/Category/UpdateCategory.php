@@ -12,6 +12,10 @@ class UpdateCategory extends Component
 
     public function mount($id)
     {
+        if (!auth()->user()->isAbleTo('type-update')) {
+            abort(403);
+        }
+
         $category = Category::findOrFail($id);
         $this->category = $category;
         $this->name = $category->name;

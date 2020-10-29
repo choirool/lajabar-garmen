@@ -14,9 +14,11 @@
                         wire:model.debounce.500ms="search" />
                     </div>
                     <div class="w-1/2 my-2">
-                        <x-link class="ml-2 float-right" href="{{ route('master-data.create-category') }}">
-                            {{ __('Create new') }}
-                        </x-link>
+                        @if (auth()->user()->isAbleTo('type-create'))
+                            <x-link class="ml-2 float-right" href="{{ route('master-data.create-category') }}">
+                                {{ __('Create new') }}
+                            </x-link>
+                        @endif
                     </div>
                 </div>
 
@@ -38,7 +40,9 @@
                             <tr>
                                 <td class="border px-4 py-2">{{ $category->name }}</td>
                                 <td class="border px-4 py-2">
-                                    <x-link href="{{ route('master-data.update-category', ['id' => $category->id]) }}">{{ __('Edit') }}</x-link>
+                                    @if (auth()->user()->isAbleTo('type-update'))
+                                        <x-link href="{{ route('master-data.update-category', ['id' => $category->id]) }}">{{ __('Edit') }}</x-link>
+                                    @endif
                                     @if($confirming == $category->id)
                                         <x-button action="delete({{ $category->id }})" type="danger">
                                             Yes?
@@ -47,10 +51,11 @@
                                             No
                                         </x-button>
                                     @else
-                                        <x-button action="confirmDelete({{ $category->id }})">
-                                            Delete
-                                        </x-button>
-                                        
+                                        @if (auth()->user()->isAbleTo('type-delete'))
+                                            <x-button action="confirmDelete({{ $category->id }})">
+                                                Delete
+                                            </x-button>
+                                        @endif
                                     @endif
                                 </td>
                             </tr>

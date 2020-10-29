@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
+use App\Models\User;
+use App\Models\Permission;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
@@ -16,34 +18,70 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     public function run()
     {
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-
-        DB::statement("SET foreign_key_checks=0");
+        DB::statement('SET foreign_key_checks=0');
         Permission::truncate();
         Role::truncate();
-        DB::statement("SET foreign_key_checks=1");
-        
+        DB::table('permission_role')->truncate();
+        DB::table('permission_user')->truncate();
+        DB::table('role_user')->truncate();
+        DB::statement('SET foreign_key_checks=1');
+
         $permissionNames = [
-            'list user', 'create user', 'update user', 'delete user', 'set role user',
-            'list type','create type','update type','delete type',
-            'list color', 'create color', 'update color', 'delete color',
-            'list size', 'create size', 'update size', 'delete size',
-            'list material', 'create material', 'update material', 'delete material',
-            'list item', 'create item', 'update item', 'delete item',
-            'list salesman', 'create salesman', 'update salesman', 'delete salesman',
-            'list customer', 'create customer', 'update customer', 'delete customer',
-            'list role', 'create role', 'update role', 'delete role',
-            'list order', 'create order', 'update order', 'delete order', 'check order', 
-            'list production', 'create production', 'update production', 'delete production',
+            'user' => [
+                'list', 'create', 'update', 'delete', 'set role',
+            ],
+            'type' => [
+                'list', 'create', 'update', 'delete',
+            ],
+            'color' => [
+                'list', 'create', 'update', 'delete',
+            ],
+            'size' => [
+                'list', 'create', 'update', 'delete',
+            ],
+            'material' => [
+                'list', 'create', 'update', 'delete',
+            ],
+            'item' => [
+                'list', 'create', 'update', 'delete',
+            ],
+            'salesman' => [
+                'list', 'create', 'update', 'delete',
+            ],
+            'customer' => [
+                'list', 'create', 'update', 'delete',
+            ],
+            'role' => [
+                'list', 'create', 'update', 'delete',
+            ],
+            'order' => [
+                'list', 'create', 'update', 'delete', 'check',
+            ],
+            'production' => [
+                'list', 'create', 'update', 'delete',
+            ],
         ];
 
-        $permissions = collect($permissionNames)->map(function ($permission) {
-            return ['name' => $permission, 'guard_name' => 'sanctum'];
-        });
+        $superAdmin = Role::create([
+            'name' => 'super-admin',
+            'display_name' => 'Super admin',
+        ]);
 
-        Permission::insert($permissions->toArray());
+        foreach ($permissionNames as $key => $permissionName) {
+            foreach ($permissionName as $value) {
+                $name = $key . ' ' . $value;
+                $permission = Permission::create([
+                    'name' => Str::slug($name, '-'),
+                    'display_name' => ucfirst($name),
+                ]);
 
-        $role = Role::create(['name' => 'super-admin']);
-        $role->givePermissionTo(Permission::all());
+                $superAdmin->attachPermission($permission);
+            }
+        }
+
+        $users = User::whereIn('username', ['choirool', 'admin'])->get();
+        foreach ($users as $user) {
+            $user->attachRole($superAdmin);
+        }
     }
 }

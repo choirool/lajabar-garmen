@@ -9,6 +9,13 @@ class CreateCategory extends Component
 {
     public $name;
 
+    public function mount()
+    {
+        if (!auth()->user()->isAbleTo('type-create')) {
+            abort(403);
+        }
+    }
+
     public function saveCategory()
     {
         $this->validate([

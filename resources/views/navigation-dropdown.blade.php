@@ -20,30 +20,46 @@
                             {{ __('Master data') }}
                         </x-slot>
                         <x-slot name="menuItems">
+                            @if (auth()->user()->isAbleTo('user-list'))
                             <x-nav-link-dropdown-item href="{{ route('master-data.users') }}">
                                 {{ __('Users') }}
                             </x-nav-link-dropdown-item>
+                            @endif
+                            @if (auth()->user()->isAbleTo('type-list'))
                             <x-nav-link-dropdown-item href="{{ route('master-data.categories') }}">
                                 {{ __('Type master') }}
                             </x-nav-link-dropdown-item>
+                            @endif
+                            @if (auth()->user()->isAbleTo('color-list'))
                             <x-nav-link-dropdown-item href="{{ route('master-data.colors') }}">
                                 {{ __('Color master') }}
                             </x-nav-link-dropdown-item>
+                            @endif
+                            @if (auth()->user()->isAbleTo('size-list'))
                             <x-nav-link-dropdown-item href="{{ route('master-data.sizes') }}">
                                 {{ __('Size master') }}
                             </x-nav-link-dropdown-item>
+                            @endif
+                            @if (auth()->user()->isAbleTo('material-list'))
                             <x-nav-link-dropdown-item href="{{ route('master-data.materials') }}">
                                 {{ __('Material master') }}
                             </x-nav-link-dropdown-item>
+                            @endif
+                            @if (auth()->user()->isAbleTo('item-list'))
                             <x-nav-link-dropdown-item href="{{ route('master-data.items') }}">
                                 {{ __('Item master') }}
                             </x-nav-link-dropdown-item>
+                            @endif
+                            @if (auth()->user()->isAbleTo('salesman-list'))
                             <x-nav-link-dropdown-item href="{{ route('master-data.salesmen') }}">
                                 {{ __('Salesmen master') }}
                             </x-nav-link-dropdown-item>
+                            @endif
+                            @if (auth()->user()->isAbleTo('customer-list'))
                             <x-nav-link-dropdown-item href="{{ route('master-data.customers') }}">
                                 {{ __('Customers master') }}
                             </x-nav-link-dropdown-item>
+                            @endif
                         </x-slot>
                     </x-nav-link-dropdown>
                     <x-nav-link-dropdown href="#">
@@ -51,9 +67,11 @@
                             {{ __('Transaction') }}
                         </x-slot>
                         <x-slot name="menuItems">
+                            @if (auth()->user()->isAbleTo('order-list'))
                             <x-nav-link-dropdown-item href="{{ route('transactions.orders') }}">
                                 {{ __('Orders') }}
                             </x-nav-link-dropdown-item>
+                            @endif
                         </x-slot>
                     </x-nav-link-dropdown>
                     <x-nav-link-dropdown href="#">
