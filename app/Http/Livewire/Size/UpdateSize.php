@@ -13,6 +13,10 @@ class UpdateSize extends Component
 
     public function mount($id)
     {
+        if(!auth()->user()->isAbleTo('size-update')) {
+            abort(403);
+        }
+
         $size = Size::findOrFail($id);
         $this->size = $size;
         $this->name = $size->name;

@@ -17,6 +17,10 @@ class Sizes extends Component
 
     public function mount()
     {
+        if(!auth()->user()->isAbleTo('size-list')) {
+            abort(403);
+        }
+
         $this->search = request()->query('search', $this->search);
     }
 

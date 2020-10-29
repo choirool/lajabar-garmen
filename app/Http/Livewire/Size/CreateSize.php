@@ -12,6 +12,10 @@ class CreateSize extends Component
 
     public function mount()
     {
+        if(!auth()->user()->isAbleTo('size-create')) {
+            abort(403);
+        }
+
         $this->level = Size::withTrashed()->max('sort') +1;
     }
 
