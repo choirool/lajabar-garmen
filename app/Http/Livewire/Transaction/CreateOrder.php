@@ -35,6 +35,10 @@ class CreateOrder extends Component
 
     public function mount()
     {
+        if(!auth()->user()->isAbleTo('order-create')) {
+            abort(403);
+        }
+
         $this->customers = Customer::select('name', 'id')->orderBy('name')->get();
         $this->salesmen = Salesman::select('name', 'id')->orderBy('name')->get();
         $this->materials = Material::orderBy('name')->get();

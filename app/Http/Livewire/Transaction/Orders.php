@@ -20,6 +20,10 @@ class Orders extends Component
 
     public function mount()
     {
+        if(!auth()->user()->isAbleTo('order-list')) {
+            abort(403);
+        }
+
         $this->search = request()->query('search', $this->search);
     }
 

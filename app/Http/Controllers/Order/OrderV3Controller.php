@@ -26,6 +26,10 @@ class OrderV3Controller extends Controller
      */
     public function create()
     {
+        if(!auth()->user()->isAbleTo('order-create')) {
+            abort(403);
+        }
+
         return new OrderCreateResponse;
     }
 
@@ -59,6 +63,10 @@ class OrderV3Controller extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->isAbleTo('order-update')) {
+            abort(403);
+        }
+
         return new OrderEditResponse($id);
     }
 

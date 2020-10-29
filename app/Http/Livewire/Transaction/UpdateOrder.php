@@ -32,6 +32,10 @@ class UpdateOrder extends Component
 
     public function mount($id)
     {
+        if(!auth()->user()->isAbleTo('order-update')) {
+            abort(403);
+        }
+
         $this->customers = Customer::select('name', 'id')->orderBy('name')->get();
         $this->salesmen = Salesman::select('name', 'id')->orderBy('name')->get();
         $this->materials = Material::orderBy('name')->get();

@@ -30,6 +30,10 @@ class OrderV2Controller extends Controller
      */
     public function create()
     {
+        if(!auth()->user()->isAbleTo('order-create')) {
+            abort(403);
+        }
+
         return new OrderCreateResponse;
     }
 
@@ -41,6 +45,10 @@ class OrderV2Controller extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
+        if(!auth()->user()->isAbleTo('order-create')) {
+            abort(403);
+        }
+
         return new OrderStoreResponse;
     }
 
@@ -63,6 +71,10 @@ class OrderV2Controller extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->isAbleTo('order-update')) {
+            abort(403);
+        }
+
         return new OrderEditResponse($id);
     }
 
@@ -75,6 +87,10 @@ class OrderV2Controller extends Controller
      */
     public function update(UpdateOrderRequest $request)
     {
+        if(!auth()->user()->isAbleTo('order-update')) {
+            abort(403);
+        }
+
         return new OrderUpdateResponse;
     }
 
