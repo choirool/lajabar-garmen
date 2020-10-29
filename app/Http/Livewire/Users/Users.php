@@ -53,9 +53,13 @@ class Users extends Component
             ->where(function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%')
                     ->orWhere('username', 'like', '%' . $this->search . '%')
-                    ->orWhere('email', 'like', '%' . $this->search . '%');
+                    ->orWhere('email', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('roles', function ($query) {
+                        $query->where('name', 'like', '%' . $this->search . '%')
+                            ->orWhere('display_name', 'like', '%' . $this->search . '%');
+                    });
             })
-
+            ->with('roles')
             ->paginate();
     }
 }

@@ -28,7 +28,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $permissionNames = [
             'user' => [
-                'list', 'create', 'update', 'delete', 'set role',
+                'list', 'create', 'update', 'delete', 'set role', 'update password',
             ],
             'type' => [
                 'list', 'create', 'update', 'delete',

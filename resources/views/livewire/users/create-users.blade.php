@@ -27,6 +27,19 @@
                             <x-jet-input id="Email" type="email" class="mt-1 block w-full" wire:model.defer="email" />
                             <x-jet-input-error for="email" class="mt-2" />
                         </div>
+
+                        @if (auth()->user()->isAbleTo('user-set-role'))
+                        <div class="col-span-6 sm:col-span-4">
+                            <x-jet-label for="role" value="{{ __('Role') }}" />
+                            <select id="material" wire:model="role" class="mt-1 block w-full form-input rounded-md shadow-sm">
+                                <option>Select role</option>
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->id }}">{{ $role->display_name }}</option>
+                                @endforeach
+                            </select>
+                            <x-jet-input-error for="role" class="mt-2" />
+                        </div>
+                        @endif
                 
                         <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="password" value="{{ __('New Password') }}" />

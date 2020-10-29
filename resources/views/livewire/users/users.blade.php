@@ -14,9 +14,11 @@
                         wire:model.debounce.500ms="search" />
                     </div>
                     <div class="w-1/2 my-2">
+                        @if (auth()->user()->isAbleTo('user-create'))
                         <x-link class="ml-2 float-right" href="{{ route('master-data.create-user') }}">
                             Create new
                         </x-link>
+                        @endif
                     </div>
                 </div>
 
@@ -32,6 +34,7 @@
                             <th class="border px-4 py-2">Name</th>
                             <th class="border px-4 py-2">Username</th>
                             <th class="border px-4 py-2">Email</th>
+                            <th class="border px-4 py-2">Role</th>
                             <th class="border px-4 py-2"></th>
                         </tr>
                     </thead>
@@ -41,8 +44,11 @@
                                 <td class="border px-4 py-2">{{ $user->name }}</td>
                                 <td class="border px-4 py-2">{{ $user->username }}</td>
                                 <td class="border px-4 py-2">{{ $user->email }}</td>
+                                <td class="border px-4 py-2">{{ optional($user->roles->first())->name }}</td>
                                 <td class="border px-4 py-2">
+                                    @if (auth()->user()->isAbleTo('user-update'))
                                     <x-link href="{{ route('master-data.update-user', ['id' => $user->id]) }}">{{ __('Edit') }}</x-link>
+                                    @endif
                                     @if($confirming == $user->id)
                                         <x-button action="deleteUser({{ $user->id }})" type="danger">
                                             Yes?
@@ -51,10 +57,11 @@
                                             No
                                         </x-button>
                                     @else
-                                        <x-button action="confirmDelete({{ $user->id }})">
-                                            Delete
-                                        </x-button>
-                                        
+                                        @if (auth()->user()->isAbleTo('user-delete'))
+                                            <x-button action="confirmDelete({{ $user->id }})">
+                                                Delete
+                                            </x-button>
+                                        @endif
                                     @endif
                                 </td>
                             </tr>

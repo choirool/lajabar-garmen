@@ -20,6 +20,11 @@
                             {{ __('Master data') }}
                         </x-slot>
                         <x-slot name="menuItems">
+                            @if (auth()->user()->isAbleTo('role-list'))
+                            <x-nav-link-dropdown-item href="{{ route('master-data.roles') }}">
+                                {{ __('User Roles') }}
+                            </x-nav-link-dropdown-item>
+                            @endif
                             @if (auth()->user()->isAbleTo('user-list'))
                             <x-nav-link-dropdown-item href="{{ route('master-data.users') }}">
                                 {{ __('Users') }}
