@@ -17,6 +17,10 @@ class Colors extends Component
 
     public function mount()
     {
+        if (!auth()->user()->isAbleTo('color-list')) {
+            abort(403);
+        }
+
         $this->search = request()->query('search', $this->search);
     }
 

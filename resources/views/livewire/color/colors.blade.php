@@ -14,9 +14,11 @@
                         wire:model.debounce.500ms="search" />
                     </div>
                     <div class="w-1/2 my-2">
+                        @if (auth()->user()->isAbleTo('color-create'))
                         <x-link class="ml-2 float-right" href="{{ route('master-data.create-color') }}">
                             {{ __('Create new') }}
                         </x-link>
+                        @endif
                     </div>
                 </div>
 
@@ -38,7 +40,9 @@
                             <tr>
                                 <td class="border px-4 py-2">{{ $color->name }}</td>
                                 <td class="border px-4 py-2">
+                                    @if (auth()->user()->isAbleTo('color-update'))
                                     <x-link href="{{ route('master-data.update-color', ['id' => $color->id]) }}">{{ __('Edit') }}</x-link>
+                                    @endif
                                     @if($confirming == $color->id)
                                         <x-button action="delete({{ $color->id }})" type="danger">
                                             Yes?
@@ -47,10 +51,11 @@
                                             No
                                         </x-button>
                                     @else
+                                        @if (auth()->user()->isAbleTo('color-delete'))
                                         <x-button action="confirmDelete({{ $color->id }})">
                                             Delete
                                         </x-button>
-                                        
+                                        @endif
                                     @endif
                                 </td>
                             </tr>

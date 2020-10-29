@@ -12,6 +12,10 @@ class UpdateColor extends Component
 
     public function mount($id)
     {
+        if (!auth()->user()->isAbleTo('color-update')) {
+            abort(403);
+        }
+
         $color = Color::findOrFail($id);
         $this->color = $color;
         $this->name = $color->name;

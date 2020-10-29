@@ -8,6 +8,13 @@ use Livewire\Component;
 class CreateColor extends Component
 {
     public $name;
+    
+    public function mount()
+    {
+        if (!auth()->user()->isAbleTo('color-create')) {
+            abort(403);
+        }
+    }
 
     public function saveColor()
     {
