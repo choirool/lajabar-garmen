@@ -17,6 +17,10 @@ class Items extends Component
 
     public function mount()
     {
+        if (!auth()->user()->isAbleTo('item-list')) {
+            abort(403);
+        }
+
         $this->search = request()->query('search', $this->search);
     }
 

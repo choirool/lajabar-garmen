@@ -17,6 +17,10 @@ class UpdateItem extends Component
 
     public function mount($id)
     {
+        if (!auth()->user()->isAbleTo('item-update')) {
+            abort(403);
+        }
+
         $item = Item::findOrFail($id);
         $this->item = $item;
         $this->name = $item->name;

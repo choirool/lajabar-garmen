@@ -14,6 +14,13 @@ class CreateItem extends Component
     public $category;
     public $material;
 
+    public function mount()
+    {
+        if (!auth()->user()->isAbleTo('item-create')) {
+            abort(403);
+        }
+    }
+
     public function saveItem()
     {
         $this->validate([

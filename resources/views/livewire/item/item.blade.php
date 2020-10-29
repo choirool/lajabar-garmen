@@ -14,9 +14,11 @@
                         wire:model.debounce.500ms="search" />
                     </div>
                     <div class="w-1/2 my-2">
+                        @if (auth()->user()->isAbleTo('item-create'))
                         <x-link class="ml-2 float-right" href="{{ route('master-data.create-item') }}">
                             {{ __('Create new') }}
                         </x-link>
+                        @endif
                     </div>
                 </div>
 
@@ -44,7 +46,9 @@
                                 <td class="border px-4 py-2">{{ optional($item->material)->name }}</td>
                                 <td class="border px-4 py-2">{{ $item->unit }}</td>
                                 <td class="border px-4 py-2">
+                                    @if (auth()->user()->isAbleTo('item-update'))
                                     <x-link href="{{ route('master-data.update-item', ['id' => $item->id]) }}">{{ __('Edit') }}</x-link>
+                                    @endif
                                     @if($confirming == $item->id)
                                         <x-button action="delete({{ $item->id }})" type="danger">
                                             Yes?
@@ -53,10 +57,11 @@
                                             No
                                         </x-button>
                                     @else
-                                        <x-button action="confirmDelete({{ $item->id }})">
-                                            Delete
-                                        </x-button>
-                                        
+                                        @if (auth()->user()->isAbleTo('item-delete'))
+                                            <x-button action="confirmDelete({{ $item->id }})">
+                                                Delete
+                                            </x-button>
+                                        @endif
                                     @endif
                                 </td>
                             </tr>
