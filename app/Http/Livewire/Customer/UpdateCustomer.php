@@ -16,6 +16,10 @@ class UpdateCustomer extends Component
 
     public function mount($id)
     {
+        if (!auth()->user()->isAbleTo('customer-update')) {
+            abort(403);
+        }
+
         $customer = Customer::findOrFail($id);
         $this->customer = $customer;
         $this->name = $customer->name;

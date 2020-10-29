@@ -38,6 +38,10 @@ class ManageProductCustomerV2 extends Component
 
     public function mount($id)
     {
+        if (!auth()->user()->isAbleTo('customer-manage-item')) {
+            abort(403);
+        }
+        
         $this->customer = Customer::findOrFail($id);
 
         if ($this->useVersion1($id)) {

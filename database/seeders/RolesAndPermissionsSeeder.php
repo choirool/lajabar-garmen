@@ -49,7 +49,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'list', 'create', 'update', 'delete',
             ],
             'customer' => [
-                'list', 'create', 'update', 'delete',
+                'list', 'create', 'update', 'delete', 'manage item',
             ],
             'role' => [
                 'list', 'create', 'update', 'delete',

@@ -37,6 +37,10 @@ class ManageProductCustomer extends Component
 
     public function mount($id)
     {
+        if (!auth()->user()->isAbleTo('customer-manage-item')) {
+            abort(403);
+        }
+
         $this->items = Item::select('name', 'id', 'unit')->orderBy('name')->get();
         $this->customer = Customer::findOrFail($id);
         $this->materials = Material::orderBy('name')->get();

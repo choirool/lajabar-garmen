@@ -13,6 +13,13 @@ class CreateCustomer extends Component
     public $email;
     public $country;
 
+    public function mount()
+    {
+        if (!auth()->user()->isAbleTo('customer-create')) {
+            abort(403);
+        }
+    }
+
     public function saveCustomer()
     {
         $this->validate([

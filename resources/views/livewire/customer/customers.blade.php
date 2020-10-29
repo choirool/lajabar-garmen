@@ -14,9 +14,11 @@
                         wire:model.debounce.500ms="search" />
                     </div>
                     <div class="w-1/2 my-2">
+                        @if (auth()->user()->isAbleTo('customer-create'))
                         <x-link class="ml-2 float-right" href="{{ route('master-data.create-customer') }}">
                             {{ __('Create new') }}
                         </x-link>
+                        @endif
                     </div>
                 </div>
 
@@ -57,20 +59,28 @@
                                             No
                                         </x-button>
                                     @else
-                                        @if ($customer->deleted_at)
-                                            <x-button action="confirmDelete({{ $customer->id }})" size="small">
-                                                Inactive
-                                            </x-button>
+                                        @if (auth()->user()->isAbleTo('customer-delete'))
+                                            @if ($customer->deleted_at)
+                                                <x-button action="confirmDelete({{ $customer->id }})" size="small">
+                                                    Inactive
+                                                </x-button>
+                                            @else
+                                                <x-button action="confirmDelete({{ $customer->id }})" size="small">
+                                                    Acitive
+                                                </x-button>    
+                                            @endif
                                         @else
-                                            <x-button action="confirmDelete({{ $customer->id }})" size="small">
-                                                Acitive
-                                            </x-button>    
+                                            {{ $customer->deleted_at ? 'Inactive' : 'Active' }}
                                         @endif
                                     @endif
                                 </td>
                                 <td class="border align-top">
+                                    @if (auth()->user()->isAbleTo('customer-update'))
                                     <x-link href="{{ $customer->deleted_at ? '#' : route('master-data.update-customer', ['id' => $customer->id]) }}" size="small">{{ __('Edit') }}</x-link>
+                                    @endif
+                                    @if (auth()->user()->isAbleTo('customer-manage-item'))
                                     <x-link href="{{ $customer->deleted_at ? '#' : route('master-data.manage-products-customer-v3', ['id' => $customer->id]) }}" size="small">{{ __('Product') }}</x-link>
+                                    @endif
                                 </td>
                             </tr>
                         @empty
