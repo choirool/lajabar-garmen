@@ -12,6 +12,10 @@ class UpdateSalesman extends Component
 
     public function mount($id)
     {
+        if (!auth()->user()->isAbleTo('salesman-update')) {
+            abort(403);
+        }
+
         $color = Salesman::findOrFail($id);
         $this->color = $color;
         $this->name = $color->name;

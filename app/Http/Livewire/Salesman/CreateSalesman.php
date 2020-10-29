@@ -9,6 +9,13 @@ class CreateSalesman extends Component
 {
     public $name;
 
+    public function mount()
+    {
+        if (!auth()->user()->isAbleTo('salesman-create')) {
+            abort(403);
+        }
+    }
+
     public function saveSalesman()
     {
         $this->validate([
