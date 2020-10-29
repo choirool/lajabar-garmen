@@ -9,6 +9,13 @@ class CreateMaterial extends Component
 {
     public $name;
 
+    public function mount()
+    {
+        if (!auth()->user()->isAbleTo('material-create')) {
+            abort(403);
+        }
+    }
+
     public function saveMaterial()
     {
         $this->validate([

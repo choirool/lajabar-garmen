@@ -12,6 +12,10 @@ class UpdateMaterial extends Component
 
     public function mount($id)
     {
+        if (!auth()->user()->isAbleTo('material-update')) {
+            abort(403);
+        }
+        
         $material = Material::findOrFail($id);
         $this->material = $material;
         $this->name = $material->name;
