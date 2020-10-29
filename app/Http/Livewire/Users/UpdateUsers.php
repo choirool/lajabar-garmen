@@ -19,6 +19,10 @@ class UpdateUsers extends Component
 
     public function mount($id)
     {
+        if (!auth()->user()->isAbleTo('user-update')) {
+            abort(403);
+        }
+
         $user = User::with('roles')->findOrFail($id);
         $this->user = $user;
         $this->name = $user->name;
@@ -45,7 +49,7 @@ class UpdateUsers extends Component
         }
         $this->user->save();
 
-        if(auth()->user()->isAbleTo('user-set-role') && $this->role) {
+        if (auth()->user()->isAbleTo('user-set-role') && $this->role) {
             $this->user->syncRoles([$this->role]);
         }
 

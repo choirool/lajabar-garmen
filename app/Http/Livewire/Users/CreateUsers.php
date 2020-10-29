@@ -16,6 +16,13 @@ class CreateUsers extends Component
     public $password = '';
     public $role = '';
 
+    public function mount()
+    {
+        if (!auth()->user()->isAbleTo('user-create')) {
+            abort(403);
+        }
+    }
+
     public function saveUser()
     {
         $this->validate([
