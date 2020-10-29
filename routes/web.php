@@ -34,6 +34,9 @@ use App\Http\Livewire\Transaction\CreateOrder;
 use App\Http\Livewire\Transaction\UpdateOrder;
 use App\Http\Livewire\Customer\ManageProductCustomer;
 use App\Http\Livewire\Customer\ManageProductCustomerV2;
+use App\Http\Livewire\Role\CreateRole;
+use App\Http\Livewire\Role\Roles;
+use App\Http\Livewire\Role\UpdateRole;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/', function () {
@@ -49,6 +52,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/', Users::class)->name('users');
             Route::get('/create-user', CreateUsers::class)->name('create-user');
             Route::get('/update-user/{id}', UpdateUsers::class)->name('update-user');
+        });
+
+        Route::prefix('/roles')->group(function () {
+            Route::get('/', Roles::class)->name('roles');
+            Route::get('/create-role', CreateRole::class)->name('create-role');
+            Route::get('/update-role/{id}', UpdateRole::class)->name('update-role');
         });
 
         Route::prefix('colors')->group(function () {
