@@ -41,10 +41,10 @@
                             <tr>
                                 <td class="border px-4 py-2">{{ $category->name }}</td>
                                 <td class="border px-4 py-2">
-                                    @if (auth()->user()->isAbleTo('type-update'))
+                                    @if (auth()->user()->isAbleTo('type-update') && !$category->deleted_at)
                                         <x-link href="{{ route('master-data.update-category', ['id' => $category->id]) }}">{{ __('Edit') }}</x-link>
                                     @endif
-                                    @if ($category->deleted_at)
+                                    @if ($category->deleted_at && auth()->user()->isAbleTo('type-restore'))
                                         @if($confirming == $category->id)
                                             <x-button action="restore({{ $category->id }})" type="danger">
                                                 Yes?
