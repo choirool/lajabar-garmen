@@ -12,6 +12,7 @@ class Sizes extends Component
     
     public $search;
     public $confirming;
+    public $deleted = false;
 
     protected $updatesQueryString = ['search'];
 
@@ -27,9 +28,16 @@ class Sizes extends Component
     public function delete($id)
     {
         Size::where('id', $id)->delete();
+        $this->resetConfirm();
     }
 
-    public function confirmDelete($id)
+    public function restore($id)
+    {
+        Size::where('id', $id)->restore();
+        $this->resetConfirm();
+    }
+
+    public function confirm($id)
     {
         $this->confirming = $id;
     }
@@ -43,6 +51,7 @@ class Sizes extends Component
     {
         return Size::query()
             ->where('name', 'like', '%' . $this->search . '%')
+            ->when($this->deleted, fn ($query) => $query->onlyTrashed())
             ->paginate();
     }
     
