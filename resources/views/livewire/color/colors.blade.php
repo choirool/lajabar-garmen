@@ -54,11 +54,9 @@
                                                     No
                                                 </x-button>
                                             @else
-                                                @if (auth()->user()->isAbleTo('color-delete'))
                                                 <x-button action="confirm({{ $color->id }})">
                                                     Restore
                                                 </x-button>
-                                                @endif
                                             @endif
                                         @endif
                                     @else

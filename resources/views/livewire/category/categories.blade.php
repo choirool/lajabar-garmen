@@ -54,11 +54,9 @@
                                                     No
                                                 </x-button>
                                             @else
-                                                @if (auth()->user()->isAbleTo('type-delete'))
-                                                    <x-button action="confirm({{ $category->id }})">
-                                                        Restore
-                                                    </x-button>
-                                                @endif
+                                                <x-button action="confirm({{ $category->id }})">
+                                                    Restore
+                                                </x-button>
                                             @endif
                                         @endif
                                     @else
