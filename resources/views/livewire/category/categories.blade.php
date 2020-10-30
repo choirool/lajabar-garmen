@@ -44,19 +44,21 @@
                                     @if (auth()->user()->isAbleTo('type-update') && !$category->deleted_at)
                                         <x-link href="{{ route('master-data.update-category', ['id' => $category->id]) }}">{{ __('Edit') }}</x-link>
                                     @endif
-                                    @if ($category->deleted_at && auth()->user()->isAbleTo('type-restore'))
-                                        @if($confirming == $category->id)
-                                            <x-button action="restore({{ $category->id }})" type="danger">
-                                                Yes?
-                                            </x-button>
-                                            <x-button action="resetConfirm" type="success">
-                                                No
-                                            </x-button>
-                                        @else
-                                            @if (auth()->user()->isAbleTo('type-delete'))
-                                                <x-button action="confirm({{ $category->id }})">
-                                                    Restore
+                                    @if ($category->deleted_at)
+                                        @if (auth()->user()->isAbleTo('type-restore'))
+                                            @if($confirming == $category->id)
+                                                <x-button action="restore({{ $category->id }})" type="danger">
+                                                    Yes?
                                                 </x-button>
+                                                <x-button action="resetConfirm" type="success">
+                                                    No
+                                                </x-button>
+                                            @else
+                                                @if (auth()->user()->isAbleTo('type-delete'))
+                                                    <x-button action="confirm({{ $category->id }})">
+                                                        Restore
+                                                    </x-button>
+                                                @endif
                                             @endif
                                         @endif
                                     @else

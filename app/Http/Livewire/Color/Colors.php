@@ -12,6 +12,7 @@ class Colors extends Component
     
     public $search;
     public $confirming;
+    public $deleted = false;
 
     protected $updatesQueryString = ['search'];
 
@@ -34,9 +35,16 @@ class Colors extends Component
     public function delete($id)
     {
         Color::where('id', $id)->delete();
+        $this->resetConfirm();
     }
 
-    public function confirmDelete($id)
+    public function restore($id)
+    {
+        Color::where('id', $id)->restore();
+        $this->resetConfirm();
+    }
+
+    public function confirm($id)
     {
         $this->confirming = $id;
     }
@@ -50,6 +58,7 @@ class Colors extends Component
     {
         return Color::query()
             ->where('name', 'like', '%' . $this->search . '%')
+            ->when($this->deleted, fn ($query) => $query->onlyTrashed())
             ->paginate();
     }
 }
