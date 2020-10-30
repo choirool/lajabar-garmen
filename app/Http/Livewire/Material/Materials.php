@@ -12,6 +12,7 @@ class Materials extends Component
     
     public $search;
     public $confirming;
+    public $deleted = false;
 
     protected $updatesQueryString = ['search'];
 
@@ -27,9 +28,16 @@ class Materials extends Component
     public function delete($id)
     {
         Material::where('id', $id)->delete();
+        $this->resetConfirm();
     }
 
-    public function confirmDelete($id)
+    public function restore($id)
+    {
+        Material::where('id', $id)->restore();
+        $this->resetConfirm();
+    }
+
+    public function confirm($id)
     {
         $this->confirming = $id;
     }
@@ -43,6 +51,7 @@ class Materials extends Component
     {
         return Material::query()
             ->where('name', 'like', '%' . $this->search . '%')
+            ->when($this->deleted, fn ($query) => $query->onlyTrashed())
             ->paginate();
     }
     

@@ -12,6 +12,7 @@
                     <div class="w-1/2 my-2">
                         <x-jet-input type="text" class="mt-1 block w-2/4" placeholder="{{ __('Search by name...') }}"
                         wire:model.debounce.500ms="search" />
+                        <label><input type="checkbox" wire:model="deleted"> Deleted</label>
                     </div>
                     <div class="w-1/2 my-2">
                         @if (auth()->user()->isAbleTo('material-create'))
@@ -40,21 +41,38 @@
                             <tr>
                                 <td class="border px-4 py-2">{{ $material->name }}</td>
                                 <td class="border px-4 py-2">
-                                    @if (auth()->user()->isAbleTo('material-update'))
+                                    @if (auth()->user()->isAbleTo('material-update') && !$material->deleted_at)
                                     <x-link href="{{ route('master-data.update-material', ['id' => $material->id]) }}">{{ __('Edit') }}</x-link>
                                     @endif
-                                    @if($confirming == $material->id)
-                                        <x-button action="delete({{ $material->id }})" type="danger">
-                                            Yes?
-                                        </x-button>
-                                        <x-button action="resetConfirm" type="success">
-                                            No
-                                        </x-button>
+                                    @if ($material->deleted_at)
+                                        @if (auth()->user()->isAbleTo('material-restore'))
+                                            @if($confirming == $material->id)
+                                                <x-button action="restore({{ $material->id }})" type="danger">
+                                                    Yes?
+                                                </x-button>
+                                                <x-button action="resetConfirm" type="success">
+                                                    No
+                                                </x-button>
+                                            @else
+                                                <x-button action="confirm({{ $material->id }})">
+                                                    Restore
+                                                </x-button>
+                                            @endif
+                                        @endif
                                     @else
-                                        @if (auth()->user()->isAbleTo('material-delete'))
-                                        <x-button action="confirmDelete({{ $material->id }})">
-                                            Delete
-                                        </x-button>
+                                        @if($confirming == $material->id)
+                                            <x-button action="delete({{ $material->id }})" type="danger">
+                                                Yes?
+                                            </x-button>
+                                            <x-button action="resetConfirm" type="success">
+                                                No
+                                            </x-button>
+                                        @else
+                                            @if (auth()->user()->isAbleTo('material-delete'))
+                                            <x-button action="confirm({{ $material->id }})">
+                                                Delete
+                                            </x-button>
+                                            @endif
                                         @endif
                                     @endif
                                 </td>

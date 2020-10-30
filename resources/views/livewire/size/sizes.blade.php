@@ -56,11 +56,9 @@
                                                     No
                                                 </x-button>
                                             @else
-                                                @if (auth()->user()->isAbleTo('size-delete'))
                                                 <x-button action="confirm({{ $size->id }})">
                                                     Restore
                                                 </x-button>
-                                                @endif
                                             @endif
                                         @endif
                                     @else
