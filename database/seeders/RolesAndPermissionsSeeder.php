@@ -28,37 +28,37 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $permissionNames = [
             'user' => [
-                'list', 'create', 'update', 'delete', 'set role', 'update password',
+                'list', 'create', 'update', 'delete', 'restore', 'set role', 'update password',
             ],
             'type' => [
-                'list', 'create', 'update', 'delete',
+                'list', 'create', 'update', 'delete', 'restore',
             ],
             'color' => [
-                'list', 'create', 'update', 'delete',
+                'list', 'create', 'update', 'delete', 'restore',
             ],
             'size' => [
-                'list', 'create', 'update', 'delete',
+                'list', 'create', 'update', 'delete', 'restore',
             ],
             'material' => [
-                'list', 'create', 'update', 'delete',
+                'list', 'create', 'update', 'delete', 'restore',
             ],
             'item' => [
-                'list', 'create', 'update', 'delete',
+                'list', 'create', 'update', 'delete', 'restore',
             ],
             'salesman' => [
-                'list', 'create', 'update', 'delete',
+                'list', 'create', 'update', 'delete', 'restore',
             ],
             'customer' => [
-                'list', 'create', 'update', 'delete', 'manage item',
+                'list', 'create', 'update', 'delete',  'restore', 'manage item',
             ],
             'role' => [
-                'list', 'create', 'update', 'delete',
+                'list', 'create', 'update', 'delete', 'restore',
             ],
             'order' => [
-                'list', 'create', 'update', 'delete', 'check',
+                'list', 'create', 'update', 'delete', 'restore', 'check',
             ],
             'production' => [
-                'list', 'create', 'update', 'delete',
+                'list', 'create', 'update', 'delete', 'restore',
             ],
         ];
 
