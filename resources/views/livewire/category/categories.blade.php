@@ -12,6 +12,7 @@
                     <div class="w-1/2 my-2">
                         <x-jet-input type="text" class="mt-1 block w-2/4" placeholder="{{ __('Search by name...') }}"
                         wire:model.debounce.500ms="search" />
+                        <label><input type="checkbox" wire:model="deleted"> Deleted</label>
                     </div>
                     <div class="w-1/2 my-2">
                         @if (auth()->user()->isAbleTo('type-create'))
@@ -43,18 +44,35 @@
                                     @if (auth()->user()->isAbleTo('type-update'))
                                         <x-link href="{{ route('master-data.update-category', ['id' => $category->id]) }}">{{ __('Edit') }}</x-link>
                                     @endif
-                                    @if($confirming == $category->id)
-                                        <x-button action="delete({{ $category->id }})" type="danger">
-                                            Yes?
-                                        </x-button>
-                                        <x-button action="resetConfirm" type="success">
-                                            No
-                                        </x-button>
-                                    @else
-                                        @if (auth()->user()->isAbleTo('type-delete'))
-                                            <x-button action="confirmDelete({{ $category->id }})">
-                                                Delete
+                                    @if ($category->deleted_at)
+                                        @if($confirming == $category->id)
+                                            <x-button action="restore({{ $category->id }})" type="danger">
+                                                Yes?
                                             </x-button>
+                                            <x-button action="resetConfirm" type="success">
+                                                No
+                                            </x-button>
+                                        @else
+                                            @if (auth()->user()->isAbleTo('type-delete'))
+                                                <x-button action="confirm({{ $category->id }})">
+                                                    Restore
+                                                </x-button>
+                                            @endif
+                                        @endif
+                                    @else
+                                        @if($confirming == $category->id)
+                                            <x-button action="delete({{ $category->id }})" type="danger">
+                                                Yes?
+                                            </x-button>
+                                            <x-button action="resetConfirm" type="success">
+                                                No
+                                            </x-button>
+                                        @else
+                                            @if (auth()->user()->isAbleTo('type-delete'))
+                                                <x-button action="confirm({{ $category->id }})">
+                                                    Delete
+                                                </x-button>
+                                            @endif
                                         @endif
                                     @endif
                                 </td>

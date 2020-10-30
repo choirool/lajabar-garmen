@@ -9,9 +9,10 @@ use Livewire\WithPagination;
 class Categories extends Component
 {
     use WithPagination;
-    
+
     public $search;
     public $confirming;
+    public $deleted = false;
 
     protected $updatesQueryString = ['search'];
 
@@ -27,9 +28,16 @@ class Categories extends Component
     public function delete($id)
     {
         Category::where('id', $id)->delete();
+        $this->resetConfirm();
     }
 
-    public function confirmDelete($id)
+    public function restore($id)
+    {
+        Category::where('id', $id)->restore();
+        $this->resetConfirm();
+    }
+
+    public function confirm($id)
     {
         $this->confirming = $id;
     }
@@ -43,9 +51,10 @@ class Categories extends Component
     {
         return Category::query()
             ->where('name', 'like', '%' . $this->search . '%')
+            ->when($this->deleted, fn ($query) => $query->onlyTrashed())
             ->paginate();
     }
-    
+
     public function render()
     {
         return view('livewire.category.categories', [
