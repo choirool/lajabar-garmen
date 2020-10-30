@@ -12,6 +12,7 @@ class Items extends Component
     
     public $search;
     public $confirming;
+    public $deleted = false;
 
     protected $updatesQueryString = ['search'];
 
@@ -27,9 +28,16 @@ class Items extends Component
     public function delete($id)
     {
         Item::where('id', $id)->delete();
+        $this->resetConfirm();
     }
 
-    public function confirmDelete($id)
+    public function restore($id)
+    {
+        Item::where('id', $id)->restore();
+        $this->resetConfirm();
+    }
+
+    public function confirm($id)
     {
         $this->confirming = $id;
     }
@@ -44,6 +52,7 @@ class Items extends Component
         return Item::query()
             ->where('name', 'like', '%' . $this->search . '%')
             ->with('category', 'material')
+            ->when($this->deleted, fn ($query) => $query->onlyTrashed())
             ->paginate();
     }
 
