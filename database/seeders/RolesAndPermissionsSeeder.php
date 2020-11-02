@@ -55,7 +55,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'list', 'create', 'update', 'delete', 'restore',
             ],
             'order' => [
-                'list', 'create', 'update', 'delete', 'restore', 'check',
+                'list', 'create', 'update', 'delete', 'restore', 'check', 'special price', 'special note',
             ],
             'production' => [
                 'list', 'create', 'update', 'delete', 'restore',
