@@ -120,7 +120,7 @@
                                                 <select 
                                                     x-model="order_line.material" 
                                                     class="w-28 bg-white"
-                                                    @change="createItemCombination(index), setPrice(index)">
+                                                    @change="createItemCombination(index), setPrice(index)" disabled>
                                                     <option value="0">Select material</option>
                                                     @foreach ($materials as $material)
                                                         <option value="{{ $material->id }}">{{ $material->name }}</option>

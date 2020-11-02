@@ -204,6 +204,7 @@
                     var selectedItem = this.items.find(item => item.id == data)
                     this.form.items[i].unit = selectedItem.unit
                     this.form.items[i].type = selectedItem.category_id
+                    this.form.items[i].material_id = selectedItem.material_id
                 },
                 createCombination(i, item) {
                     form = this.form.items[i]
