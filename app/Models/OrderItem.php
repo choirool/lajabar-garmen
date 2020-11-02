@@ -35,17 +35,17 @@ class OrderItem extends Model
 
     public function item()
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsTo(Item::class)->withTrashed();
     }
 
     public function material()
     {
-        return $this->belongsTo(Material::class);
+        return $this->belongsTo(Material::class)->withTrashed();
     }
 
     public function color()
     {
-        return $this->belongsTo(Color::class);
+        return $this->belongsTo(Color::class)->withTrashed();
     }
 
     public function prices()

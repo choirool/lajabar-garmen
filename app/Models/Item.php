@@ -20,7 +20,7 @@ class Item extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class)->withTrashed();
     }
 
     public function customerItems()
@@ -30,6 +30,6 @@ class Item extends Model
 
     public function material()
     {
-        return $this->belongsTo(Material::class);
+        return $this->belongsTo(Material::class)->withTrashed();
     }
 }

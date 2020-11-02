@@ -26,11 +26,11 @@ class Order extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class)->withTrashed();
     }
 
     public function salesman()
     {
-        return $this->belongsTo(Salesman::class);
+        return $this->belongsTo(Salesman::class)->withTrashed();
     }
 }
