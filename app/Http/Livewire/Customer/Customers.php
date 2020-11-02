@@ -12,6 +12,7 @@ class Customers extends Component
 
     public $search;
     public $confirming;
+    public $deleted;
 
     protected $updatesQueryString = ['search'];
 
@@ -55,7 +56,8 @@ class Customers extends Component
                     ->orWhere('address', 'like', '%' . $this->search . '%')
                     ->orWhere('phone', 'like', '%' . $this->search . '%');
             })
-            ->withTrashed()
+            ->when($this->deleted, fn ($query) => $query->onlyTrashed())
+            // ->withTrashed()
             ->paginate();
     }
 

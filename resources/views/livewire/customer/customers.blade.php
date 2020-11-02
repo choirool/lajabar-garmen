@@ -12,6 +12,7 @@
                     <div class="w-1/2 my-2">
                         <x-jet-input type="text" class="mt-1 block w-2/4" placeholder="{{ __('Search by name, address, phone or email...') }}"
                         wire:model.debounce.500ms="search" />
+                        <label><input type="checkbox" wire:model="deleted"> Inactive</label>
                     </div>
                     <div class="w-1/2 my-2">
                         @if (auth()->user()->isAbleTo('customer-create'))
