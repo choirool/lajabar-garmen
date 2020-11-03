@@ -17,6 +17,7 @@ class OrderItemPrice extends Model
         'size_id',
         'qty',
         'price',
+        'special_price',
     ];
 
     public function orderItem()

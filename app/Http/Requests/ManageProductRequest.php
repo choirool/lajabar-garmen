@@ -38,10 +38,12 @@ class ManageProductRequest extends FormRequest
             'items.*.item_id' => 'required|in:' . $items,
             'items.*.item_combination' => 'required|distinct',
             'items.*.price' => 'required|numeric',
+            'items.*.special_price' => 'required|numeric',
             'items.*.type' => 'required|in:' . $categories,
             'items.*.material_id' => 'required|in:' . $materials,
             'items.*.color_id' => 'required|in:' . $colors,
             'items.*.note' => 'sometimes|max:225',
+            'items.*.special_note' => 'sometimes|max:225',
             'items.*.screen_printing' => 'required|boolean',
         ];
     }

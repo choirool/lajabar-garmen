@@ -21,6 +21,7 @@ class OrderItem extends Model
         'color_id',
         'image',
         'note',
+        'special_note',
         'screen_printing',
     ];
 

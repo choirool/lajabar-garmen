@@ -42,14 +42,15 @@ class StoreManageProductResponse implements Responsable
                 'color_id' => $item['color_id'],
                 'image' => '',
                 'note' => $item['note'] ? : '',
+                'special_note' => $item['special_note'] ? : '',
                 'screen_printing' => $item['screen_printing'],
             ]);
 
-            $this->saveCustomerItemPrices($customerItem, $item['price']);
+            $this->saveCustomerItemPrices($customerItem, $item['price'], $item['special_price']);
         }
     }
 
-    protected function saveCustomerItemPrices($customerItem, $price)
+    protected function saveCustomerItemPrices($customerItem, $price, $specialPrice)
     {
         $priceData = [];
         foreach (Size::orderBy('name')->get() as $size) {
@@ -57,6 +58,7 @@ class StoreManageProductResponse implements Responsable
                 'customer_item_id' => $customerItem->id,
                 'size_id' => $size->id,
                 'price' => $price,
+                'special_price' => $specialPrice,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];

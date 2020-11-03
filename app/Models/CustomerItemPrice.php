@@ -15,6 +15,7 @@ class CustomerItemPrice extends Model
         'customer_item_id',
         'size_id',
         'price',
+        'special_price',
     ];
 
     public function customerItem()

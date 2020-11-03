@@ -41,14 +41,16 @@
                         <table class="table-auto text-xs" x-cloak>
                             <thead>
                                 <tr>
-                                    <th class="border" width="20%">Item name</th>
+                                    <th class="border" width="15%">Item name</th>
                                     <th class="border" width="3%">Unit</th>
                                     <th class="border" width="10%">Type</th>
                                     <th class="border" width="10%">Material</th>
                                     <th class="border" width="7%">Color</th>
                                     <th class="border" width="10%">Price</th>
+                                    <th class="border" width="10%">Special Price</th>
                                     <th class="border" width="3%">Sablon</th>
-                                    <th class="border" width="25%">Note</th>
+                                    <th class="border" width="20%">Note</th>
+                                    <th class="border" width="20%">Special Note</th>
                                     <th class="border" width="2%"></th>
                                 </tr>
                             </thead>
@@ -116,11 +118,19 @@
                                                 x-model="item.price"
                                                 :disabled="item.color_id == '' && item.material_id == ''">
                                         </td>
+                                        <td class="border align-top" :class="{ 'border-red-700': errors[`items.${i}.special_price`] }">
+                                            <input type="number" 
+                                                class="w-full bg-white" 
+                                                x-model="item.special_price">
+                                        </td>
                                         <td class="border align-top" :class="{ 'border-red-700': errors[`items.${i}.screen_printing`] }">
                                             <input type="checkbox" class="w-full bg-white" x-model="item.screen_printing">
                                         </td>
                                         <td class="border align-top" :class="{ 'border-red-700': errors[`items.${i}.note`] }">
                                             <input type="text" class="w-full" x-model="item.note">
+                                        </td>
+                                        <td class="border align-top" :class="{ 'border-red-700': errors[`items.${i}.special_note`] }">
+                                            <input type="text" class="w-full" x-model="item.special_note">
                                         </td>
                                         <td class="border align-top">
                                             <a href="javascript:;" @click="removeItem(i)">X</a>
@@ -177,10 +187,12 @@
                         unit: '',
                         type: '',
                         price: '',
+                        special_price: '',
                         material_id: '',
                         color_id: '',
                         image: '',
                         note: '',
+                        special_note: '',
                         screen_printing: false
                     }]
                 },
@@ -191,10 +203,12 @@
                         unit: '',
                         type: '',
                         price: '',
+                        special_price: '',
                         material_id: '',
                         color_id: '',
                         image: '',
                         note: '',
+                        special_note: '',
                         screen_printing: false
                     })
                 },
@@ -253,10 +267,12 @@
                                 unit: customerItem.item.unit,
                                 type: customerItem.item.category_id,
                                 price: customerItem.prices[0].price,
+                                special_price: customerItem.prices[0].special_price,
                                 material_id: customerItem.item.material_id,
                                 color_id: customerItem.color_id,
                                 image: customerItem.images,
                                 note: customerItem.note,
+                                special_note: customerItem.special_note,
                                 screen_printing: customerItem.screen_printing
                             })
                         })

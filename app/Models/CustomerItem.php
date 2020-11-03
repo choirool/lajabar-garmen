@@ -21,6 +21,7 @@ class CustomerItem extends Model
         'price',
         'image',
         'note',
+        'special_note',
         'screen_printing',
     ];
 
