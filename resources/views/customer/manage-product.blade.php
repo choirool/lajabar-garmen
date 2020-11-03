@@ -86,7 +86,8 @@
                                             <select 
                                                 class="w-full bg-white" 
                                                 x-model="item.material_id"
-                                                @change="createCombination(i, item)">
+                                                @change="createCombination(i, item)"
+                                                disabled>
                                                 <option value="">Select material</option>
                                                 @foreach ($materials as $material)
                                                     <option value="{{ $material->id }}">
@@ -248,11 +249,11 @@
                         this.customerItems.forEach(customerItem => {
                             this.form.items.push({
                                 item_id: customerItem.item_id,
-                                item_combination: `${customerItem.item_id}_${customerItem.material_id}_${customerItem.color_id}`,
+                                item_combination: `${customerItem.item_id}_${customerItem.item.material_id}_${customerItem.color_id}`,
                                 unit: customerItem.item.unit,
                                 type: customerItem.item.category_id,
                                 price: customerItem.prices[0].price,
-                                material_id: customerItem.material_id,
+                                material_id: customerItem.item.material_id,
                                 color_id: customerItem.color_id,
                                 image: customerItem.images,
                                 note: customerItem.note,

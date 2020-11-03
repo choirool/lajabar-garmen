@@ -34,7 +34,7 @@ class OrderEditResponse implements Responsable
             'categories' => Category::orderBy('name')->get(),
             'colors' => Color::orderBy('name')->get(),
             'sizes' => Size::select('name', 'id')->get(),
-            'items' => Item::select('name', 'id', 'unit', 'category_id')->orderBy('name')->get(),
+            'items' => Item::select('name', 'id', 'unit', 'category_id', 'material_id')->orderBy('name')->get(),
             'order' => $this->order,
         ]);
     }

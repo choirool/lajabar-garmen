@@ -268,6 +268,7 @@
                     var selectedItem = this.items.find(item => item.id == data)
                     this.form.order_lines[i].unit = selectedItem.unit
                     this.form.order_lines[i].type = selectedItem.category_id
+                    this.form.order_lines[i].material = selectedItem.material_id
                 },
                 createItemCombination(i) {
                     var formItem = this.form.order_lines[i]
