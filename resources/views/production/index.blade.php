@@ -63,9 +63,15 @@
                                     <th class="border" colspan="{{ $sizes->count() }}">Size</th>
                                     <th class="border" rowspan="2">Qty</th>
                                     <th class="border" rowspan="2">Price</th>
+                                    @if (auth()->user()->isAbleTo('order-special-price'))
+                                    <th class="border" rowspan="2">Special Price</th>
+                                    @endif
                                     <th class="border" rowspan="2">Sub Total</th>
                                     <th class="border" rowspan="2">Image</th>
                                     <th class="border" rowspan="2">Note</th>
+                                    @if (auth()->user()->isAbleTo('order-special-note'))
+                                        <th class="border" rowspan="2">Special Note</th>
+                                    @endif
                                     <th class="border" rowspan="2">Percentage</th>
                                 </tr>
                                 <tr>
@@ -109,11 +115,17 @@
                                         </template>
                                         <td class="border" x-text="subTotalQty(orderItem)"></td>
                                         <td class="border" x-text="orderItem.prices[0].price"></td>
+                                        @if (auth()->user()->isAbleTo('order-special-price'))
+                                        <td class="border" x-text="orderItem.prices[0].special_price"></td>
+                                        @endif
                                         <td class="border" x-text="subTotal(orderItem)"></td>
                                         <td class="border">
                                             <a :href="imageUrl(orderItem.image_url)">View image</a>
                                         </td>
                                         <td class="border" x-text="orderItem.note"></td>
+                                        @if (auth()->user()->isAbleTo('order-special-note'))
+                                            <td class="border" x-text="orderItem.special_note"></td>
+                                        @endif
                                         <td class="border" x-text="percentage(orderItem, index)"></td>
                                     </tr>
                                 </template>
