@@ -73,6 +73,7 @@ class OrderUpdateResponse implements Responsable
             'material_id' => $data['material'],
             'color_id' => $data['color'],
             'note' => isset($data['note']) ? $data['note'] : '',
+            'special_note' => isset($data['special_note']) ? $data['special_note'] : '',
             'screen_printing' => $data['printing'],
         ];
 
@@ -112,6 +113,7 @@ class OrderUpdateResponse implements Responsable
                 'size_id' => $price['size_id'],
                 'qty' => $price['qty'],
                 'price' => $price['price'],
+                'special_price' => $price['special_price'],
             ]);
         }
 
@@ -119,6 +121,7 @@ class OrderUpdateResponse implements Responsable
             'size_id' => $price['size_id'],
             'qty' => $price['qty'],
             'price' => $price['price'],
+            'special_price' => $price['special_price'],
         ]);
     }
 

@@ -74,9 +74,15 @@
                                         <th class="border" colspan="{{ $sizes->count() }}">Price</th>
                                         <th class="border" rowspan="2">Qty</th>
                                         <th class="border" rowspan="2">Price</th>
+                                        @if (auth()->user()->isAbleTo('order-special-price'))
+                                            <th class="border" rowspan="2">Special Price</th>
+                                        @endif
                                         <th class="border" rowspan="2">Sub Total</th>
                                         <th class="border" rowspan="2">Image</th>
                                         <th class="border" rowspan="2">Note</th>
+                                        @if (auth()->user()->isAbleTo('order-special-note'))
+                                            <th class="border" rowspan="2">Special Note</th>
+                                        @endif
                                         <th class="border" rowspan="2"></th>
                                     </tr>
                                     <tr>
@@ -153,6 +159,11 @@
                                             <td class="border text-center">
                                                 <input type="number" min="0" class="w-20" x-model="order_line.priceData" @change="priceDataChanged(order_line)">
                                             </td>
+                                            @if (auth()->user()->isAbleTo('order-special-price'))
+                                                <td class="border text-center">
+                                                    <input type="number" min="0" class="w-20" x-model="order_line.specialPriceData">
+                                                </td>
+                                            @endif
                                             <td class="border text-right">
                                                 <div class="w-24" x-text="subTotal(order_line)"></div>
                                             </td>
@@ -165,6 +176,11 @@
                                             <td class="border">
                                                 <input type="text" x-model="order_line.note" :class="{ 'border-red-700': errors[`order_lines.${index}.note`] }">
                                             </td>
+                                            @if (auth()->user()->isAbleTo('order-special-note'))
+                                                <td class="border">
+                                                    <input type="text" x-model="order_line.special_note" :class="{ 'border-red-700': errors[`order_lines.${index}.special_note`] }">
+                                                </td>
+                                            @endif
                                             <td class="border">
                                                 <template x-if="form.order_lines.length > 1">
                                                     <span class="cursor-pointer" @click="removeLine(index)">X</span>
@@ -180,7 +196,7 @@
                                                 Add new item
                                             </a>
                                         </td>
-                                        <td colspan="{{ ($sizes->count() + 8) }}" class="text-right">
+                                        <td colspan="{{ ($sizes->count() + 9) }}" class="text-right">
                                             <span x-text="grandTotal()"></span>
                                         </td>
                                         <td class=""></td>
@@ -237,7 +253,9 @@
                         printing: data ? data.screen_printing == 1 : false,
                         image: '',
                         priceData: 0,
+                        specialPriceData: 0,
                         note: '',
+                        special_note: '',
                         price: [],
                     }
 
@@ -246,7 +264,8 @@
                             id: '',
                             size_id: size.id,
                             qty: 0,
-                            price: 0
+                            price: 0,
+                            special_price: 0
                         })
                     });
        
@@ -264,6 +283,7 @@
                     var selectedItem = this.items.find(item => item.id == data)
                     this.form.order_lines[i].unit = selectedItem.unit
                     this.form.order_lines[i].type = selectedItem.category_id
+                    this.form.order_lines[i].material = selectedItem.material_id
                 },
                 createItemCombination(i) {
                     var formItem = this.form.order_lines[i]
@@ -280,13 +300,16 @@
 
                         if (customerItem) {
                             this.form.order_lines[i].priceData = customerItem.prices[0].price
+                            this.form.order_lines[i].specialPriceData = customerItem.prices[0].special_price
                             this.form.order_lines[i].price.forEach(price => {
                                 price.price = customerItem.prices[0].price
+                                price.special_price = customerItem.prices[0].special_price
                             })
                         } else {
                             this.form.order_lines[i].priceData = 0
                             this.form.order_lines[i].price.forEach(price => {
-                                price.price =0
+                                price.price = 0
+                                price.special_price = 0
                             })
                         }
                     }
@@ -337,6 +360,7 @@
                                             formData.append(`order_lines[${k}][color]`, orderLines['color'])
                                             formData.append(`order_lines[${k}][printing]`, orderLines['printing'] == true ? '1' : '0')
                                             formData.append(`order_lines[${k}][note]`, orderLines['note'])
+                                            formData.append(`order_lines[${k}][special_note]`, orderLines['special_note'])
                                             if (this.$refs[`file_${k}`].files[0]) {
                                                 formData.append(`order_lines[${k}][image]`, this.$refs[`file_${k}`].files[0])
                                             }
@@ -346,6 +370,7 @@
                                                 formData.append(`order_lines[${k}][price][${i}][size_id]`, price.size_id)
                                                 formData.append(`order_lines[${k}][price][${i}][qty]`, price.qty)
                                                 formData.append(`order_lines[${k}][price][${i}][price]`, price.price)
+                                                formData.append(`order_lines[${k}][price][${i}][special_price]`, price.special_price)
                                             })
                                         }
                                     }
@@ -401,7 +426,9 @@
                             image: '',
                             image_url: '{{ $orderItem->image_url }}',
                             priceData: 0,
+                            specialPriceData: 0,
                             note: '{{ $orderItem->note }}',
+                            special_note: '{{ $orderItem->special_note }}',
                             price: []
                         })
                         
@@ -420,12 +447,14 @@
                             @endphp
 
                             this.form.order_lines[{{ $i }}].priceData = {{ $nonZeroPriceData ? $nonZeroPriceData->price : 0 }}
+                            this.form.order_lines[{{ $i }}].specialPriceData = {{ $nonZeroPriceData ? $nonZeroPriceData->special_price : 0 }}
 
                             this.form.order_lines[{{ $i }}].price.push({
                                 id: {{ $currentPirceData ? $currentPirceData->id : 'null' }},
                                 size_id: {{ $size->id }},
                                 qty: {{ $currentPirceData ? $currentPirceData->qty: 0 }},
-                                price: {{ $nonZeroPriceData ? $nonZeroPriceData->price : 0 }}
+                                price: {{ $nonZeroPriceData ? $nonZeroPriceData->price : 0 }},
+                                special_price: {{ $nonZeroPriceData ? $nonZeroPriceData->special_price : 0 }}
                             })
                         @endforeach
                     @endforeach

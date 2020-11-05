@@ -66,6 +66,7 @@ class OrderStoreResponse implements Responsable
             'color_id' => $data['color'],
             'image' => $imageName,
             'note' => isset($data['note']) ? $data['note'] : '',
+            'special_note' => isset($data['special_note']) ? $data['special_note'] : '',
             'screen_printing' => $data['printing'],
         ]);
     }
@@ -92,6 +93,7 @@ class OrderStoreResponse implements Responsable
             'size_id' => $price['size_id'],
             'qty' => $price['qty'],
             'price' => $price['price'],
+            'special_price' => $price['special_price'],
         ]);
     }
 

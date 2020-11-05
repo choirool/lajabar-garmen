@@ -72,7 +72,7 @@
                                 <td class="border align-top truncate">{{ $order->customer->email }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->country }}</td>
                                 <td class="border">
-                                    @if (auth()->user()->isAbleTo('order-edit'))
+                                    @if (auth()->user()->isAbleTo('order-update'))
                                     <x-link href="{{ route('transactions.v3.edit-order', ['id' => $order->id]) }}" size="small">{{ __('Edit') }}</x-link>
                                     @endif
                                     @if (auth()->user()->isAbleTo('order-check'))
