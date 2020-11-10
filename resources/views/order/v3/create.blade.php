@@ -9,55 +9,7 @@
         <div class="w-full mx-auto sm:px-6 lg:px-1">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-1 py-1 sm:px-1 bg-white border-b border-gray-200">
-                    <div class="w-full flex bg-blue-200 px-3 py-3 mb-5">
-                        <div class="w-1/2 my-2">
-                            <table>
-                                <tr>
-                                    <td>Customer name</td>
-                                    <td>:</td>
-                                    <td>
-                                        <select x-model="form.customer_id">
-                                            <option value="">Select customer</option>
-                                            @foreach ($customers as $customer)
-                                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <template x-if="errors.customer_id">
-                                            <p class="mt-2 text-sm text-red-600"
-                                                x-text="errors.customer_id[0]"></p>
-                                        </template>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Date</td>
-                                    <td>:</td>
-                                    <td>
-                                        <input type="date" x-model="form.date">
-                                        <template x-if="errors.date">
-                                            <p class="mt-2 text-sm text-red-600"
-                                                x-text="errors.date[0]"></p>
-                                        </template>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Sales</td>
-                                    <td>:</td>
-                                    <td>
-                                        <select x-model="form.salesman_id">
-                                            <option value="">Select salesman</option>
-                                            @foreach ($salesmen as $salesman)
-                                                <option value="{{ $salesman->id }}">{{ $salesman->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <template x-if="errors.salesman_id">
-                                            <p class="mt-2 text-sm text-red-600"
-                                                x-text="errors.salesman_id[0]"></p>
-                                        </template>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                    @include('order.v3.customer-form')
 
                     <template x-if="showTable">
                         <div class="w-full flex overflow-x-scroll overflow-y-hidden">
@@ -206,6 +158,21 @@
                             </table>
                         </div>
                         <div class="mt-2 flex">
+                            <template x-if="!form.dp.has_dp">
+                                <button class="rounded p-2 bg-white hover:bg-gray-400 text-black" @click="addDp">
+                                    {{ __('Add DP') }}
+                                </button>
+                            </template>
+                            <template x-if="form.dp.has_dp">
+                                <button class="rounded p-2 bg-white hover:bg-gray-400 text-black" @click="removeDp">
+                                    {{ __('Remove DP') }}
+                                </button>
+                            </template>
+                        </div>
+                        <template x-if="form.dp.has_dp">
+                            @include('order.v3.dp-form')
+                        </template>
+                        <div class="mt-2 flex">
                             <template x-if="loading">
                                 <button class="rounded p-2 bg-white hover:bg-gray-400 text-black">
                                     {{ __('Loading...') }}
@@ -239,7 +206,13 @@
                     customer_id: '',
                     date: '',
                     salesman_id: '',
-                    order_lines: []
+                    order_lines: [],
+                    dp: {
+                        has_dp: 0,
+                        payment_method: '',
+                        amount: '',
+                        date: ''
+                    }
                 },
                 addNewLine(data = null) {
                     var orderLine = {
@@ -345,6 +318,12 @@
                         price.price = data.priceData
                     })
                 },
+                addDp() {
+                    this.form.dp.has_dp = 1
+                },
+                removeDp() {
+                    this.form.dp.has_dp = 0
+                },
                 generateFormData() {
                     var formData = new FormData()
 
@@ -352,28 +331,38 @@
                         if (this.form.hasOwnProperty(key)) {
                             const element = this.form[key]
                             if (typeof element == 'object') {
-                                for (const k in element) {
-                                    if (element.hasOwnProperty(k)) {
-                                        const orderLines = element[k];
-                                        formData.append(`order_lines[${k}][item]`, orderLines['item'])
-                                        formData.append(`order_lines[${k}][unit]`, orderLines['unit'])
-                                        formData.append(`order_lines[${k}][item_combination]`, orderLines['item_combination'])
-                                        formData.append(`order_lines[${k}][type]`, orderLines['type'])
-                                        formData.append(`order_lines[${k}][material]`, orderLines['material'])
-                                        formData.append(`order_lines[${k}][color]`, orderLines['color'])
-                                        formData.append(`order_lines[${k}][printing]`, orderLines['printing'] == true ? '1' : '0')
-                                        formData.append(`order_lines[${k}][note]`, orderLines['note'])
-                                        formData.append(`order_lines[${k}][special_note]`, orderLines['special_note'])
-                                        if (this.$refs[`file_${k}`].files[0]) {
-                                            formData.append(`order_lines[${k}][image]`, this.$refs[`file_${k}`].files[0])
+                                if (key == 'dp') {
+                                    for (const k in element) {
+                                        if (element.hasOwnProperty(k)) {
+                                            formData.append(`dp[${k}]`, element[k])
                                         }
+                                    }
+                                }
 
-                                        orderLines['price'].forEach((price, i) => {
-                                            formData.append(`order_lines[${k}][price][${i}][size_id]`, price.size_id)
-                                            formData.append(`order_lines[${k}][price][${i}][qty]`, price.qty)
-                                            formData.append(`order_lines[${k}][price][${i}][price]`, price.price)
-                                            formData.append(`order_lines[${k}][price][${i}][special_price]`, price.special_price)
-                                        })
+                                if (key == 'order_lines') {
+                                    for (const k in element) {
+                                        if (element.hasOwnProperty(k)) {
+                                            const orderLines = element[k];
+                                            formData.append(`order_lines[${k}][item]`, orderLines['item'])
+                                            formData.append(`order_lines[${k}][unit]`, orderLines['unit'])
+                                            formData.append(`order_lines[${k}][item_combination]`, orderLines['item_combination'])
+                                            formData.append(`order_lines[${k}][type]`, orderLines['type'])
+                                            formData.append(`order_lines[${k}][material]`, orderLines['material'])
+                                            formData.append(`order_lines[${k}][color]`, orderLines['color'])
+                                            formData.append(`order_lines[${k}][printing]`, orderLines['printing'] == true ? '1' : '0')
+                                            formData.append(`order_lines[${k}][note]`, orderLines['note'])
+                                            formData.append(`order_lines[${k}][special_note]`, orderLines['special_note'])
+                                            if (this.$refs[`file_${k}`].files[0]) {
+                                                formData.append(`order_lines[${k}][image]`, this.$refs[`file_${k}`].files[0])
+                                            }
+
+                                            orderLines['price'].forEach((price, i) => {
+                                                formData.append(`order_lines[${k}][price][${i}][size_id]`, price.size_id)
+                                                formData.append(`order_lines[${k}][price][${i}][qty]`, price.qty)
+                                                formData.append(`order_lines[${k}][price][${i}][price]`, price.price)
+                                                formData.append(`order_lines[${k}][price][${i}][special_price]`, price.special_price)
+                                            })
+                                        }
                                     }
                                 }
                             } else {

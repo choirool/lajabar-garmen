@@ -69,7 +69,7 @@ class StoreOrderRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'customer_id' => 'required|in:' . $this->customers->implode('id', ','),
             'salesman_id' => 'required|in:' . $this->salesmen->implode('id', ','),
             'date' => 'required|date|date_format:Y-m-d|before_or_equal:today',
@@ -86,6 +86,15 @@ class StoreOrderRequest extends FormRequest
             'order_lines.*.price.*.size_id' => 'required|in:' . $this->sizes->implode('id', ','),
             'order_lines.*.price.*.qty' => 'required|numeric|min:0',
             'order_lines.*.price.*.price' => 'required|numeric|min:0',
+            'dp.has_dp' => 'required|boolean',
         ];
+
+        if (request('dp.has_dp')) {
+            $rules['dp.amount'] = 'required|numeric';
+            $rules['dp.payment_method'] = 'required|in:cash,cc,bank_transfer';
+            $rules['dp.date'] = 'required|date|date_format:Y-m-d';
+        }
+
+        return $rules;
     }
 }

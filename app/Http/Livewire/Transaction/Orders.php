@@ -50,6 +50,7 @@ class Orders extends Component
     protected function getOrders()
     {
         $order = Order::query()
+            ->orderAmount()
             ->where(function ($query) {
                 $query->where('invoice_code', 'like', '%' . $this->search . '%')
                     ->orWhereHas('customer', function (Builder $query) {

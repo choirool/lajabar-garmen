@@ -3,7 +3,9 @@
 namespace App\Http\Responses\Order\V2;
 
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\OrderItem;
+use Illuminate\Support\Str;
 use App\Models\OrderItemPrice;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -37,6 +39,10 @@ class OrderStoreResponse implements Responsable
                         }
                     });
                 });
+
+                if ($request->dp['has_dp']) {
+                    $this->createDp($order, $request);
+                }
             });
         }
     }
@@ -58,7 +64,7 @@ class OrderStoreResponse implements Responsable
             $upload = $this->storeImage($data['image'], $order->id);
             $imageName = $upload['name'];
         }
-        
+
         return OrderItem::create([
             'order_id' => $order->id,
             'item_id' => $data['item'],
@@ -94,6 +100,18 @@ class OrderStoreResponse implements Responsable
             'qty' => $price['qty'],
             'price' => $price['price'],
             'special_price' => $price['special_price'],
+        ]);
+    }
+
+    protected function createDp($order, $request)
+    {
+        Payment::create([
+            'order_id' => $order->id,
+            'payment_date' => $request->dp['date'],
+            'payment_method' => Str::of($request->dp['payment_method'])->replace('_', ' '),
+            'payment_type' => 'dp',
+            'amount' => $request->dp['amount'],
+            'meta' => [],
         ]);
     }
 

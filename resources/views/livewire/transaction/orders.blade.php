@@ -53,6 +53,7 @@
                         <tr>
                             <th class="border">Date</th>
                             <th class="border">No</th>
+                            <th class="border">Order amount</th>
                             <th class="border">Customer name</th>
                             <th class="border">Phone</th>
                             <th class="border">Email</th>
@@ -67,6 +68,7 @@
                                     <span>{{ $order->invoice_date }}</span>
                                 </td>
                                 <td class="border align-top truncate">{{ $order->invoice_code }}</td>
+                                <td class="border align-top truncate">{{ $order->order_amount }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->name }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->phone }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->email }}</td>
