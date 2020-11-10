@@ -11,6 +11,7 @@ use App\Models\Material;
 use App\Models\Salesman;
 use App\Models\CustomerItem;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateOrderRequest extends FormRequest
 {
@@ -51,7 +52,7 @@ class UpdateOrderRequest extends FormRequest
                 ];
             })->implode('item', ',');
     }
-    
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -69,7 +70,7 @@ class UpdateOrderRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'id' => 'required|exists:orders',
             'customer_id' => 'required|in:' . $this->customers->implode('id', ','),
             'salesman_id' => 'required|in:' . $this->salesmen->implode('id', ','),
@@ -88,6 +89,24 @@ class UpdateOrderRequest extends FormRequest
             'order_lines.*.price.*.qty' => 'required|numeric|min:0',
             'order_lines.*.price.*.price' => 'required|numeric|min:0',
             'deleted_items' => 'sometimes|array',
+            'dp.has_dp' => 'required|boolean',
         ];
+
+        if (request('dp.has_dp')) {
+            if (request('dp.id') !== 'null') {
+                $rules['dp.id'] = [
+                    'required',
+                    'numeric',
+                    Rule::exists('payments', 'id')
+                        ->where('order_id', request('id'))
+                ];
+            }
+
+            $rules['dp.amount'] = 'required|numeric';
+            $rules['dp.payment_method'] = 'required|in:cash,cc,bank_transfer';
+            $rules['dp.date'] = 'required|date|date_format:Y-m-d';
+        }
+
+        return $rules;
     }
 }

@@ -52,9 +52,8 @@ class OrderEditResponse implements Responsable
     protected function getOrder()
     {
         return Order::query()
-            ->with(['orderItems' => function ($query) {
-                $query->with('item', 'prices');
-            }])
+            ->with(['orderItems' => fn ($query) => $query->with('item', 'prices')])
+            ->with('dp')
             ->findOrFail($this->id);
     }
 

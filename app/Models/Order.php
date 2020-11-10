@@ -43,4 +43,9 @@ class Order extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function dp()
+    {
+        return $this->hasOne(Payment::class)->where('payment_type', 'dp');
+    }
 }

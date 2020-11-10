@@ -3,7 +3,9 @@
 namespace App\Http\Responses\Order\V2;
 
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\OrderItem;
+use Illuminate\Support\Str;
 use App\Models\OrderItemPrice;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +29,7 @@ class OrderUpdateResponse implements Responsable
 
     protected function getOrder($orderId)
     {
-        return Order::findOrFail($orderId);
+        return Order::with('dp')->findOrFail($orderId);
     }
 
     public function saveData($request)
@@ -47,6 +49,7 @@ class OrderUpdateResponse implements Responsable
                 });
 
                 $this->deleteOrderItems($request);
+                $this->proccessDp($request);
             });
         }
     }
@@ -130,6 +133,28 @@ class OrderUpdateResponse implements Responsable
         if ($request->has('deleted_items') && count($request->deleted_items)) {
             OrderItem::whereIn('id', $request->deleted_items)->delete();
             OrderItemPrice::whereIn('order_item_id', $request->deleted_items)->delete();
+        }
+    }
+
+    protected function proccessDp($request)
+    {
+        if ($request->dp['has_dp']) {
+            $dp = new Payment;
+            if ($this->order->dp) {
+                $dp = $this->order->dp;
+            }
+
+            $dp->order_id = $this->order->id;
+            $dp->payment_date = $request->dp['date'];
+            $dp->payment_method = Str::of($request->dp['payment_method'])->replace('_', ' ');
+            $dp->payment_type = 'dp';
+            $dp->amount = $request->dp['amount'];
+            $dp->meta = $request->dp['meta'];
+            $dp->save();
+        } else {
+            if ($this->order->dp) {
+                $this->order->dp->delete();
+            }
         }
     }
 

@@ -157,21 +157,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="mt-2 flex">
-                            <template x-if="!form.dp.has_dp">
-                                <button class="rounded p-2 bg-white hover:bg-gray-400 text-black" @click="addDp">
-                                    {{ __('Add DP') }}
-                                </button>
-                            </template>
-                            <template x-if="form.dp.has_dp">
-                                <button class="rounded p-2 bg-white hover:bg-gray-400 text-black" @click="removeDp">
-                                    {{ __('Remove DP') }}
-                                </button>
-                            </template>
-                        </div>
-                        <template x-if="form.dp.has_dp">
-                            @include('order.v3.dp-form')
-                        </template>
+                        @include('order.v3.dp-form')
                         <div class="mt-2 flex">
                             <template x-if="loading">
                                 <button class="rounded p-2 bg-white hover:bg-gray-400 text-black">
@@ -323,6 +309,12 @@
                 },
                 removeDp() {
                     this.form.dp.has_dp = 0
+                },
+                checkDpAmount() {
+                    if(this.form.dp.amount > this.grandTotal()) {
+                        alert('Dp payment greater than total order amount')
+                        this.form.dp.amount = 0
+                    }
                 },
                 generateFormData() {
                     var formData = new FormData()
