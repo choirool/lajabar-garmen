@@ -39,7 +39,7 @@
                     errors: [],
                     loading: false,
                     amountDue: {{ $order->order_amount - $order->paid_amount }},
-                    paidAmount: {{ $order->paid_amount }},
+                    paidAmount: {{ $order->paid_amount ? : 0 }},
                     form: {
                         order_id: {{ $order->id }},
                         payment_method: '',
