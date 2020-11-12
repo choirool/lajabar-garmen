@@ -22,6 +22,7 @@ use App\Http\Livewire\Users\UpdateUsers;
 use App\Http\Livewire\Customer\Customers;
 use App\Http\Livewire\Material\Materials;
 use App\Http\Livewire\Transaction\Orders;
+use App\Http\Controllers\ReportController;
 use App\Http\Livewire\Category\Categories;
 use App\Http\Livewire\Category\CreateCategory;
 use App\Http\Livewire\Category\UpdateCategory;
@@ -139,6 +140,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             // Route::post('/create-order', [\App\Http\Controllers\OrderV3Controller::class, 'store'])->name('store-order');
             // Route::patch('/update-order', [\App\Http\Controllers\OrderV3Controller::class, 'update'])->name('update-order');
         });
+    });
+
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('sales-chart', [ReportController::class, 'salesChart'])->name('sales-chart');
     });
 
     Route::get('/artisan', function (Request $request) {
