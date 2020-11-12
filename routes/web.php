@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\Customer\CustomerController;
-use App\Http\Controllers\ProductionController;
 use Illuminate\Http\Request;
 use App\Http\Livewire\Item\Items;
+use App\Http\Livewire\Role\Roles;
 use App\Http\Livewire\Size\Sizes;
 use App\Http\Livewire\Users\Users;
 use App\Http\Livewire\Color\Colors;
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\Item\CreateItem;
 use App\Http\Livewire\Item\UpdateItem;
+use App\Http\Livewire\Role\CreateRole;
+use App\Http\Livewire\Role\UpdateRole;
 use App\Http\Livewire\Size\CreateSize;
 use App\Http\Livewire\Size\UpdateSize;
 use Illuminate\Support\Facades\Artisan;
@@ -32,11 +33,12 @@ use App\Http\Livewire\Salesman\CreateSalesman;
 use App\Http\Livewire\Salesman\UpdateSalesman;
 use App\Http\Livewire\Transaction\CreateOrder;
 use App\Http\Livewire\Transaction\UpdateOrder;
+use App\Http\Controllers\Order\PaymentController;
+use App\Http\Controllers\Order\ProductionController;
+use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Livewire\Customer\ManageProductCustomer;
 use App\Http\Livewire\Customer\ManageProductCustomerV2;
-use App\Http\Livewire\Role\CreateRole;
-use App\Http\Livewire\Role\Roles;
-use App\Http\Livewire\Role\UpdateRole;
+use App\Http\Controllers\Customer\CustomerItemsController;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/', function () {
@@ -92,7 +94,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/update-customer/{id}/manage-product', ManageProductCustomer::class)->name('manage-products-customer');
             Route::get('/update-customer/{id}/manage-product-v2', ManageProductCustomerV2::class)->name('manage-products-customer-v2');
             Route::get('/update-customer/{id}/manage-product-v3', [CustomerController::class, 'manageProduct'])->name('manage-products-customer-v3');
-            Route::get('/customer-items', \App\Http\Controllers\CustomerItemsController::class)->name('customer.customer-items');
+            Route::get('/customer-items', CustomerItemsController::class)->name('customer.customer-items');
         });
 
         Route::prefix('items')->group(function () {
@@ -116,6 +118,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::prefix('productions')->name('production.')->group(function () {
             Route::get('/{orderId}', [ProductionController::class, 'index'])->name('index');
             Route::post('/{orderId}', [ProductionController::class, 'store'])->name('store');
+        });
+
+        Route::prefix('payment')->name('payment.')->group(function () {
+            Route::get('/create/{orderId}', [PaymentController::class, 'create'])->name('create');
+            Route::post('/store', [PaymentController::class, 'store'])->name('store');
+            Route::post('/update', [PaymentController::class, 'update'])->name('update');
         });
 
         Route::prefix('/v2')->name('v2.')->group(function () {

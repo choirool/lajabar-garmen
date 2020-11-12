@@ -27,4 +27,24 @@ trait OrderScope
                 ->whereColumn('order_id', 'orders.id')
         ]);
     }
+
+    public function scopeFilterByUnpaid(Builder $query)
+    {
+        $query->where(function ($query) {
+            $paidAmount = Payment::query()
+                ->selectRaw('sum(amount)')
+                ->whereColumn('order_id', 'orders.id')
+                ->toSql();
+
+            $orderAmount = OrderItemPrice::query()
+                ->selectRaw('sum(qty * price)')
+                ->whereHas('orderItem', function ($query) {
+                    $query->whereColumn('order_id', '=', 'orders.id');
+                })
+                ->toSql();
+
+            $query->whereRaw("(({$orderAmount}) - ({$paidAmount})) > 0")
+                ->orWhereDoesntHave('payments');
+        });
+    }
 }

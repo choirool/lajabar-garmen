@@ -15,12 +15,13 @@ class Orders extends Component
     public $startDate = null;
     public $endDate = null;
     public $confirming;
+    public $unpaid = false;
 
     protected $updatesQueryString = ['search'];
 
     public function mount()
     {
-        if(!auth()->user()->isAbleTo('order-list')) {
+        if (!auth()->user()->isAbleTo('order-list')) {
             abort(403);
         }
 
@@ -57,7 +58,8 @@ class Orders extends Component
                     ->orWhereHas('customer', function (Builder $query) {
                         $query->where('name', 'like', '%' . $this->search . '%');
                     });
-            });
+            })
+            ->when($this->unpaid, fn ($query) => $query->filterByUnpaid());
 
         if ($this->startDate && $this->endDate) {
             $order->whereBetween('invoice_date', [$this->startDate, $this->endDate]);

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Order;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Responses\Production\ProductionIndexResponse;
 use App\Http\Responses\Production\ProductionStoreResponse;
 

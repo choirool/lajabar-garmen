@@ -197,7 +197,14 @@
                         has_dp: 0,
                         payment_method: '',
                         amount: '',
-                        date: ''
+                        date: '',
+                        meta: {
+                            bank_name: '',
+                            account_number: '',
+                            cc_name: '',
+                            cc_number: '',
+                            note: ''
+                        }
                     }
                 },
                 addNewLine(data = null) {
