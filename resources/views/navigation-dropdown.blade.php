@@ -87,6 +87,9 @@
                             <x-nav-link-dropdown-item href="{{ route('reports.sales-chart') }}">
                                 {{ __('Chart') }}
                             </x-nav-link-dropdown-item>
+                            <x-nav-link-dropdown-item href="{{ route('reports.daily-sales') }}">
+                                {{ __('Daily sales') }}
+                            </x-nav-link-dropdown-item>
                         </x-slot>
                     </x-nav-link-dropdown>
                 </div>

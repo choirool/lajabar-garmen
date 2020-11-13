@@ -144,6 +144,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('sales-chart', [ReportController::class, 'salesChart'])->name('sales-chart');
+        Route::get('daily-sales', [ReportController::class, 'dailySales'])->name('daily-sales');
     });
 
     Route::get('/artisan', function (Request $request) {
