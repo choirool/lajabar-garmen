@@ -43,8 +43,8 @@
                             </div>
                         </a>
                     </div>
-                    {{-- <div class="w-full md:w-1/2 xl:w-1/4 pt-3 px-3 md:pl-2 xl:pl-3 xl:pr-2">
-                        <a href="#">
+                    <div class="w-full md:w-1/2 xl:w-1/4 pt-3 px-3 md:pl-2 xl:pl-3 xl:pr-2">
+                        <a href="{{ route('transactions.invoices') }}">
                             <div class="bg-purple-600 border rounded shadow p-2 h-48">
                                 <div class="flex flex-row items-center">
                                     <div class="flex-1 text-center pt-14">
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                         </a>
-                    </div> --}}
+                    </div>
                 </div>
 
                 {{-- <div class="container px-4 py-4 mx-auto">

@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Orders') }}
+        {{ __('Invoices') }}
     </h2>
 </x-slot>
 
@@ -36,6 +36,11 @@
                                         class="border border-gray-500 border-solid">
                                 </div>
                             </div>
+                            <div class="pt-1">
+                                <label>
+                                    <input type="checkbox" wire:model="unpaid">Not paid off yet
+                                </label>
+                            </div>
                             <div>
                                 <button 
                                     wire:click="searchData" 
@@ -65,6 +70,9 @@
                         <tr>
                             <th class="border">Date</th>
                             <th class="border">No</th>
+                            <th class="border">Amount</th>
+                            <th class="border">Paid</th>
+                            <th class="border">Amount due</th>
                             <th class="border">Customer name</th>
                             <th class="border">Phone</th>
                             <th class="border">Email</th>
@@ -74,21 +82,26 @@
                     </thead>
                     <tbody>
                         @forelse ($orders as $order)
-                            <tr>
+                            <tr 
+                                class="
+                                {{ ($order->order_amount - $order->paid_amount) == 0 ? ' bg-teal-300' : '' }}
+                                {{ ($order->order_amount - $order->paid_amount) > 0 ? ' bg-red-300' : '' }}
+                                "
+                            >
                                 <td class="border align-top truncate">
                                     <span>{{ $order->invoice_date }}</span>
                                 </td>
                                 <td class="border align-top truncate">{{ $order->invoice_code }}</td>
+                                <td class="border align-top truncate text-right">{{ $order->order_amount }}</td>
+                                <td class="border align-top truncate text-right">{{ $order->paid_amount }}</td>
+                                <td class="border align-top truncate text-right">{{ $order->order_amount - $order->paid_amount }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->name }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->phone }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->email }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->country }}</td>
                                 <td class="border">
-                                    @if (auth()->user()->isAbleTo('order-update'))
-                                    <x-link href="{{ route('transactions.v3.edit-order', ['id' => $order->id]) }}" size="small">{{ __('Edit') }}</x-link>
-                                    @endif
-                                    @if (auth()->user()->isAbleTo('order-check'))
-                                    <x-link href="{{ route('transactions.production.index', ['orderId' => $order->id]) }}" size="small">{{ __('Check') }}</x-link>
+                                    @if (auth()->user()->isAbleTo('order-create-payment'))
+                                    <x-link href="{{ route('transactions.payment.create', ['orderId' => $order->id]) }}" size="small">{{ __('Payment') }}</x-link>
                                     @endif
                                 </td>
                             </tr>

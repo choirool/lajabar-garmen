@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Orders extends Component
+class Invoices extends Component
 {
     use WithPagination;
 
@@ -21,7 +21,7 @@ class Orders extends Component
 
     public function mount()
     {
-        if (!auth()->user()->isAbleTo('order-list')) {
+        if (!auth()->user()->isAbleTo('view-invoices')) {
             abort(403);
         }
 
@@ -51,6 +51,8 @@ class Orders extends Component
     protected function getOrders()
     {
         $order = Order::query()
+            ->orderAmount()
+            ->paidAmount()
             ->where(function ($query) {
                 $query->where('invoice_code', 'like', '%' . $this->search . '%')
                     ->orWhereHas('customer', function (Builder $query) {
@@ -72,7 +74,7 @@ class Orders extends Component
 
     public function render()
     {
-        return view('livewire.transaction.orders', [
+        return view('livewire.transaction.invoices', [
             'orders' => $this->getOrders()
         ]);
     }
