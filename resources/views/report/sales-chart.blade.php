@@ -14,17 +14,17 @@
                             <div id="sales-chart"></div>
                         </div>
                         <div class="w-1/2">
-                            Chart 1
+                            <div id="daily-sales"></div>
                         </div>
                     </div>
-                    <div class="flex">
+                    {{-- <div class="flex">
                         <div class="w-1/2">
                             Chart 1
                         </div>
                         <div class="w-1/2">
                             Chart 1
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -57,6 +57,35 @@
             var chart = new google.visualization.PieChart(document.getElementById('sales-chart'));
             chart.draw(data, options);
         }
+
+        google.charts.setOnLoadCallback(drawVisualization);
+
+      function drawVisualization() {
+        var chartData = []
+        chartData.push(['Description', 'Today', 'Month to date'])
+
+        @foreach($daily_sales as $daily_sale)
+            chartData.push([
+                '{{ $daily_sale->item_name }}',
+                {{ $daily_sale->today_sales ? : '0' }},
+                {{ $daily_sale->month_to_date ? : '0' }}
+            ]);
+        @endforeach
+        var data = google.visualization.arrayToDataTable(chartData);
+
+        var options = {
+          title : 'Daily sales periode {{ now()->startOfMonth()->format('Y-m-d') }} to {{ now()->format('Y-m-d') }}',
+          vAxis: {title: 'Sales'},
+          hAxis: {title: 'Description'},
+          seriesType: 'bars',
+          series: {5: {type: 'line'}},
+          'width':700, 'height':400
+        };
+
+        var chart = new google.visualization.ComboChart(document.getElementById('daily-sales'));
+        chart.draw(data, options);
+      }
+
     </script>
 @endpush
 </x-app-layout>
