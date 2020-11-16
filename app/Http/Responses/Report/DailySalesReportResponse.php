@@ -2,10 +2,10 @@
 
 namespace App\Http\Responses\Report;
 
+use PdfReport;
+use ExcelReport;
 use App\Models\OrderItemPrice;
 use Illuminate\Contracts\Support\Responsable;
-use Jimmyjs\ReportGenerator\ReportMedia\PdfReport;
-use Jimmyjs\ReportGenerator\ReportMedia\ExcelReport;
 
 class DailySalesReportResponse implements Responsable
 {
@@ -74,13 +74,12 @@ class DailySalesReportResponse implements Responsable
         ];
 
         $fileName = 'Daily_sales_' . now()->startOfMonth()->format('Y-m-d') . '_to_' . now()->format('Y-m-d');
-        $exporter = 'ExcelReport';
+        $exporter = ExcelReport::of($title, $meta, $queryBuilder, $columns);
         if ($request->download == 'pdf') {
-            $exporter = 'PdfReport';
+            $exporter = PdfReport::of($title, $meta, $queryBuilder, $columns);
         }
 
-        return $exporter::of($title, $meta, $queryBuilder, $columns)
-            ->showTotal([
+        return $exporter->showTotal([
                 'Today' => 'point',
                 'Month to date' => 'point',
             ])
