@@ -2,10 +2,10 @@
 
 namespace App\Http\Responses\Report;
 
-use PdfReport;
-use ExcelReport;
 use App\Models\OrderItemPrice;
 use Illuminate\Contracts\Support\Responsable;
+use Jimmyjs\ReportGenerator\ReportMedia\PdfReport;
+use Jimmyjs\ReportGenerator\ReportMedia\ExcelReport;
 
 class DailySalesReportResponse implements Responsable
 {
