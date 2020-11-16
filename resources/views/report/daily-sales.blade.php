@@ -43,7 +43,8 @@
                             </tfoot>
                         </table>
 
-                        <a href="{{ route('reports.daily-sales', ['download']) }}">Download</a>
+                        <a href="{{ route('reports.daily-sales', ['download' => 'pdf']) }}">Export to pdf</a> | 
+                        <a href="{{ route('reports.daily-sales', ['download' => 'excel']) }}">Export to excel</a>
                     </div>
                 </div>
             </div>
