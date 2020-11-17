@@ -50,13 +50,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="w-1/5 my-2">
+                    {{-- <div class="w-1/5 my-2">
                         @if (auth()->user()->isAbleTo('order-create'))
                         <x-link class="ml-2 float-right" href="{{ route('transactions.v3.create-order') }}">
                             {{ __('Create new') }}
                         </x-link>
                         @endif
-                    </div>
+                    </div> --}}
                 </div>
 
                 @if (session()->has('message'))
@@ -102,6 +102,9 @@
                                 <td class="border">
                                     @if (auth()->user()->isAbleTo('order-create-payment'))
                                     <x-link href="{{ route('transactions.payment.create', ['orderId' => $order->id]) }}" size="small">{{ __('Payment') }}</x-link>
+                                    @endif
+                                    @if (auth()->user()->isAbleTo('order-view-prebilling'))
+                                    <x-link href="{{ route('transactions.prebilling', ['id' => $order->id]) }}" size="small">{{ __('Prebilling') }}</x-link>
                                     @endif
                                 </td>
                             </tr>
