@@ -96,6 +96,9 @@
                             </tr>
                         </tfoot>
                     </table>
+                    <div>
+                        <a href="{{ route('transactions.prebilling.export', ['id' => $order->id, 'export' => 'excel']) }}">Save to excel</a>
+                    </div>
                 </div>        
             </div>
         </div>

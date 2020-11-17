@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Responses\Order;
+namespace App\Http\Responses\Order\Prebilling;
 
-use App\Models\Size;
 use App\Models\Order;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Contracts\Support\Responsable;
+use App\Http\Responses\Order\Prebilling\Excel\PrebillingExport;
 
-class PrebillingResponse implements Responsable
+class PrebillingExportToExcelResponse implements Responsable
 {
     protected $id;
 
@@ -17,10 +18,10 @@ class PrebillingResponse implements Responsable
 
     public function toResponse($request)
     {
-        return view('order.prebilling', [
-            'order' => $this->getOrder(),
-            'sizes' => Size::all(),
-        ]);
+        $order = $this->getOrder();
+        $fileName = 'Prebilling_' . $order->invoice_code . '.xlsx';
+
+        return Excel::download(new PrebillingExport($order), $fileName);
     }
 
     protected function getOrder()

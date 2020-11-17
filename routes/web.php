@@ -25,7 +25,7 @@ use App\Http\Livewire\Transaction\Orders;
 use App\Http\Controllers\ReportController;
 use App\Http\Livewire\Category\Categories;
 use App\Http\Livewire\Transaction\Invoices;
-use App\Http\Controllers\PrbillingController;
+use App\Http\Controllers\PrebillingController;
 use App\Http\Livewire\Category\CreateCategory;
 use App\Http\Livewire\Category\UpdateCategory;
 use App\Http\Livewire\Customer\CreateCustomer;
@@ -116,7 +116,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::prefix('transactions')->name('transactions.')->group(function () {
         Route::get('/orders', Orders::class)->name('orders');
         Route::get('/invoices', Invoices::class)->name('invoices');
-        Route::get('/prebilling/{id}', PrbillingController::class)->name('prebilling');
+        Route::get('/prebilling/export/{id}', [PrebillingController::class, 'export'])->name('prebilling.export');
+        Route::get('/prebilling/{id}', [PrebillingController::class, 'show'])->name('prebilling.show');
         Route::get('/create-order', CreateOrder::class)->name('create-order');
         Route::get('/update-order/{id}', UpdateOrder::class)->name('update-order');
 

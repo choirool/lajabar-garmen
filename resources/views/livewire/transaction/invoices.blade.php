@@ -104,7 +104,7 @@
                                     <x-link href="{{ route('transactions.payment.create', ['orderId' => $order->id]) }}" size="small">{{ __('Payment') }}</x-link>
                                     @endif
                                     @if (auth()->user()->isAbleTo('order-view-prebilling'))
-                                    <x-link href="{{ route('transactions.prebilling', ['id' => $order->id]) }}" size="small">{{ __('Prebilling') }}</x-link>
+                                    <x-link href="{{ route('transactions.prebilling.show', ['id' => $order->id]) }}" size="small">{{ __('Prebilling') }}</x-link>
                                     @endif
                                 </td>
                             </tr>
