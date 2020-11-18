@@ -50,9 +50,9 @@
                                         </td>
                                     @endforeach
                                     <td class="border text-center">{{ $orderItem->prices->sum('qty') }}</td>
-                                    <td class="border text-right">{{ $orderItem->prices->first()->price }}</td>
+                                    <td class="border text-right">{{ format_number($orderItem->prices->first()->price) }}</td>
                                     <td class="border text-right">
-                                        {{ $orderItem->prices->sum(fn ($price) => $price->qty * $price->price ) }}
+                                        {{ format_number($orderItem->prices->sum(fn ($price) => $price->qty * $price->price)) }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -64,7 +64,7 @@
                                     {{ $order->orderItems->reduce(fn ($carry, $item) => $carry + $item->prices->sum('qty')) }}
                                 </td>
                                 <td class="border">Total</td>
-                                <td class="border text-right">{{ $order->order_amount }}</td>
+                                <td class="border text-right">{{ format_number($order->order_amount) }}</td>
                             </tr>
                             <tr>
                                 <td colspan="{{ $sizes->count() + 5 }}"></td>
@@ -73,7 +73,7 @@
                                     @php
                                         $dp = $order->dp ? $order->dp->amount : 0;
                                     @endphp
-                                    {{ $dp }}
+                                    {{ format_number($dp) }}
                                 </td>
                             </tr>
                             @if ($order->payments)
@@ -82,7 +82,7 @@
                                         <td colspan="{{ $sizes->count() + 5 }}"></td>
                                         <td class="border">Payment {{ $payment->payment_date }}</td>
                                         <td class="border text-right">
-                                            {{ $payment->amount }}
+                                            {{ format_number($payment->amount) }}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -91,7 +91,7 @@
                                 <td colspan="{{ $sizes->count() + 5 }}"></td>
                                 <td class="border">Balance</td>
                                 <td class="border text-right">
-                                    {{ $order->order_amount - $order->paid_amount }}
+                                    {{ format_number($order->order_amount - $order->paid_amount) }}
                                 </td>
                             </tr>
                         </tfoot>

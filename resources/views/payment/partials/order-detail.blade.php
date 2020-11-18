@@ -47,17 +47,23 @@
                         {{ $orderItem->prices->sum('qty') }}
                     </td>
                     <td class="border text-right">
-                        {{ $orderItem->prices->first(fn($p) => $p->price > 0)->price }}
+                        @php
+                            $price = $orderItem->prices->first(fn($p) => $p->price > 0)
+                        @endphp
+                        {{ format_number($price->price) }}
                     </td>
                     @if (auth()->user()->isAbleTo('order-special-price'))
                         <td class="border text-right">
-                            {{ $orderItem->prices->first(fn($p) => $p->price > 0)->special_price }}
+                            {{ format_number($price->special_price) }}
                         </td>
                     @endif
                     <td class="border text-right">
-                        {{ $orderItem->prices->reduce(function ($carry, $item) {
-                            return $carry + ($item->price * $item->qty);
-                        }) }}
+                        @php
+                            $subTotal = $orderItem->prices->reduce(function ($carry, $item) {
+                                return $carry + ($item->price * $item->qty);
+                            });
+                        @endphp
+                        {{ format_number($subTotal) }}
                     </td>
                     <td class="border">{{ $orderItem->note }}</td>
                     @if (auth()->user()->isAbleTo('order-special-note'))
@@ -70,20 +76,20 @@
             <tr>
                 <td class="text-right" colspan="{{ $sizes->count() + 9 }}">Total</td>
                 <td class="text-right">
-                    {{ $order->order_amount }}
+                    {{ format_number($order->order_amount) }}
                 </td>
             </tr>
             <tr>
                 <td class="text-right" colspan="{{ $sizes->count() + 9 }}">DP</td>
                 <td class="text-right">
-                    {{ $order->dp ? $order->dp->amount : 0 }}
+                    {{ $order->dp ? format_number($order->dp->amount) : 0 }}
                 </td>
             </tr>
             @foreach ($order->payments as $payment)
                 <tr>
                     <td class="text-right" colspan="{{ $sizes->count() + 9 }}">Payment {{ $payment->payment_date }}</td>
                     <td class="text-right">
-                        {{ $payment->amount }}
+                        {{ format_number($payment->amount) }}
                     </td>
                     <td>
                         <a href="{{ route('transactions.payment.create', ['orderId' => $order->id, 'paymentId' => $payment->id]) }}">Edit</a>
@@ -93,7 +99,7 @@
             <tr>
                 <td class="border-t-2 text-right text-lg" colspan="{{ $sizes->count() + 9 }}">Amount due</td>
                 <td class="border-t-2 text-right text-lg">
-                    {{ $order->order_amount - $order->paid_amount  }}
+                    {{ format_number($order->order_amount - $order->paid_amount)  }}
                 </td>
             </tr>
         </tfoot>
