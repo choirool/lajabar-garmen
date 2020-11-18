@@ -96,10 +96,10 @@
                                     <span>{{ $order->invoice_date }}</span>
                                 </td>
                                 <td class="border align-top truncate">{{ $order->invoice_code }}</td>
-                                <td class="border align-top truncate text-right">{{ $order->order_amount }}</td>
-                                <td class="border align-top truncate text-right">{{ $dp }}</td>
-                                <td class="border align-top truncate text-right">{{ $order->paid_amount }}</td>
-                                <td class="border align-top truncate text-right">{{ $order->order_amount - $order->paid_amount }}</td>
+                                <td class="border align-top truncate text-right">{{ format_number($order->order_amount) }}</td>
+                                <td class="border align-top truncate text-right">{{ format_number($dp) }}</td>
+                                <td class="border align-top truncate text-right">{{ format_number($order->paid_amount) }}</td>
+                                <td class="border align-top truncate text-right">{{ format_number($order->order_amount - $order->paid_amount) }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->name }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->phone }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->email }}</td>

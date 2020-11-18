@@ -29,16 +29,16 @@
                                 @foreach ($sales as $sale)
                                     <tr>
                                         <td class="border">{{ $sale->item_name }}</td>
-                                        <td class="border text-right w-60">{{ $sale->today_sales ? : '0'}}</td>
-                                        <td class="border text-right w-60">{{ $sale->month_to_date }}</td>
+                                        <td class="border text-right w-60">{{ $sale->today_sales ? format_number($sale->today_sales) : '0'}}</td>
+                                        <td class="border text-right w-60">{{ format_number($sale->month_to_date) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td class="border font-bold">Total</td>
-                                    <td class="border font-bold text-right w-60">{{ $sales->sum('today_sales') }}</td>
-                                    <td class="border font-bold text-right w-60">{{ $sales->sum('month_to_date') }}</td>
+                                    <td class="border font-bold text-right w-60">{{ format_number($sales->sum('today_sales')) }}</td>
+                                    <td class="border font-bold text-right w-60">{{ format_number($sales->sum('month_to_date')) }}</td>
                                 </tr>
                             </tfoot>
                         </table>
