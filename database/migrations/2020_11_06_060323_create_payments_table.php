@@ -19,7 +19,7 @@ class CreatePaymentsTable extends Migration
             $table->date('payment_date');
             $table->enum('payment_method', ['cc', 'cash', 'bank transfer']);
             $table->enum('payment_type', ['dp', 'payment']);
-            $table->decimal('amount');
+            $table->decimal('amount', 12, 2);
             $table->json('meta');
             $table->timestamps();
             $table->softDeletes();

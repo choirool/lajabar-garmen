@@ -14,7 +14,7 @@ class AddSpecialPriceCustomerItemPricesTable extends Migration
     public function up()
     {
         Schema::table('customer_item_prices', function (Blueprint $table) {
-            $table->decimal('special_price');
+            $table->decimal('special_price', 12 ,2);
         });
     }
 

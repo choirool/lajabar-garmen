@@ -71,7 +71,8 @@
                             <th class="border">Date</th>
                             <th class="border">No</th>
                             <th class="border">Amount</th>
-                            <th class="border">Paid</th>
+                            <th class="border">DP</th>
+                            <th class="border">Paid (+DP)</th>
                             <th class="border">Amount due</th>
                             <th class="border">Customer name</th>
                             <th class="border">Phone</th>
@@ -82,6 +83,9 @@
                     </thead>
                     <tbody>
                         @forelse ($orders as $order)
+                        @php
+                            $dp = $order->dp ? $order->dp->amount : 0;
+                        @endphp
                             <tr 
                                 class="
                                 {{ ($order->order_amount - $order->paid_amount) == 0 ? ' bg-teal-300' : '' }}
@@ -93,6 +97,7 @@
                                 </td>
                                 <td class="border align-top truncate">{{ $order->invoice_code }}</td>
                                 <td class="border align-top truncate text-right">{{ $order->order_amount }}</td>
+                                <td class="border align-top truncate text-right">{{ $dp }}</td>
                                 <td class="border align-top truncate text-right">{{ $order->paid_amount }}</td>
                                 <td class="border align-top truncate text-right">{{ $order->order_amount - $order->paid_amount }}</td>
                                 <td class="border align-top truncate">{{ $order->customer->name }}</td>

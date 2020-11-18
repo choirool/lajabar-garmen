@@ -17,7 +17,7 @@ class CreateCustomerItemPricesTable extends Migration
             $table->id();
             $table->integer('customer_item_id');
             $table->integer('size_id');
-            $table->decimal('price');
+            $table->decimal('price', 12, 2);
             $table->timestamps();
             $table->softDeletes();
         });

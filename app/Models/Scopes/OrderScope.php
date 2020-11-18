@@ -31,9 +31,10 @@ trait OrderScope
     public function scopeFilterByUnpaid(Builder $query)
     {
         $query->where(function ($query) {
-            $paidAmount = Payment::query()
+            $paidAmount = Payment::withoutGlobalScope('notZero')
                 ->selectRaw('sum(amount)')
                 ->whereColumn('order_id', 'orders.id')
+                ->whereRaw('amount > 0')
                 ->toSql();
 
             $orderAmount = OrderItemPrice::query()

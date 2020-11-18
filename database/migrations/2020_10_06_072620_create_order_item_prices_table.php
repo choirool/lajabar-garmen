@@ -18,7 +18,7 @@ class CreateOrderItemPricesTable extends Migration
             $table->integer('order_item_id');
             $table->integer('size_id');
             $table->integer('qty');
-            $table->decimal('price');
+            $table->decimal('price', 12, 2);
             $table->timestamps();
             $table->softDeletes();
         });

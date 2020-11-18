@@ -11,7 +11,7 @@ class Invoices extends Component
 {
     use WithPagination;
 
-    public $search;
+    public $search = '';
     public $startDate = null;
     public $endDate = null;
     public $confirming;
@@ -53,11 +53,14 @@ class Invoices extends Component
         $order = Order::query()
             ->orderAmount()
             ->paidAmount()
+            ->with('dp')
             ->where(function ($query) {
-                $query->where('invoice_code', 'like', '%' . $this->search . '%')
-                    ->orWhereHas('customer', function (Builder $query) {
-                        $query->where('name', 'like', '%' . $this->search . '%');
-                    });
+                if ($this->search !== '') {
+                    $query->where('invoice_code', 'like', '%' . $this->search . '%')
+                        ->orWhereHas('customer', function (Builder $query) {
+                            $query->where('name', 'like', '%' . $this->search . '%');
+                        });
+                }
             })
             ->when($this->unpaid, fn ($query) => $query->filterByUnpaid());
 
