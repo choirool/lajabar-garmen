@@ -72,9 +72,24 @@
                             {{ __('Transaction') }}
                         </x-slot>
                         <x-slot name="menuItems">
+                            @if (auth()->user()->isAbleTo('customer-list'))
+                            <x-nav-link-dropdown-item href="{{ route('master-data.customers') }}">
+                                {{ __('Customers') }}
+                            </x-nav-link-dropdown-item>
+                            @endif
+                            @if (auth()->user()->isAbleTo('order-create'))
+                            <x-nav-link-dropdown-item href="{{ route('transactions.v3.create-order') }}">
+                                {{ __('Production') }}
+                            </x-nav-link-dropdown-item>
+                            @endif
                             @if (auth()->user()->isAbleTo('order-list'))
                             <x-nav-link-dropdown-item href="{{ route('transactions.orders') }}">
                                 {{ __('Orders') }}
+                            </x-nav-link-dropdown-item>
+                            @endif
+                            @if (auth()->user()->isAbleTo('view-invoices'))
+                            <x-nav-link-dropdown-item href="{{ route('transactions.invoices') }}">
+                                {{ __('Invoices') }}
                             </x-nav-link-dropdown-item>
                             @endif
                         </x-slot>
