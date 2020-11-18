@@ -72,7 +72,7 @@
                                                 No
                                             </x-button>
                                         @else
-                                            @if (auth()->user()->isAbleTo('status-delete'))
+                                            @if (auth()->user()->isAbleTo('status-delete') && $status->id !== 1)
                                             <x-button action="confirm({{ $status->id }})">
                                                 Delete
                                             </x-button>
