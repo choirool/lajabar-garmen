@@ -60,6 +60,11 @@
                                 {{ __('Salesmen master') }}
                             </x-nav-link-dropdown-item>
                             @endif
+                            @if (auth()->user()->isAbleTo('status-list'))
+                            <x-nav-link-dropdown-item href="{{ route('master-data.statuses') }}">
+                                {{ __('Status master') }}
+                            </x-nav-link-dropdown-item>
+                            @endif
                             @if (auth()->user()->isAbleTo('customer-list'))
                             <x-nav-link-dropdown-item href="{{ route('master-data.customers') }}">
                                 {{ __('Customers master') }}

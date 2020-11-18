@@ -42,6 +42,9 @@ use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Livewire\Customer\ManageProductCustomer;
 use App\Http\Livewire\Customer\ManageProductCustomerV2;
 use App\Http\Controllers\Customer\CustomerItemsController;
+use App\Http\Livewire\Status\CreateStatus;
+use App\Http\Livewire\Status\Statuses;
+use App\Http\Livewire\Status\UpdateStatus;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/', function () {
@@ -87,6 +90,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/', Categories::class)->name('categories');
             Route::get('/create-category', CreateCategory::class)->name('create-category');
             Route::get('/update-category/{id}', UpdateCategory::class)->name('update-category');
+        });
+
+        Route::prefix('statuses')->group(function () {
+            Route::get('/', Statuses::class)->name('statuses');
+            Route::get('/create-status', CreateStatus::class)->name('create-status');
+            Route::get('/update-status/{id}', UpdateStatus::class)->name('update-status');
         });
 
         Route::prefix('customers')->group(function () {
