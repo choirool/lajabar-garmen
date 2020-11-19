@@ -54,6 +54,11 @@ class OrderItem extends Model
         return $this->hasMany(OrderItemPrice::class);
     }
 
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
+
     public function getImageUrlAttribute()
     {
         if ($this->image) {

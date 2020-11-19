@@ -3,7 +3,9 @@
 namespace App\Http\Responses\Production;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Production;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Support\Responsable;
 
 class ProductionStoreResponse implements Responsable
@@ -17,7 +19,10 @@ class ProductionStoreResponse implements Responsable
 
     public function toResponse($request)
     {
-        $this->saveData($request);
+        DB::transaction(function () use ($request) {
+            $this->saveData($request);
+        });
+
         session()->flash('message', 'Data successfully created.');
 
         return response()->json([
@@ -31,6 +36,8 @@ class ProductionStoreResponse implements Responsable
         $data = [];
 
         foreach ($request->all() as $value) {
+            $this->updateOrderItem($value);
+
             foreach ($value['values'] as $v) {
                 if ($v['id'] && $v['value'] > 0) {
                     $currentProduction = $this->getCurrentProduction($v);
@@ -55,6 +62,16 @@ class ProductionStoreResponse implements Responsable
         }
 
         Production::insert($data);
+    }
+
+    protected function updateOrderItem($data)
+    {
+        if (auth()->user()->isAbleTo('order-update-status')) {
+            OrderItem::where('id', $data['id'])
+                ->update([
+                    'status_id' => $data['status'],
+                ]);
+        }
     }
 
     protected function productions($orderId)

@@ -73,6 +73,7 @@
                                         <th class="border" rowspan="2">Special Note</th>
                                     @endif
                                     <th class="border" rowspan="2">Percentage</th>
+                                    <th class="border" rowspan="2">Status</th>
                                 </tr>
                                 <tr>
                                     @foreach ($sizes as $size)
@@ -82,7 +83,7 @@
                             </thead>
                             <tbody>
                                 <template x-for="(orderItem, index) in order.order_items">
-                                    <tr>
+                                    <tr :style="`background-color: ${form[index].color};`">
                                         <td class="border" x-text="orderItem.item.name"></td>
                                         <td class="border" x-text="orderItem.item.unit"></td>
                                         <td class="border" x-text="orderItem.item.category.name"></td>
@@ -127,6 +128,14 @@
                                             <td class="border" x-text="orderItem.special_note"></td>
                                         @endif
                                         <td class="border" x-text="percentage(orderItem, index)"></td>
+                                        <td class="border">
+                                            <select x-model="form[index].status" {{ auth()->user()->isAbleTo('order-update-status') ? '' : 'disabled' }}>
+                                                <option value="">Select status</option>
+                                                @foreach ($statuses as $status)
+                                                    <option value="{{ $status->id }}">{{ $status->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
                                     </tr>
                                 </template>
                             </tbody>
@@ -160,6 +169,7 @@
                 loading: false,
                 order: @json($order),
                 sizes: @json($sizes),
+                statuses: @json($statuses),
                 form: [],
                 printing(data) {
                     return data ? 'Yes' : 'no'
@@ -257,6 +267,8 @@
                     this.order.order_items.forEach((orderItem, index) => {
                         this.form.push({
                             id: orderItem.id,
+                            status: orderItem.status_id,
+                            color: this.statuses.find(status => status.id == orderItem.status_id).color,
                             values: []
                         })
 

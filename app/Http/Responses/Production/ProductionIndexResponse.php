@@ -2,8 +2,9 @@
 
 namespace App\Http\Responses\Production;
 
-use App\Models\Order;
 use App\Models\Size;
+use App\Models\Order;
+use App\Models\Status;
 use Illuminate\Contracts\Support\Responsable;
 
 class ProductionIndexResponse implements Responsable
@@ -19,7 +20,7 @@ class ProductionIndexResponse implements Responsable
     {
         return Order::query()
             ->with(['orderItems' => function ($query) {
-                $query->with('prices.productions', 'item.category', 'material', 'color');
+                $query->with('prices.productions', 'item.category', 'material', 'color', 'status');
             }])
             ->with('customer', 'salesman')
             ->findOrFail($orderId);
@@ -29,7 +30,8 @@ class ProductionIndexResponse implements Responsable
     {
         return view('production.index', [
             'order' => $this->order,
-            'sizes' => Size::all()
+            'sizes' => Size::all(),
+            'statuses' => Status::all(),
         ]);
     }
 }
