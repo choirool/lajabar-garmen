@@ -61,7 +61,7 @@ class OrderItem extends Model
 
     public function getImageUrlAttribute()
     {
-        if ($this->image) {
+        if ($this->image && Storage::exists('orders/' . $this->image)) {
             return Storage::url('orders/' . $this->image);
         }
 

@@ -3,9 +3,11 @@
 namespace App\Http\Responses\Customer;
 
 use App\Models\Size;
+use Illuminate\Support\Str;
 use App\Models\CustomerItem;
 use App\Models\CustomerItemPrice;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Support\Responsable;
 
 class StoreManageProductResponse implements Responsable
@@ -22,8 +24,8 @@ class StoreManageProductResponse implements Responsable
 
     protected function storeData($request)
     {
-        DB::transaction(function () use($request) {
-            CustomerItemPrice::whereHas('customerItem', function ($query) use($request){
+        DB::transaction(function () use ($request) {
+            CustomerItemPrice::whereHas('customerItem', function ($query) use ($request) {
                 $query->where('customer_id', $request->customer_id);
             })->forceDelete();
 
@@ -35,19 +37,41 @@ class StoreManageProductResponse implements Responsable
     protected function saveCustomerItem($request)
     {
         foreach ($request->items as $item) {
+            $imageName = $item['image'] ?: '';
+
+            if ($item['image'] && get_class($item['image']) == 'Illuminate\Http\UploadedFile') {
+                $upload = $this->storeImage($item['image']);
+                $imageName = $upload['name'];
+            }
+
             $customerItem = CustomerItem::create([
                 'customer_id' => $request->customer_id,
                 'item_id' => $item['item_id'],
                 'material_id' => $item['material_id'],
                 'color_id' => $item['color_id'],
-                'image' => '',
-                'note' => $item['note'] ? : '',
-                'special_note' => $item['special_note'] ? : '',
+                'image' => $imageName,
+                'note' => $item['note'] ?: '',
+                'special_note' => $item['special_note'] ?: '',
                 'screen_printing' => $item['screen_printing'],
             ]);
 
             $this->saveCustomerItemPrices($customerItem, $item['price'], $item['special_price']);
         }
+    }
+
+    protected function storeImage($image)
+    {
+        $fileName = time() . Str::random(9) . '.' . $image->extension();
+        $path = Storage::putFileAs(
+            'orders',
+            $image,
+            $fileName
+        );
+
+        return [
+            'name' => $fileName,
+            'path' => $path,
+        ];
     }
 
     protected function saveCustomerItemPrices($customerItem, $price, $specialPrice)

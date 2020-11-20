@@ -37,7 +37,7 @@
                             </x-alert>
                         </template>
                     </div>
-                    <div class="w-full flex overflow-x-scroll overflow-y-hidden">
+                    <div class="w-full flex" :class="{'overflow-x-scroll': overflow, 'overflow-y-hidden' : overflow}">
                         <table class="table-auto text-xs" x-cloak>
                             <thead>
                                 <tr>
@@ -49,6 +49,7 @@
                                     <th class="border" width="10%">Price</th>
                                     <th class="border" width="10%">Special Price</th>
                                     <th class="border" width="3%">Sablon</th>
+                                    <th class="border" width="20%">Image</th>
                                     <th class="border" width="20%">Note</th>
                                     <th class="border" width="20%">Special Note</th>
                                     <th class="border" width="2%"></th>
@@ -126,6 +127,22 @@
                                         <td class="border align-top" :class="{ 'border-red-700': errors[`items.${i}.screen_printing`] }">
                                             <input type="checkbox" class="w-full bg-white" x-model="item.screen_printing">
                                         </td>
+                                        <td class="border align-top" :class="{ 'border-red-700': errors[`items.${i}.image`] }">
+                                            <template x-if="item.image_url">
+                                                <a 
+                                                    href="javascript:;"
+                                                    x-on:mouseleave="item.show_image = false, overflow = true"
+                                                    x-on:mouseover="overflow = false, item.show_image = true">
+                                                    View image
+                                                </a>
+                                                <div class="relative" x-cloak x-show.transition.origin.top="item.show_image">
+                                                    <div class="absolute w-auto h-auto top-0 z-10 p-1 -mt-5 transform -translate-x-1/2 -translate-y-full">
+                                                        <img :src="item.image_url">
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <input type="file" :x-ref="`file_${i}`">
+                                        </td>
                                         <td class="border align-top" :class="{ 'border-red-700': errors[`items.${i}.note`] }">
                                             <input type="text" class="w-full" x-model="item.note">
                                         </td>
@@ -176,6 +193,7 @@
                 errors: [],
                 timeout: null,
                 message: '',
+                overflow: true,
                 items: @json($items),
                 customerItems: @json($customer->products),
                 loading: false,
@@ -207,6 +225,7 @@
                         material_id: '',
                         color_id: '',
                         image: '',
+                        show_image: false,
                         note: '',
                         special_note: '',
                         screen_printing: false
@@ -225,6 +244,44 @@
                     form = this.form.items[i]
                     this.form.items[i].item_combination = `${form.item_id}_${form.material_id}_${form.color_id}`
                 },
+                viewImage(i) {
+                    console.log(i);
+                },
+                generateForm() {
+                    var formData = new FormData()
+
+                    for (const key in this.form) {
+                        if (this.form.hasOwnProperty(key)) {
+                            const element = this.form[key]
+
+                            if (typeof element == 'object') {
+                                for (const k in element) {
+                                    var item = element[k]
+                                    formData.append(`items[${k}][item_id]`, item['item_id'])
+                                    formData.append(`items[${k}][item_combination]`, item['item_combination'])
+                                    formData.append(`items[${k}][unit]`, item['unit'])
+                                    formData.append(`items[${k}][type]`, item['type'])
+                                    formData.append(`items[${k}][price]`, item['price'])
+                                    formData.append(`items[${k}][special_price]`, item['special_price'])
+                                    formData.append(`items[${k}][material_id]`, item['material_id'])
+                                    formData.append(`items[${k}][color_id]`, item['color_id'])
+                                    formData.append(`items[${k}][note]`, item['note'])
+                                    formData.append(`items[${k}][special_note]`, item['special_note'])
+                                    formData.append(`items[${k}][screen_printing]`, item['screen_printing'] ? '1' : '0')
+                                    if (this.$refs[`file_${k}`].files[0]) {
+                                        formData.append(`items[${k}][image]`, this.$refs[`file_${k}`].files[0])
+                                    } else {
+                                        formData.append(`items[${k}][image]`, item['image'])
+                                    }
+                                }
+                            } else {
+                                formData.append(key, element)
+                            }
+                        }
+                    }
+
+                    return formData
+                },
                 saveData() {
                     let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     this.errors = []
@@ -234,11 +291,12 @@
                         method: 'POST',
                         headers: {
                             // 'X-Requested-With': 'XMLHttpRequest',
-                            'Content-Type': 'application/json',
+                            // 'Content-Type': 'application/json',
                             'Accept': 'application/json, text-plain, */*',
                             'X-CSRF-TOKEN': token
                         },
-                        body: JSON.stringify(this.form)
+                        // body: JSON.stringify(this.form)
+                        body: this.generateForm()
                     })
                     .then(response => response.json())
                     .then((response) => {
@@ -270,7 +328,9 @@
                                 special_price: customerItem.prices[0].special_price,
                                 material_id: customerItem.item.material_id,
                                 color_id: customerItem.color_id,
-                                image: customerItem.images,
+                                image_url: customerItem.image_url,
+                                show_image: false,
+                                image: customerItem.image,
                                 note: customerItem.note,
                                 special_note: customerItem.special_note,
                                 screen_printing: customerItem.screen_printing

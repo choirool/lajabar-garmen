@@ -7,6 +7,7 @@ use App\Models\Color;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerItem extends Model
 {
@@ -23,6 +24,10 @@ class CustomerItem extends Model
         'note',
         'special_note',
         'screen_printing',
+    ];
+
+    protected $appends = [
+        'image_url',
     ];
 
     public function customer()
@@ -48,5 +53,14 @@ class CustomerItem extends Model
     public function prices()
     {
         return $this->hasMany(CustomerItemPrice::class);
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->image && Storage::exists('orders/' . $this->image)) {
+            return Storage::url('orders/' . $this->image);
+        }
+
+        return null;
     }
 }

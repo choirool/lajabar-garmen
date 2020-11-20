@@ -79,7 +79,7 @@ class OrderStoreResponse implements Responsable
 
     protected function storeImage($image, $orderId)
     {
-        $fileName = $orderId . '-' . time() . '.' . $image->extension();
+        $fileName = $orderId . '-' . time() . Str::random(9) . '.' . $image->extension();
         $path = Storage::putFileAs(
             'orders',
             $image,
