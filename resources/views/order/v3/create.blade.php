@@ -112,12 +112,12 @@
                                             <td class="border text-right">
                                                 <div class="w-24" x-text="subQty(order_line)"></div>
                                             </td>
-                                            <td class="border text-center">
-                                                <input type="number" min="0" class="w-20" x-model="order_line.priceData" @change="priceDataChanged(order_line)">
+                                            <td class="border">
+                                                <input type="number" min="0" class="w-20 text-right" x-model="order_line.priceData" @change="priceDataChanged(order_line)">
                                             </td>
                                             @if (auth()->user()->isAbleTo('order-special-price'))
-                                                <td class="border text-center">
-                                                    <input type="number" min="0" class="w-20" x-model="order_line.specialPriceData">
+                                                <td class="border text-right">
+                                                    <input type="number" min="0" class="w-20 text-right" x-model="order_line.specialPriceData">
                                                 </td>
                                             @endif
                                             <td class="border text-right">
@@ -274,6 +274,8 @@
                         if (customerItem) {
                             this.form.order_lines[i].priceData = customerItem.prices[0].price
                             this.form.order_lines[i].specialPriceData = customerItem.prices[0].special_price
+                            this.form.order_lines[i].note = customerItem.note
+                            this.form.order_lines[i].special_note = customerItem.special_note
                             this.form.order_lines[i].price.forEach(price => {
                                 price.price = customerItem.prices[0].price
                                 price.special_price = customerItem.prices[0].special_price
