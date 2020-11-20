@@ -59,8 +59,8 @@ class OrderStoreResponse implements Responsable
 
     protected function storeOrderItem($data, $order)
     {
-        $imageName = '';
-        if (isset($data['image'])) {
+        $imageName = isset($data['image']) ? $data['image'] : '';
+        if (isset($data['image']) && get_class($data['image']) == 'Illuminate\Http\UploadedFile') {
             $upload = $this->storeImage($data['image'], $order->id);
             $imageName = $upload['name'];
         }

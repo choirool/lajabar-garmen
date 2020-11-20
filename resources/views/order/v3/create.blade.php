@@ -12,7 +12,7 @@
                     @include('order.v3.customer-form')
 
                     <template x-if="showTable">
-                        <div class="w-full flex overflow-x-scroll overflow-y-hidden">
+                        <div class="w-full flex" :class="{'overflow-x-scroll overflow-y-hidden' :overflow}">
                             <table class="table-auto text-xs">
                                 <thead>
                                     <tr>
@@ -124,6 +124,19 @@
                                                 <div class="w-24" x-text="subTotal(order_line)"></div>
                                             </td>
                                             <td class="border">
+                                                <template x-if="order_line.image_url">
+                                                    <a 
+                                                        href="javascript:;"
+                                                        x-on:mouseleave="order_line.show_image = false, overflow = true"
+                                                        x-on:mouseover="overflow = true, order_line.show_image = true">
+                                                        View image
+                                                    </a>
+                                                    <div class="relative" x-cloak x-show.transition.origin.top="order_line.show_image">
+                                                        <div class="absolute w-auto h-auto top-0 z-10 p-1 -mt-5 transform -translate-x-1/2 -translate-y-full">
+                                                            <img :src="order_line.image_url">
+                                                        </div>
+                                                    </div>
+                                                </template>
                                                 <input type="file" :x-ref="`file_${index}`" :class="{ 'border-red-700': errors[`order_lines.${index}.image`] }">
                                             </td>
                                             <td class="border">
@@ -182,6 +195,7 @@
             return {
                 errors: [],
                 showTable: false,
+                overflow: true,
                 loading: false,
                 sizes: @json($sizes),
                 items: @json($items),
@@ -219,6 +233,7 @@
                         note: '',
                         special_note: '',
                         image: '',
+                        show_image: false,
                         priceData: 0,
                         specialPriceData: 0,
                         price: [],
@@ -276,6 +291,7 @@
                             this.form.order_lines[i].specialPriceData = customerItem.prices[0].special_price
                             this.form.order_lines[i].note = customerItem.note
                             this.form.order_lines[i].special_note = customerItem.special_note
+                            this.form.order_lines[i].image_url = customerItem.image_url
                             this.form.order_lines[i].price.forEach(price => {
                                 price.price = customerItem.prices[0].price
                                 price.special_price = customerItem.prices[0].special_price
@@ -355,6 +371,8 @@
                                             formData.append(`order_lines[${k}][special_note]`, orderLines['special_note'])
                                             if (this.$refs[`file_${k}`].files[0]) {
                                                 formData.append(`order_lines[${k}][image]`, this.$refs[`file_${k}`].files[0])
+                                            } else {
+                                                formData.append(`order_lines[${k}][image]`, orderLines['image'])
                                             }
 
                                             orderLines['price'].forEach((price, i) => {
