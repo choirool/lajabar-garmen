@@ -25,8 +25,10 @@
                                 <th class="border" rowspan="2">Color</th>
                                 <th class="border" colspan="{{ $sizes->count() }}">Size</th>
                                 <th class="border" rowspan="2">QTY</th>
+                                @if (!request()->has('hide_price'))
                                 <th class="border" rowspan="2">Price</th>
                                 <th class="border" rowspan="2">Total Price</th>
+                                @endif
                             </tr>
                             <tr>
                                 @foreach ($sizes as $size)
@@ -50,10 +52,12 @@
                                         </td>
                                     @endforeach
                                     <td class="border text-center">{{ $orderItem->prices->sum('qty') }}</td>
+                                    @if (!request()->has('hide_price'))
                                     <td class="border text-right">{{ format_number($orderItem->prices->first()->price) }}</td>
                                     <td class="border text-right">
                                         {{ format_number($orderItem->prices->sum(fn ($price) => $price->qty * $price->price)) }}
                                     </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>
@@ -63,9 +67,12 @@
                                 <td class="border text-center">
                                     {{ $order->orderItems->reduce(fn ($carry, $item) => $carry + $item->prices->sum('qty')) }}
                                 </td>
+                                @if (!request()->has('hide_price'))
                                 <td class="border">Total</td>
                                 <td class="border text-right">{{ format_number($order->order_amount) }}</td>
+                                @endif
                             </tr>
+                            @if (!request()->has('hide_price'))
                             <tr>
                                 <td colspan="{{ $sizes->count() + 5 }}"></td>
                                 <td class="border">DP</td>
@@ -94,10 +101,18 @@
                                     {{ format_number($order->order_amount - $order->paid_amount) }}
                                 </td>
                             </tr>
+                            @endif
                         </tfoot>
                     </table>
                     <div>
-                        <a href="{{ route('transactions.prebilling.export', ['id' => $order->id, 'export' => 'excel']) }}">Save to excel</a>
+                        @if (!request()->has('hide_price'))
+                        <a href="?hide_price">Hide price</a> | 
+                        @else
+                        <a href="{{ request()->url() }}">Show price</a> | 
+                        @endif
+                        <a href="{{ route('transactions.prebilling.export', ['id' => $order->id, 'export' => 'excel', 'hide_price' => request()->has('hide_price')]) }}">
+                            Save to excel
+                        </a>
                     </div>
                 </div>        
             </div>

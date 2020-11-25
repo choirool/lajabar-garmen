@@ -21,7 +21,7 @@ class PrebillingExportToExcelResponse implements Responsable
         $order = $this->getOrder();
         $fileName = 'Prebilling_' . $order->invoice_code . '.xlsx';
 
-        return Excel::download(new PrebillingExport($order), $fileName);
+        return Excel::download(new PrebillingExport($order, $request), $fileName);
     }
 
     protected function getOrder()

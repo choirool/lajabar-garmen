@@ -12,10 +12,12 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class PrebillingExport implements FromView, WithStyles
 {
     protected $order;
+    protected $request;
 
-    public function __construct($order)
+    public function __construct($order, $request)
     {
         $this->order = $order;
+        $this->request = $request;
     }
 
     public function view(): View
@@ -23,6 +25,7 @@ class PrebillingExport implements FromView, WithStyles
         return view('excels.prebilling', [
             'order' => $this->order,
             'sizes' => Size::all(),
+            'request' => $this->request,
         ]);
     }
 

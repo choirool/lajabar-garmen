@@ -28,8 +28,10 @@
             <th class="border" rowspan="2">Color</th>
             <th class="border" colspan="{{ $sizes->count() }}">Size</th>
             <th class="border" rowspan="2">QTY</th>
+            @if ((int)$request->hide_price == 0)
             <th class="border" rowspan="2">Price</th>
             <th class="border" rowspan="2">Total Price</th>
+            @endif
         </tr>
         <tr>
             @foreach ($sizes as $size)
@@ -51,10 +53,12 @@
                     </td>
                 @endforeach
                 <td class="border text-center">{{ $orderItem->prices->sum('qty') }}</td>
+                @if ((int)$request->hide_price == 0)
                 <td class="border text-right">{{ $orderItem->prices->first()->price }}</td>
                 <td class="border text-right">
                     {{ $orderItem->prices->sum(fn ($price) => $price->qty * $price->price ) }}
                 </td>
+                @endif
             </tr>
         @endforeach
     </tbody>
@@ -64,9 +68,12 @@
             <td class="border text-center">
                 {{ $order->orderItems->reduce(fn ($carry, $item) => $carry + $item->prices->sum('qty')) }}
             </td>
+            @if ((int)$request->hide_price == 0)
             <td class="border">Total</td>
             <td class="border text-right">{{ $order->order_amount }}</td>
+            @endif
         </tr>
+        @if ((int)$request->hide_price == 0)
         <tr>
             <td colspan="{{ $sizes->count() + 5 }}"></td>
             <td class="border">DP</td>
@@ -95,5 +102,6 @@
                 {{ $order->order_amount - $order->paid_amount }}
             </td>
         </tr>
+        @endif
     </tfoot>
 </table>
