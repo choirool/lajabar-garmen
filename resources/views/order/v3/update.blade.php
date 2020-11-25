@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-1 py-1 sm:px-1 bg-white border-b border-gray-200">
                     <div class="w-full flex bg-blue-200 px-3 py-3 mb-5">
-                        <div class="w-1/2 my-2">
+                        <div class="w-1/3 my-2">
                             <table>
                                 <tr>
                                     <td>Customer name</td>
@@ -53,6 +53,20 @@
                                                 x-text="errors.salesman_id[0]"></p>
                                         </template>
                                     </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="w-1/2 my-2">
+                            <table>
+                                <tr>
+                                    <td>Phone</td>
+                                    <td>:</td>
+                                    <td>{{ $customer->phone }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Country</td>
+                                    <td>:</td>
+                                    <td>{{ $customer->country }}</td>
                                 </tr>
                             </table>
                         </div>

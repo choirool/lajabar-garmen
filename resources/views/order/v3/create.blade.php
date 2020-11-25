@@ -113,7 +113,7 @@
                                                 <div class="w-24" x-text="subQty(order_line)"></div>
                                             </td>
                                             <td class="border">
-                                                <input type="number" min="0" class="w-20 text-right" x-model="order_line.priceData" @change="priceDataChanged(order_line)">
+                                                <input type="number" :x-ref="`price_${index}`" min="0" class="w-20 text-right" x-model="order_line.priceData" @change="priceDataChanged(order_line)">
                                             </td>
                                             @if (auth()->user()->isAbleTo('order-special-price'))
                                                 <td class="border text-right">
@@ -200,8 +200,10 @@
                 sizes: @json($sizes),
                 items: @json($items),
                 categories: @json($categories),
+                customers: @json($customers),
                 availableItems: [],
                 customerItems: [],
+                selectedCustomer: '',
                 form: {
                     customer_id: '',
                     date: '',
@@ -340,6 +342,9 @@
                         alert('Dp payment greater than total order amount')
                         this.form.dp.amount = 0
                     }
+                },
+                customerSelected(customerId) {
+                    this.selectedCustomer = this.customers.find(customer => customer.id == customerId)
                 },
                 generateFormData() {
                     var formData = new FormData()

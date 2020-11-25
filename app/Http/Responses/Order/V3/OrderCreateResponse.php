@@ -16,7 +16,7 @@ class OrderCreateResponse implements Responsable
     public function toResponse($request)
     {
         return view('order.v3.create', [
-            'customers' => Customer::select('name', 'id')->orderBy('name')->get(),
+            'customers' => Customer::select('name', 'id', 'phone', 'country')->orderBy('name')->get(),
             'salesmen' => Salesman::select('name', 'id')->orderBy('name')->get(),
             'materials' => Material::orderBy('name')->get(),
             'categories' => Category::orderBy('name')->get(),
