@@ -27,24 +27,25 @@ class ManageProductRequest extends FormRequest
      */
     public function rules()
     {
-        $items = Item::select('id')->get()->implode('id', ',');
-        $categories = Category::select('id')->get()->implode('id', ',');
-        $materials = Material::select('id')->get()->implode('id', ',');
-        $colors = Color::select('id')->get()->implode('id', ',');
+        // $items = Item::select('id')->get()->implode('id', ',');
+        // $categories = Category::select('id')->get()->implode('id', ',');
+        // $materials = Material::select('id')->get()->implode('id', ',');
+        // $colors = Color::select('id')->get()->implode('id', ',');
 
         return [
             'customer_id' => 'required|exists:customers,id',
             'items' => 'required|array',
-            'items.*.item_id' => 'required|in:' . $items,
-            'items.*.item_combination' => 'required|distinct',
-            'items.*.price' => 'required|numeric',
-            'items.*.special_price' => 'required|numeric',
-            'items.*.type' => 'required|in:' . $categories,
-            'items.*.material_id' => 'required|in:' . $materials,
-            'items.*.color_id' => 'required|in:' . $colors,
-            'items.*.note' => 'sometimes|max:225',
-            'items.*.special_note' => 'sometimes|max:225',
-            'items.*.screen_printing' => 'required|boolean',
+            'items.*.data' => 'required',
+            // 'items.*.item_id' => 'required|in:' . $items,
+            // 'items.*.item_combination' => 'required|distinct',
+            // 'items.*.price' => 'required|numeric',
+            // 'items.*.special_price' => 'required|numeric',
+            // 'items.*.type' => 'required|in:' . $categories,
+            // 'items.*.material_id' => 'required|in:' . $materials,
+            // 'items.*.color_id' => 'required|in:' . $colors,
+            // 'items.*.note' => 'sometimes|max:225',
+            // 'items.*.special_note' => 'sometimes|max:225',
+            // 'items.*.screen_printing' => 'required|boolean',
         ];
     }
 }

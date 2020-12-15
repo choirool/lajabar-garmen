@@ -257,17 +257,30 @@
                             if (typeof element == 'object') {
                                 for (const k in element) {
                                     var item = element[k]
-                                    formData.append(`items[${k}][item_id]`, item['item_id'])
-                                    formData.append(`items[${k}][item_combination]`, item['item_combination'])
-                                    formData.append(`items[${k}][unit]`, item['unit'])
-                                    formData.append(`items[${k}][type]`, item['type'])
-                                    formData.append(`items[${k}][price]`, item['price'])
-                                    formData.append(`items[${k}][special_price]`, item['special_price'])
-                                    formData.append(`items[${k}][material_id]`, item['material_id'])
-                                    formData.append(`items[${k}][color_id]`, item['color_id'])
-                                    formData.append(`items[${k}][note]`, item['note'])
-                                    formData.append(`items[${k}][special_note]`, item['special_note'])
-                                    formData.append(`items[${k}][screen_printing]`, item['screen_printing'] ? '1' : '0')
+                                    var dataValue = {}
+                                    dataValue[`items.${k}.item_id`] = item['item_id'],
+                                    dataValue[`items.${k}.item_combination`] = item['item_combination'],
+                                    dataValue[`items.${k}.unit`] = item['unit'],
+                                    dataValue[`items.${k}.type`] = item['type'],
+                                    dataValue[`items.${k}.price`] = item['price'],
+                                    dataValue[`items.${k}.special_price`] = item['special_price'],
+                                    dataValue[`items.${k}.material_id`] = item['material_id'],
+                                    dataValue[`items.${k}.color_id`] = item['color_id'],
+                                    dataValue[`items.${k}.note`] = item['note'],
+                                    dataValue[`items.${k}.special_note`] = item['special_note'],
+                                    dataValue[`items.${k}.screen_printing`] = item['screen_printing'] ? '1' : '0'
+                                    formData.append(`items[${k}][data]`, JSON.stringify(dataValue))
+                                    // formData.append(`items[${k}][item_id]`, item['item_id'])
+                                    // formData.append(`items[${k}][item_combination]`, item['item_combination'])
+                                    // formData.append(`items[${k}][unit]`, item['unit'])
+                                    // formData.append(`items[${k}][type]`, item['type'])
+                                    // formData.append(`items[${k}][price]`, item['price'])
+                                    // formData.append(`items[${k}][special_price]`, item['special_price'])
+                                    // formData.append(`items[${k}][material_id]`, item['material_id'])
+                                    // formData.append(`items[${k}][color_id]`, item['color_id'])
+                                    // formData.append(`items[${k}][note]`, item['note'])
+                                    // formData.append(`items[${k}][special_note]`, item['special_note'])
+                                    // formData.append(`items[${k}][screen_printing]`, item['screen_printing'] ? '1' : '0')
                                     if (this.$refs[`file_${k}`].files[0]) {
                                         formData.append(`items[${k}][image]`, this.$refs[`file_${k}`].files[0])
                                     } else {
