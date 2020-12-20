@@ -13,6 +13,11 @@
                         <div class="w-1/3 my-2">
                             <table>
                                 <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Inv. Order #{{ $order->order_to }}</td>
+                                </tr>
+                                <tr>
                                     <td>Customer name</td>
                                     <td>:</td>
                                     <td>

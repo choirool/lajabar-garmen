@@ -25,7 +25,8 @@ class OrderEditResponse implements Responsable
 
     public function toResponse($request)
     {
-        $version = $this->useVersion2() ? 'v2' : 'v3';
+        // $version = $this->useVersion2() ? 'v2' : 'v3';
+        $version = 'v3';
 
         return view('order.' . $version . '.update', [
             'customers' => $this->getCustomer(),
@@ -39,7 +40,7 @@ class OrderEditResponse implements Responsable
         ]);
     }
 
-protected function getCustomer()
+    protected function getCustomer()
     {
         return Customer::select('name', 'id', 'phone', 'country', 'invoice_color')
             ->where('id', $this->order->customer_id)
@@ -52,6 +53,7 @@ protected function getCustomer()
     protected function getOrder()
     {
         return Order::query()
+            ->orderTo()
             ->with(['orderItems' => fn ($query) => $query->with('item', 'prices')])
             ->with('dp')
             ->findOrFail($this->id);

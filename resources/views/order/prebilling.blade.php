@@ -9,12 +9,23 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-1 py-8 sm:px-8 bg-white border-b border-gray-200">
-                    <div class="w-full mb-5">
-                        <p class="h1 text-center">AL - JABARS</p>
-                        <p class="text-center">Jl. Pulau Batanta Gang VII A No. 4</p>
-                        <p class="text-xs">Name: {{ $order->customer->name }}</p>
-                        <p class="text-xs">Date: {{ $order->invoice_date }}</p>
-                        <p class="text-xs">Order ID: {{ $order->invoice_code }}</p>
+                    <div class="w-full">
+                        <div class="w-full mb-5">
+                            <p class="h1 text-center">AL - JABARS</p>
+                            <p class="text-center">Jl. Pulau Batanta Gang VII A No. 4</p>
+                        </div>
+                        <div class="w-full flex justify-between">
+                            <div>
+                                <p class="text-xs">Name: {{ $order->customer->name }}</p>
+                                <p class="text-xs">Date: {{ $order->invoice_date }}</p>
+                                <p class="text-xs">Order ID: {{ $order->invoice_code }}</p>
+                            </div>
+                            <div>
+                                <p class="pr-5 pl-5" style="background-color: {{ $order->customer->invoice_color }};">
+                                Inv. Order #{{ $order->order_to }}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                     <table class="table-auto w-full text-xs">
                         <thead>
