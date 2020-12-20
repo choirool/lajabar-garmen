@@ -9,6 +9,13 @@
         <tr>
             <td>Name:</td>
             <td>{{ $order->customer->name }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            @foreach ($sizes as $size)
+                <td class="border text-center"></td>
+            @endforeach
+            <td >Inv. Order #{{ $order->order_to }}</td>
         </tr>
         <tr>
             <td>Date:</td>

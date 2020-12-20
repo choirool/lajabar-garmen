@@ -29,6 +29,7 @@ class PrebillingExportToExcelResponse implements Responsable
         return Order::query()
             ->orderAmount()
             ->paidAmount()
+            ->orderTo()
             ->with('customer', 'salesman', 'dp', 'payments')
             ->with(['orderItems' => function ($query) {
                 $query->with('item.category', 'prices', 'color', 'material');
