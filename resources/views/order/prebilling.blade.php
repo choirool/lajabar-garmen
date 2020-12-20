@@ -123,6 +123,9 @@
                         @endif
                         <a href="{{ route('transactions.prebilling.export', ['id' => $order->id, 'export' => 'excel', 'hide_price' => request()->has('hide_price')]) }}">
                             Save to excel
+                        </a> |
+                        <a href="{{ route('transactions.prebilling.export', ['id' => $order->id, 'export' => 'pdf', 'hide_price' => request()->has('hide_price')]) }}">
+                            Save to pdf
                         </a>
                     </div>
                 </div>        

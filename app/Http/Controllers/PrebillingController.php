@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Responses\Order\Prebilling\PrebillingShowResponse;
+use App\Http\Responses\Order\Prebilling\PrebillingExportToPdfResponse;
 use App\Http\Responses\Order\Prebilling\PrebillingExportToExcelResponse;
 
 class PrebillingController extends Controller
@@ -23,6 +24,10 @@ class PrebillingController extends Controller
     {
         if($request->export == 'excel') {
             return new PrebillingExportToExcelResponse($id);
+        }
+
+        if($request->export == 'pdf') {
+            return new PrebillingExportToPdfResponse($id);
         }
     }
 }
