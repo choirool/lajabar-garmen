@@ -58,6 +58,13 @@
                 <td>:</td>
                 <td x-text="selectedCustomer.country"></td>
             </tr>
+            <tr>
+                <td>Inovice name</td>
+                <td>:</td>
+                <td>
+                    <textarea x-model="form.invoice_name"></textarea>
+                </td>
+            </tr>
         </table>
     </div>
 </div>

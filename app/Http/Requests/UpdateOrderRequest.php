@@ -83,7 +83,7 @@ class UpdateOrderRequest extends FormRequest
             'order_lines.*.color' => 'required|in:' . $this->colors->implode('id', ','),
             'order_lines.*.printing' => 'required|boolean',
             'order_lines.*.note' => '',
-            'order_lines.*.image' => 'sometimes|image',
+            // 'order_lines.*.image' => 'sometimes|image',
             'order_lines.*.price' => 'required|array',
             'order_lines.*.price.*.size_id' => 'required|in:' . $this->sizes->implode('id', ','),
             'order_lines.*.price.*.qty' => 'required|numeric|min:0',
@@ -91,6 +91,10 @@ class UpdateOrderRequest extends FormRequest
             'deleted_items' => 'sometimes|array',
             'dp.has_dp' => 'required|boolean',
         ];
+
+        if (request('order_lines.*.image')) {
+            $rules[] = 'image';
+        }
 
         if (request('dp.has_dp')) {
             if (request('dp.id') !== 'null') {

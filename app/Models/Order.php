@@ -22,6 +22,7 @@ class Order extends Model
         'customer_id',
         'invoice_date',
         'salesman_id',
+        'invoice_name',
     ];
 
     public function orderItems()

@@ -208,6 +208,7 @@
                     customer_id: '',
                     date: '',
                     salesman_id: '',
+                    invoice_name: '',
                     order_lines: [],
                     dp: {
                         has_dp: 0,

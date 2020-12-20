@@ -54,6 +54,7 @@ class OrderStoreResponse implements Responsable
             'customer_id' => $request->customer_id,
             'invoice_date' => $request->date,
             'salesman_id' => $request->salesman_id,
+            'invoice_name' => $request->invoice_name,
         ]);
     }
 

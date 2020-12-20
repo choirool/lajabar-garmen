@@ -68,6 +68,13 @@
                                     <td>:</td>
                                     <td>{{ $customer->country }}</td>
                                 </tr>
+                                <tr>
+                                    <td>Inovice name</td>
+                                    <td>:</td>
+                                    <td>
+                                        <textarea x-model="form.invoice_name"></textarea>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>
@@ -253,6 +260,7 @@
                     customer_id: {{ $order->customer_id }},
                     date: '{{ $order->invoice_date }}',
                     salesman_id: {{ $order->salesman_id }},
+                    invoice_name: '{{ $order->invoice_name }}',
                     order_lines: [],
                     deleted_items: [],
                     dp: {
