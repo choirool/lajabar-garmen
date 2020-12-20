@@ -41,7 +41,7 @@ class OrderEditResponse implements Responsable
 
 protected function getCustomer()
     {
-        return Customer::select('name', 'id', 'phone', 'country')
+        return Customer::select('name', 'id', 'phone', 'country', 'invoice_color')
             ->where('id', $this->order->customer_id)
             ->with(['products' => function ($query) {
                 $query->with('item', 'prices');

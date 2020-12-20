@@ -9,7 +9,7 @@
         <div class="w-full mx-auto sm:px-6 lg:px-1">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-1 py-1 sm:px-1 bg-white border-b border-gray-200">
-                    <div class="w-full flex bg-blue-200 px-3 py-3 mb-5">
+                    <div class="w-full flex bg-blue-200 px-3 py-3 mb-5" style="background-color: {{ $customers->first()->invoice_color }};">
                         <div class="w-1/3 my-2">
                             <table>
                                 <tr>
