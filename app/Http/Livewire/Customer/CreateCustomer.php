@@ -12,6 +12,7 @@ class CreateCustomer extends Component
     public $phone;
     public $email;
     public $country;
+    public $invoiceColor;
 
     public function mount()
     {
@@ -28,6 +29,7 @@ class CreateCustomer extends Component
             'phone' => 'required|min:2',
             'email' => 'required|email|unique:customers',
             'country' => 'required',
+            'invoiceColor' => 'required',
         ]);
 
         Customer::create([
@@ -36,6 +38,7 @@ class CreateCustomer extends Component
             'phone' => $this->phone,
             'country' => $this->country,
             'email' => $this->email,
+            'invoice_color' => $this->invoiceColor,
         ]);
         
         session()->flash('message', 'Customer successfully created.');

@@ -13,6 +13,7 @@ class UpdateCustomer extends Component
     public $phone = '';
     public $email = '';
     public $country = '';
+    public $invoiceColor = '';
 
     public function mount($id)
     {
@@ -27,6 +28,7 @@ class UpdateCustomer extends Component
         $this->phone = $customer->phone;
         $this->email = $customer->email;
         $this->country = $customer->country;
+        $this->invoiceColor = $customer->invoice_color;
     }
 
     public function saveCustomer()
@@ -37,6 +39,7 @@ class UpdateCustomer extends Component
             'phone' => 'required|min:2',
             'email' => 'required|email|unique:customers,email,'. $this->customer->id . ',id',
             'country' => 'required',
+            'invoiceColor' => 'required',
         ]);
 
         $this->customer->name = $this->name;
@@ -44,6 +47,7 @@ class UpdateCustomer extends Component
         $this->customer->phone = $this->phone;
         $this->customer->country = $this->country;
         $this->customer->email = $this->email;
+        $this->customer->invoice_color = $this->invoiceColor;
         $this->customer->save();
 
         session()->flash('message', 'Customer successfully updated.');

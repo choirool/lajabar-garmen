@@ -37,6 +37,7 @@
                             <th class="border">Phone</th>
                             <th class="border">Email</th>
                             <th class="border">Country</th>
+                            <th class="border">Invoice color</th>
                             <th class="border">Status</th>
                             <th class="border"></th>
                         </tr>
@@ -51,6 +52,9 @@
                                 <td class="border align-top truncate">{{ $customer->phone }}</td>
                                 <td class="border align-top truncate">{{ $customer->email }}</td>
                                 <td class="border align-top truncate">{{ $customer->country }}</td>
+                                <td class="border align-top truncate">
+                                    <div class="p-2" style="background-color: {{ $customer->invoice_color }};"></div>
+                                </td>
                                 <td class="border align-top truncate">
                                     @if($confirming == $customer->id)
                                         <x-button action="toggleActive({{ $customer->id }}, {{ $customer->deleted_at ? true : false}})" type="danger" size="small">

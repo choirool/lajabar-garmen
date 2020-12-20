@@ -34,7 +34,13 @@
                             <x-jet-label for="country" value="{{ __('Country') }}" />
                             <x-jet-input id="country" type="text" class="mt-1 block w-full" wire:model.defer="country" />
                             <x-jet-input-error for="country" class="mt-2" />
-                        </div>           
+                        </div>
+                        <div class="col-span-6 sm:col-span-4">
+                            <x-jet-label for="country" value="{{ __('Invoice color') }}" />
+                            {{-- <x-jet-input id="country" type="color" class="mt-1 block w-full" wire:model.defer="invoiceColor" /> --}}
+                            <input id="country" type="color" class="mt-1" wire:model.defer="invoiceColor" />
+                            <x-jet-input-error for="invoiceColor" class="mt-2" />
+                        </div>             
                     </x-slot>
                 
                     <x-slot name="actions">

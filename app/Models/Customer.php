@@ -17,6 +17,7 @@ class Customer extends Model
         'country',
         'phone',
         'email',
+        'invoice_color',
     ];
 
     public function products()
