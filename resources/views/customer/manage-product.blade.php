@@ -169,7 +169,7 @@
                             </tfoot>
                         </table>
                     </div>
-                    <div class="mt-2 flex">
+                    <div class="mt-2 flex justify-between">
                         <template x-if="loading">
                             <button class="rounded p-2 bg-white hover:bg-gray-400 text-black">
                                 {{ __('Loading...') }}
@@ -180,6 +180,9 @@
                                 {{ __('Save') }}
                             </button>
                         </template>
+                        <div>
+                            {{ $products->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -195,7 +198,7 @@
                 message: '',
                 overflow: true,
                 items: @json($items),
-                customerItems: @json($customer->products),
+                customerItems: @json($products->items()),
                 loading: false,
                 form: {
                     customer_id: {{ request()->route('id') }},
@@ -300,7 +303,7 @@
                     this.errors = []
                     this.loading = true
 
-                    fetch('{{ route('master-data.manage-products-customer-store-data-v3') }}', {
+                    fetch('{{ route('master-data.manage-products-customer-store-data-v3', ['page' => request('page')]) }}', {
                         method: 'POST',
                         headers: {
                             // 'X-Requested-With': 'XMLHttpRequest',

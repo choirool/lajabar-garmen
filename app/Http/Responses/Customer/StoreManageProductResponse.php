@@ -81,11 +81,11 @@ class StoreManageProductResponse implements Responsable
     protected function storeData($request)
     {
         DB::transaction(function () use ($request) {
-            CustomerItemPrice::whereHas('customerItem', function ($query) use ($request) {
-                $query->where('customer_id', $request->customer_id);
-            })->forceDelete();
+            $customerItems = CustomerItem::where('customer_id', $request->customer_id)->paginate(50);
+            $dataIds = collect($customerItems->items())->pluck('id');
+            CustomerItemPrice::whereIn('customer_item_id', $dataIds)->forceDelete();
 
-            CustomerItem::where('customer_id', $request->customer_id)->forceDelete();
+            CustomerItem::whereIn('id', $dataIds)->forceDelete();
             $this->saveCustomerItem($request);
         });
     }
