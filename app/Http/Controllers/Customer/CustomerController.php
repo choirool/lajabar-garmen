@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ManageProductRequest;
 use App\Http\Responses\Customer\ManageProductResponse;
 use App\Http\Responses\Customer\StoreManageProductResponse;
+use App\Http\Responses\Customer\ExportExcelManageProductResponse;
 
 class CustomerController extends Controller
 {
@@ -18,5 +19,10 @@ class CustomerController extends Controller
     public function storeManageProduct(ManageProductRequest $request)
     {
         return new StoreManageProductResponse;
+    }
+
+    public function export(Request $request, $id)
+    {
+        return new ExportExcelManageProductResponse;
     }
 }

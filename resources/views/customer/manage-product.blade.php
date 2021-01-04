@@ -170,16 +170,22 @@
                         </table>
                     </div>
                     <div class="mt-2 flex justify-between">
-                        <template x-if="loading">
-                            <button class="rounded p-2 bg-white hover:bg-gray-400 text-black">
-                                {{ __('Loading...') }}
-                            </button>
-                        </template>
-                        <template x-if="!loading">
-                            <button @click="saveData" class="rounded p-2 bg-white hover:bg-gray-400 text-black">
-                                {{ __('Save') }}
-                            </button>
-                        </template>
+                        <div>
+                            <template x-if="loading">
+                                <button class="rounded p-2 bg-white hover:bg-gray-400 text-black">
+                                    {{ __('Loading...') }}
+                                </button>
+                            </template>
+                            <template x-if="!loading">
+                                <button @click="saveData" class="rounded p-2 bg-white hover:bg-gray-400 text-black">
+                                    {{ __('Save') }}
+                                </button>
+                            </template>
+                            <a href="{{ route('master-data.customer-product-export', ['id' => request()->route('id')]) }}" class="rounded p-2 bg-white hover:bg-gray-400 text-black">
+                                {{ __('Export') }}
+                            </a>
+                        </div>
+
                         <div>
                             {{ $products->links() }}
                         </div>

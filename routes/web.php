@@ -106,6 +106,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/update-customer/{id}/manage-product', ManageProductCustomer::class)->name('manage-products-customer');
             Route::get('/update-customer/{id}/manage-product-v2', ManageProductCustomerV2::class)->name('manage-products-customer-v2');
             Route::get('/update-customer/{id}/manage-product-v3', [CustomerController::class, 'manageProduct'])->name('manage-products-customer-v3');
+            Route::get('/update-customer/{id}/export', [CustomerController::class, 'export'])->name('customer-product-export');
             Route::get('/customer-items', CustomerItemsController::class)->name('customer.customer-items');
         });
 
