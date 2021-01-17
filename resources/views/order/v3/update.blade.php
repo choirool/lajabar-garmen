@@ -84,6 +84,14 @@
                         </div>
                     </div>
 
+                    <div class="w-full">
+                        <template x-if="message != ''">
+                            <x-alert type="success">
+                                Data saved
+                            </x-alert>
+                        </template>
+                    </div>
+
                     <template x-if="showTable">
                         <div class="w-full flex overflow-x-scroll overflow-y-hidden">
                             <table class="table-auto text-xs">
@@ -231,6 +239,13 @@
                             </table>
                         </div>
                         @include('order.v3.dp-form')
+                        <div class="w-full">
+                            <template x-if="message != ''">
+                                <x-alert type="success">
+                                    Data saved
+                                </x-alert>
+                            </template>
+                        </div>
                         <div class="mt-2 flex">
                             <template x-if="loading">
                                 <button class="rounded p-2 bg-white hover:bg-gray-400 text-black">
@@ -244,6 +259,9 @@
                             </template>
                         </div>
                     </template>
+                    <div>
+                        {{ $orderItems->links() }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -254,6 +272,8 @@
         function order() {
             return {
                 errors: [],
+                message: '',
+                timeout: null,
                 showTable: true,
                 loading: false,
                 availableItems: [],
@@ -459,7 +479,7 @@
                     let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     this.errors = []
                     this.loading = true
-                    fetch('{{ route('transactions.v2.update-order') }}', {
+                    fetch('{{ route('transactions.v2.update-order', ['page' => request()->input('page')]) }}', {
                         method: 'POST',
                         headers: {
                             // 'Content-Type': 'multipart/form-data',
@@ -477,7 +497,11 @@
                         }
 
                         if (response.status) {
-                            window.location = response.redirect
+                            // window.location = response.redirect
+                            clearTimeout(this.timeout)
+                            this.message = response.message
+                            this.timeout = setTimeout(() => { this.message = '' }, 3000)
+                            this.loading = false
                         }
                     }).catch((error) => {
                         console.log(error);
@@ -485,7 +509,7 @@
                     })
                 },
                 initOrder($watch) {
-                    @foreach($order->orderItems as $i => $orderItem)
+                    @foreach($orderItems->items() as $i => $orderItem)
                         this.form.order_lines.push({
                             id: {{ $orderItem->id }},
                             item: {{ $orderItem->item_id }},

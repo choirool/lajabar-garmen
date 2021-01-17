@@ -23,7 +23,8 @@ class OrderUpdateResponse implements Responsable
 
         return response()->json([
             'status' => true,
-            'redirect' => route('transactions.orders'),
+            'message' => 'Data successfully updated.',
+            // 'redirect' => route('transactions.orders'),
         ]);
     }
 
@@ -90,8 +91,10 @@ class OrderUpdateResponse implements Responsable
         if ($imageName !== '') {
             $orderItemData['image'] = $imageName;
         }
-        
-        OrderItem::where('id', $data['id'])->update($orderItemData);
+
+        $orderItem = OrderItem::where('id', $data['id'])->first();
+        $orderItem->update($orderItemData);
+        return $orderItem;
     }
 
     protected function storeImage($image, $orderId)
@@ -111,7 +114,7 @@ class OrderUpdateResponse implements Responsable
 
     protected function storeOrderItemPrice($price, $orderItem)
     {
-        if ($price['id'] == null) {
+        if ($price['id'] == 'null') {
             OrderItemPrice::create([
                 'order_item_id' => $orderItem->id,
                 'size_id' => $price['size_id'],
@@ -119,14 +122,14 @@ class OrderUpdateResponse implements Responsable
                 'price' => $price['price'],
                 'special_price' => $price['special_price'],
             ]);
+        } else {
+            OrderItemPrice::where('id', $price['id'])->update([
+                'size_id' => $price['size_id'],
+                'qty' => $price['qty'],
+                'price' => $price['price'],
+                'special_price' => $price['special_price'],
+            ]);
         }
-
-        OrderItemPrice::where('id', $price['id'])->update([
-            'size_id' => $price['size_id'],
-            'qty' => $price['qty'],
-            'price' => $price['price'],
-            'special_price' => $price['special_price'],
-        ]);
     }
 
     public function deleteOrderItems($request)

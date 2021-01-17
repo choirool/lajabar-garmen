@@ -77,7 +77,7 @@ class UpdateOrderRequest extends FormRequest
             'date' => 'required|date|date_format:Y-m-d|before_or_equal:today',
             'order_lines' => 'required|array',
             'order_lines.*.item' => 'required|in:' . $this->items->implode('id', ','),
-            'order_lines.*.item_combination' => 'required|distinct|in:' . $this->customerItems,
+            // 'order_lines.*.item_combination' => 'required|distinct|in:' . $this->customerItems,
             'order_lines.*.type' => 'required|in:' . $this->categories->implode('id', ','),
             'order_lines.*.material' => 'required|in:' . $this->materials->implode('id', ','),
             'order_lines.*.color' => 'required|in:' . $this->colors->implode('id', ','),

@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Material;
+use App\Models\OrderItem;
 use App\Models\Salesman;
 use Illuminate\Contracts\Support\Responsable;
 
@@ -37,6 +38,7 @@ class OrderEditResponse implements Responsable
             'sizes' => Size::select('name', 'id')->get(),
             'items' => Item::select('name', 'id', 'unit', 'category_id', 'material_id')->orderBy('name')->get(),
             'order' => $this->order,
+            'orderItems' => $this->getOrderItems(),
         ]);
     }
 
@@ -54,9 +56,17 @@ class OrderEditResponse implements Responsable
     {
         return Order::query()
             ->orderTo()
-            ->with(['orderItems' => fn ($query) => $query->with('item', 'prices')])
+            // ->with(['orderItems' => fn ($query) => $query->with('item', 'prices')])
             ->with('dp')
             ->findOrFail($this->id);
+    }
+
+    protected function getOrderItems()
+    {
+        return OrderItem::query()
+            ->where('order_id', $this->id)
+            ->with('item', 'prices')
+            ->paginate(20);
     }
 
     protected function useVersion2()
