@@ -282,6 +282,7 @@
                 },
                 setPrice(i) {
                     var formItem = this.form.order_lines[i]
+                    console.log(formItem.item, formItem.material, formItem.color);
                     if (formItem.item && formItem.material && formItem.color) {
                         var customerItem = this.customerItems.find(item => {
                             return item.item_id == formItem.item
@@ -366,15 +367,25 @@
                                     for (const k in element) {
                                         if (element.hasOwnProperty(k)) {
                                             const orderLines = element[k];
-                                            formData.append(`order_lines[${k}][item]`, orderLines['item'])
-                                            formData.append(`order_lines[${k}][unit]`, orderLines['unit'])
-                                            formData.append(`order_lines[${k}][item_combination]`, orderLines['item_combination'])
-                                            formData.append(`order_lines[${k}][type]`, orderLines['type'])
-                                            formData.append(`order_lines[${k}][material]`, orderLines['material'])
-                                            formData.append(`order_lines[${k}][color]`, orderLines['color'])
-                                            formData.append(`order_lines[${k}][printing]`, orderLines['printing'] == true ? '1' : '0')
-                                            formData.append(`order_lines[${k}][note]`, orderLines['note'])
-                                            formData.append(`order_lines[${k}][special_note]`, orderLines['special_note'])
+                                            var dataValue = {}
+                                            dataValue[`order_lines.${k}.item_id`] = orderLines['item']
+                                            dataValue[`order_lines.${k}.unit`] = orderLines['unit']
+                                            dataValue[`order_lines.${k}.item_combination`] = orderLines['item_combination']
+                                            dataValue[`order_lines.${k}.type`] = orderLines['type']
+                                            dataValue[`order_lines.${k}.material`] = orderLines['material']
+                                            dataValue[`order_lines.${k}.color`] = orderLines['color']
+                                            dataValue[`order_lines.${k}.printing`] = orderLines['printing']
+                                            dataValue[`order_lines.${k}.note`] = orderLines['note']
+                                            dataValue[`order_lines.${k}.special_note`] = orderLines['special_note']
+                                            // formData.append(`order_lines[${k}][item]`, orderLines['item'])
+                                            // formData.append(`order_lines[${k}][unit]`, orderLines['unit'])
+                                            // formData.append(`order_lines[${k}][item_combination]`, orderLines['item_combination'])
+                                            // formData.append(`order_lines[${k}][type]`, orderLines['type'])
+                                            // formData.append(`order_lines[${k}][material]`, orderLines['material'])
+                                            // formData.append(`order_lines[${k}][color]`, orderLines['color'])
+                                            // formData.append(`order_lines[${k}][printing]`, orderLines['printing'] == true ? '1' : '0')
+                                            // formData.append(`order_lines[${k}][note]`, orderLines['note'])
+                                            // formData.append(`order_lines[${k}][special_note]`, orderLines['special_note'])
                                             if (this.$refs[`file_${k}`].files[0]) {
                                                 formData.append(`order_lines[${k}][image]`, this.$refs[`file_${k}`].files[0])
                                             } else {
@@ -382,11 +393,17 @@
                                             }
 
                                             orderLines['price'].forEach((price, i) => {
-                                                formData.append(`order_lines[${k}][price][${i}][size_id]`, price.size_id)
-                                                formData.append(`order_lines[${k}][price][${i}][qty]`, price.qty)
-                                                formData.append(`order_lines[${k}][price][${i}][price]`, price.price)
-                                                formData.append(`order_lines[${k}][price][${i}][special_price]`, price.special_price)
+                                                dataValue[`order_lines.${k}.price.${i}.size_id`] = price.size_id
+                                                dataValue[`order_lines.${k}.price.${i}.qty`] = price.qty
+                                                dataValue[`order_lines.${k}.price.${i}.price`] = price.price
+                                                dataValue[`order_lines.${k}.price.${i}.special_price`] = price.special_price
+                                                // formData.append(`order_lines[${k}][price][${i}][size_id]`, price.size_id)
+                                                // formData.append(`order_lines[${k}][price][${i}][qty]`, price.qty)
+                                                // formData.append(`order_lines[${k}][price][${i}][price]`, price.price)
+                                                // formData.append(`order_lines[${k}][price][${i}][special_price]`, price.special_price)
                                             })
+
+                                            formData.append(`order_lines[${k}][data]`, JSON.stringify(dataValue))
                                         }
                                     }
                                 }
