@@ -47,7 +47,8 @@ class OrderEditResponse implements Responsable
         return Customer::select('name', 'id', 'phone', 'country', 'invoice_color')
             ->where('id', $this->order->customer_id)
             ->with(['products' => function ($query) {
-                $query->with('item', 'prices');
+                $query->with('item', 'prices')
+                    ->groupBy('item_id');
             }])
             ->get();
     }
