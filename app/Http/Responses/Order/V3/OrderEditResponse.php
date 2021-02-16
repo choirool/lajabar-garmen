@@ -67,7 +67,7 @@ class OrderEditResponse implements Responsable
         return OrderItem::query()
             ->where('order_id', $this->id)
             ->with('item', 'prices')
-            ->paginate(20);
+            ->paginate(15);
     }
 
     protected function useVersion2()

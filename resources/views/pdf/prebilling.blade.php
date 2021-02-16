@@ -77,7 +77,7 @@
                     @endforeach
                     <td class="border text-center">{{ $orderItem->prices->sum('qty') }}</td>
                     @if ((int)$request->hide_price == 0)
-                    <td class="border text-right">{{ format_number($orderItem->prices->first()->price) }}</td>
+                    <td class="border text-right">{{ $orderItem->prices->first() ? format_number($orderItem->prices->first()->price) : 0 }}</td>
                     <td class="border text-right">
                         {{ format_number($orderItem->prices->sum(fn ($price) => $price->qty * $price->price)) }}
                     </td>

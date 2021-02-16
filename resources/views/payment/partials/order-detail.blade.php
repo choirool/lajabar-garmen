@@ -48,13 +48,13 @@
                     </td>
                     <td class="border text-right">
                         @php
-                            $price = $orderItem->prices->first(fn($p) => $p->price > 0)
+                            $price = $orderItem->prices->first(fn($p) => $p->price > 0);
                         @endphp
-                        {{ format_number($price->price) }}
+                        {{ $price ? format_number($price->price): 0 }}
                     </td>
                     @if (auth()->user()->isAbleTo('order-special-price'))
                         <td class="border text-right">
-                            {{ format_number($price->special_price) }}
+                            {{ $price ? format_number($price->special_price): 0 }}
                         </td>
                     @endif
                     <td class="border text-right">
