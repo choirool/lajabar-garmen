@@ -24,7 +24,10 @@ class OrderUpdateResponse implements Responsable
         return response()->json([
             'status' => true,
             'message' => 'Data successfully updated.',
-            // 'redirect' => route('transactions.orders'),
+            'redirect' => route('transactions.v3.edit-order', [
+                'page' => $request->page,
+                'id' => $request->id,
+            ]),
         ]);
     }
 

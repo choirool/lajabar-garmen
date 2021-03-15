@@ -497,10 +497,12 @@
                         }
 
                         if (response.status) {
-                            // window.location = response.redirect
                             clearTimeout(this.timeout)
                             this.message = response.message
-                            this.timeout = setTimeout(() => { this.message = '' }, 3000)
+                            this.timeout = setTimeout(() => { 
+                                this.message = '' 
+                                window.location = response.redirect
+                            }, 1000)
                             this.loading = false
                         }
                     }).catch((error) => {
