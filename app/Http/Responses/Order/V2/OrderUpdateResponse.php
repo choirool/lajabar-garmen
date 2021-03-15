@@ -115,7 +115,7 @@ class OrderUpdateResponse implements Responsable
 
     protected function storeOrderItemPrice($price, $orderItem)
     {
-        if ($price['id'] == 'null') {
+        if ($price['id'] == 'null' || $price['id'] == null) {
             OrderItemPrice::create([
                 'order_item_id' => $orderItem->id,
                 'size_id' => $price['size_id'],
@@ -167,7 +167,7 @@ class OrderUpdateResponse implements Responsable
     {
         return collect($request['order_lines'])->filter(function ($orderLine) {
             return collect($orderLine['price'])
-                ->filter(fn ($price) => (int) $price['price'] > 0 && (int) $price['price'] > 0)
+                ->filter(fn ($price) => (int) $price['price'] > 0)
                 ->count();
         });
     }
