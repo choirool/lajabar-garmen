@@ -43,9 +43,7 @@ class OrderUpdateResponse implements Responsable
                     $orderItem = $this->storeOrderItem($data);
 
                     collect($data['price'])->each(function ($price) use ($orderItem) {
-                        if ((int) $price['qty'] > 0 && (int) $price['price'] > 0) {
-                            $this->storeOrderItemPrice($price, $orderItem);
-                        }
+                        $this->storeOrderItemPrice($price, $orderItem);
                     });
                 });
 
