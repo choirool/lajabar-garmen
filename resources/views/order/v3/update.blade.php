@@ -104,7 +104,7 @@
                                         <th class="border" rowspan="2">Type</th>
                                         <th class="border" rowspan="2">Material</th>
                                         <th class="border" rowspan="2">Color</th>
-                                        <th class="border" rowspan="2">Sablon</th>
+                                        <th class="border" rowspan="2">Print</th>
                                         <th class="border" colspan="{{ $sizes->count() }}">Size</th>
                                         <th class="border" rowspan="2">Qty</th>
                                         <th class="border" rowspan="2">Price</th>
